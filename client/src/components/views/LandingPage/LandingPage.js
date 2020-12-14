@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Axios from "axios";
 
 const LandingPage = () => {
   useEffect(() => {});
