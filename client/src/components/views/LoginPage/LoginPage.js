@@ -1,30 +1,18 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { loginUser } from "../../../_actions/user_action";
 
 const LoginPage = (props) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginFailMessage, setLoginFailMessage] = useState("");
+  const { register, errors, handleSubmit } = useForm();
+  const [loginFailMessage, setLoginFailMessage] = useState();
   const dispatch = useDispatch();
 
-  const onChangeHandler = (event) => {
-    const {
-      target: { value, name }
-    } = event;
-
-    if (name === "emailInput") {
-      setEmail(value);
-    } else if (name === "passwordInput") {
-      setPassword(value);
-    }
-  };
-  const onSubmitHandler = (event) => {
-    event.preventDefault();
-    let body = {
-      email,
-      password
+  const onSubmitHandler = (data) => {
+    const body = {
+      email: data.emailInput,
+      password: data.passwordInput
     };
     dispatch(loginUser(body)).then((response) => {
       if (response.payload.loginSuccess) {
@@ -38,7 +26,7 @@ const LoginPage = (props) => {
   return (
     <div style={{ width: "500px" }}>
       <form
-        onSubmit={onSubmitHandler}
+        onSubmit={handleSubmit(onSubmitHandler)}
         style={{ display: "flex", flexDirection: "column" }}
       >
         <input
@@ -46,22 +34,32 @@ const LoginPage = (props) => {
           id="emailInput"
           name="emailInput"
           placeholder="이메일"
-          value={email}
-          onChange={onChangeHandler}
+          ref={register({ required: true })}
         />
+        {errors.emailInput && errors.emailInput.type === "required" && (
+          <p style={{ color: "red", fontSize: "14px" }}>
+            이메일을 입력해주세요
+          </p>
+        )}
         <input
           type="password"
-          id="passwordInput"
           name="passwordInput"
+          ref={register({ required: true })}
           placeholder="비밀번호"
-          value={password}
-          onChange={onChangeHandler}
         />
+        {errors.passwordInput && errors.passwordInput.type === "required" && (
+          <p style={{ color: "red", fontSize: "14px" }}>
+            비밀번호를 입력해주세요
+          </p>
+        )}
         <button type="submit">로그인</button>
       </form>
       {loginFailMessage && (
         <p style={{ color: "red", fontSize: "14px" }}>{loginFailMessage}</p>
       )}
+      <Link to="/accounts" replace>
+        <button>회원가입</button>
+      </Link>
     </div>
   );
 };
