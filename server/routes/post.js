@@ -39,4 +39,14 @@ router.post("/uploadPost", (req, res) => {
   });
 });
 
+router.get("/getPosts", (req, res) => {
+  Post.find()
+    .populate("userFrom")
+    .sort({ createdAt: -1 })
+    .exec((err, posts) => {
+      if (err) return res.status(400).send(err);
+      res.status(200).json({ success: true, posts });
+    });
+});
+
 module.exports = router;

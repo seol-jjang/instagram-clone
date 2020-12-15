@@ -23,7 +23,7 @@ function PostUploadPage(props) {
     event.preventDefault();
 
     const postObj = {
-      writer: user.userData._id,
+      userFrom: user.userData._id,
       description: description,
       filePath: images
     };
