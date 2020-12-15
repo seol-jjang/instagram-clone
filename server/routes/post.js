@@ -24,7 +24,10 @@ let upload = multer({ storage: storage }).array("attachment");
 router.post("/uploadImage", (req, res) => {
   upload(req, res, (err) => {
     if (err) return res.json({ success: false, err });
-    return res.json({ success: true, images: res.req.files });
+
+    const images = res.req.files;
+    const path = images.map((image) => image.filename);
+    return res.json({ success: true, path: path });
   });
 });
 
