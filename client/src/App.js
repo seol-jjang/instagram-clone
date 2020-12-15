@@ -5,7 +5,7 @@ import RegisterPage from "./components/views/RegisterPage/RegisterPage";
 import LoginPage from "./components/views/LoginPage/LoginPage";
 import NotFound from "./components/views/NotFound/NotFound";
 import Auth from "./hoc/authentication";
-import UploadPost from "./components/views/UploadPostPage/UploadPostPage";
+import PostUploadPage from "./components/views/PostUploadPage/PostUploadPage";
 
 function App() {
   return (
@@ -14,7 +14,11 @@ function App() {
         <Switch>
           <Route exact path="/" component={Auth(LoginPage, false)} />
           <Route exact path="/accounts" component={Auth(RegisterPage, false)} />
-          <Route exact path="/post/upload" component={Auth(UploadPost, true)} />
+          <Route
+            exact
+            path="/post/upload"
+            component={Auth(PostUploadPage, true)}
+          />
           <Route exact path="/main" component={Auth(LandingPage, null)} />
           <Route path="*" component={NotFound} />
         </Switch>

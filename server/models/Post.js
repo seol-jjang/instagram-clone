@@ -12,7 +12,8 @@ const postSchema = mongoose.Schema(
       maxlength: 250
     },
     filePath: {
-      type: Object
+      type: Object,
+      unique: 1
     }
   },
   { timestamps: true }
