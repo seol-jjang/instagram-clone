@@ -16,7 +16,8 @@ const LoginPage = (props) => {
     };
     dispatch(loginUser(body)).then((response) => {
       if (response.payload.loginSuccess) {
-        props.history.push("/");
+        localStorage.setItem("ls", response.payload.userId);
+        props.history.push(`/main`);
       } else {
         setLoginFailMessage(response.payload.message);
       }
