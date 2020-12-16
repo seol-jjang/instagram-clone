@@ -33,7 +33,7 @@ const LoginPage = (props) => {
     <>
       <Section>
         <Logo>instagram</Logo>
-        <LoginFrom onSubmit={handleSubmit(onSubmitHandler)}>
+        <LoginForm onSubmit={handleSubmit(onSubmitHandler)}>
           <Input
             type="email"
             id="emailInput"
@@ -58,7 +58,7 @@ const LoginPage = (props) => {
             </p>
           )}
           <Button type="submit">로그인</Button>
-        </LoginFrom>
+        </LoginForm>
         {loginFailMessage && (
           <p style={{ color: "red", fontSize: "14px" }}>{loginFailMessage}</p>
         )}
@@ -72,6 +72,8 @@ const LoginPage = (props) => {
     </>
   );
 };
+
+export default withRouter(LoginPage);
 
 const Section = styled.section`
   max-width: 350px;
@@ -87,10 +89,11 @@ const Section = styled.section`
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 25px 40px;
   }
 `;
 
-const LoginFrom = styled.form`
+const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
 `;
@@ -111,10 +114,9 @@ const Span = styled.span`
   font-size: 15px;
 `;
 const AccountBtn = styled.button`
+  cursor: pointer;
   background-color: transparent;
   color: ${palette.ActivatedColor};
   font-size: 15px;
   font-weight: bold;
 `;
-
-export default withRouter(LoginPage);

@@ -14,6 +14,9 @@ const StyleInput = styled.input`
   &:focus {
     border: 1px solid #bbb;
   }
+  &::placeholder {
+    color: ${palette.grayText};
+  }
 `;
 
 const Input = React.forwardRef((props, ref) => {
@@ -23,9 +26,5 @@ const Input = React.forwardRef((props, ref) => {
     </StyleInput>
   );
 });
-
-// const Input = ({ children, ...rest }) => {
-//
-// };
 
 export default Input;

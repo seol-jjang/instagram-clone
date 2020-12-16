@@ -3,5 +3,6 @@ import styled from "styled-components";
 export const palette = {
   borderColor: "#dbdbdb",
   backgroundGray: "#fafafa",
-  ActivatedColor: "#0195f7"
+  ActivatedColor: "#0195f7",
+  grayText: "#aaaaaa"
 };
