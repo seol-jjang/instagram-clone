@@ -31,8 +31,8 @@ function PostUploadPage(props) {
     Axios.post("/api/post/uploadPost", postObj).then((response) => {
       if (response.data.success) {
         setTimeout(() => {
-          props.history.push("/main");
-        }, 3000);
+          props.history.push("/");
+        }, 1000);
       } else {
         alert("게시글 업로드에 실패했습니다.");
       }

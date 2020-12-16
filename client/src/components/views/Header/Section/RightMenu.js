@@ -20,7 +20,7 @@ function RightMenu(props) {
         <Link to="/accounts">
           <button>회원가입</button>
         </Link>
-        <Link to="/accounts">
+        <Link to="/login">
           <button>로그인</button>
         </Link>
       </div>
