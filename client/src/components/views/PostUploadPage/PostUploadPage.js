@@ -2,6 +2,7 @@ import Axios from "axios";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { Inner, MainContents } from "../../../styles/Theme";
 import FileUpload from "../../utils/FileUpload";
 import Header from "../Header/Header";
 
@@ -39,9 +40,8 @@ function PostUploadPage(props) {
     });
   };
   return (
-    <>
-      <Header />
-      <div>
+    <MainContents>
+      <Inner>
         <form onSubmit={onSubmit} encType="multipart/form-data">
           <FileUpload refreshFunction={updateImages} />
           <textarea onChange={onTextChange} value={description}></textarea>
@@ -54,8 +54,8 @@ function PostUploadPage(props) {
             key={index}
           />
         ))}
-      </div>
-    </>
+      </Inner>
+    </MainContents>
   );
 }
 

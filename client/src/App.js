@@ -7,12 +7,14 @@ import NotFound from "./components/views/NotFound/NotFound";
 import Auth from "./hoc/authentication";
 import PostUploadPage from "./components/views/PostUploadPage/PostUploadPage";
 import GlobalStyle from "./styles/GlobalStyle";
+import Header from "./components/views/Header/Header";
 
 function App() {
   return (
     <>
       <GlobalStyle />
       <Router>
+        <Header />
         <Switch>
           <Route exact path="/" component={Auth(LandingPage, null)} />
           <Route exact path="/login" component={Auth(LoginPage, false)} />

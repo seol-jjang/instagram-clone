@@ -57,6 +57,8 @@ const GlobalStyle = createGlobalStyle`
   
     a {
         text-decoration: none;
+        font-size: 0;
+        color: black;
     }
   
     button,

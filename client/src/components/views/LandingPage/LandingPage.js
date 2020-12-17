@@ -1,6 +1,8 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
+import styled from "styled-components";
+import { Inner, MainContents } from "../../../styles/Theme";
 import Header from "../Header/Header";
 
 const LandingPage = (props) => {
@@ -30,10 +32,11 @@ const LandingPage = (props) => {
   ));
   return (
     <>
-      <Header />
-      <main>
-        <section>{renderPosts}</section>
-      </main>
+      <MainContents>
+        <Inner>
+          <section>{renderPosts}</section>
+        </Inner>
+      </MainContents>
     </>
   );
 };

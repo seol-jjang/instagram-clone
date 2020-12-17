@@ -28,7 +28,10 @@ const userSchema = mongoose.Schema({
     type: Number,
     default: 1
   },
-  image: String,
+  profileImage: {
+    type: String,
+    default: "uploads/defaultProfile.jpg"
+  },
   token: {
     type: String
   },

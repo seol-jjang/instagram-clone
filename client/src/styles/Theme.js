@@ -8,7 +8,12 @@ export const palette = {
 };
 
 export const Inner = styled.div`
+  position: relative;
   width: 940px;
   max-width: 1000px;
   margin: 0 auto;
+`;
+
+export const MainContents = styled.main`
+  margin-top: 60px;
 `;

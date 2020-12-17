@@ -55,7 +55,7 @@ router.get("/auth", auth, (req, res) => {
     name: req.user.name,
     nickname: req.user.nickname,
     role: req.user.role,
-    image: req.user.image
+    profileImage: req.user.profileImage
   });
 });
 

@@ -120,4 +120,7 @@ const ErrorText = styled.p`
   margin-bottom: 5px;
   color: red;
   font-size: 14px;
+  text-align: center;
+  line-height: 1.4;
+  word-break: keep-all;
 `;
