@@ -42,9 +42,7 @@ const LoginPage = (props) => {
             ref={register({ required: true })}
           />
           {errors.emailInput && errors.emailInput.type === "required" && (
-            <p style={{ color: "red", fontSize: "14px" }}>
-              이메일을 입력해주세요
-            </p>
+            <ErrorText>이메일을 입력해주세요</ErrorText>
           )}
           <Input
             type="password"
@@ -53,15 +51,11 @@ const LoginPage = (props) => {
             placeholder="비밀번호"
           />
           {errors.passwordInput && errors.passwordInput.type === "required" && (
-            <p style={{ color: "red", fontSize: "14px" }}>
-              비밀번호를 입력해주세요
-            </p>
+            <ErrorText>비밀번호를 입력해주세요</ErrorText>
           )}
           <Button type="submit">로그인</Button>
         </LoginForm>
-        {loginFailMessage && (
-          <p style={{ color: "red", fontSize: "14px" }}>{loginFailMessage}</p>
-        )}
+        {loginFailMessage && <ErrorText>{loginFailMessage}</ErrorText>}
       </Section>
       <Section>
         <Span>계정이 없으신가요?</Span>
@@ -113,10 +107,17 @@ const Logo = styled.h1`
 const Span = styled.span`
   font-size: 15px;
 `;
+
 const AccountBtn = styled.button`
   cursor: pointer;
   background-color: transparent;
   color: ${palette.ActivatedColor};
   font-size: 15px;
   font-weight: bold;
+`;
+
+const ErrorText = styled.p`
+  margin-bottom: 5px;
+  color: red;
+  font-size: 14px;
 `;

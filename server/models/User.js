@@ -12,18 +12,17 @@ const userSchema = mongoose.Schema({
   email: {
     type: String,
     trim: true,
-    unique: 1
+    unique: true
   },
   password: {
     type: String,
-    minlength: 6,
-    unique: 1
+    minlength: 6
   },
   nickname: {
     type: String,
     maxlength: 30,
     trim: true,
-    unique: 1
+    unique: true
   },
   role: {
     type: Number,

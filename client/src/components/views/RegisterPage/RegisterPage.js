@@ -1,31 +1,44 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
+import { AiOutlineLoading } from "react-icons/ai";
 import { registerUser } from "../../../_actions/user_action";
 import logo from "../../../assets/instagram_logo.png";
 import Input from "../../../styles/common/Input";
 import Button from "../../../styles/common/Button";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { palette } from "../../../styles/Theme";
 
 const RegisterPage = (props) => {
   const { register, errors, handleSubmit } = useForm();
   const dispatch = useDispatch();
-  const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
+  const submitBtn = useRef();
+  const loadingBtn = useRef();
+  //const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/i;
+  //const emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+  const emailRegExp = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i;
+  const nickNameRegExp = /^[0-9a-z]([0-9a-z_.])*/i;
 
   const onSubmit = (data) => {
+    const lowerNickname = data.nicknameInput.toLowerCase();
     const body = {
       email: data.emailInput,
       name: data.nameInput,
-      nickname: data.nicknameInput,
+      nickname: lowerNickname,
       password: data.passwordInput
     };
+    submitBtn.current.classList.add("hide");
+    loadingBtn.current.classList.remove("hide");
     dispatch(registerUser(body)).then((response) => {
       if (response.payload.success) {
-        props.history.push("/login");
+        setTimeout(() => {
+          props.history.push("/login");
+        }, 1300);
       } else {
         alert(response.payload.message);
+        submitBtn.current.classList.remove("hide");
+        loadingBtn.current.classList.add("hide");
       }
     });
   };
@@ -39,30 +52,49 @@ const RegisterPage = (props) => {
           <Input
             type="email"
             name="emailInput"
-            ref={register({ required: true, pattern: emailRegExp })}
+            ref={register({
+              required: true,
+              pattern: emailRegExp
+            })}
             placeholder="이메일"
           />
           {errors.emailInput && errors.emailInput.type === "required" && (
-            <p>이메일을 입력해주세요</p>
+            <ErrorText>이메일을 입력해주세요</ErrorText>
           )}
           {errors.emailInput && errors.emailInput.type === "pattern" && (
-            <p>유효하지 않은 이메일형식입니다.</p>
+            <ErrorText>유효하지 않은 이메일형식입니다.</ErrorText>
           )}
           <Input
             type="text"
             name="nameInput"
+            maxLength="30"
             ref={register}
             placeholder="성명"
           />
           <Input
             type="text"
             name="nicknameInput"
-            ref={register({ required: true, maxLength: 30 })}
+            minLength="3"
+            maxLength="30"
+            ref={register({
+              required: true,
+              maxLength: 30,
+              minLength: 3,
+              pattern: nickNameRegExp
+            })}
             placeholder="사용자 이름"
           />
           {errors.nicknameInput && errors.nicknameInput.type === "required" && (
-            <p>사용자이름을 입력해주세요</p>
+            <ErrorText>사용자이름을 입력해주세요</ErrorText>
           )}
+          {errors.nicknameInput &&
+            (errors.nicknameInput.type === "pattern" ||
+              errors.nicknameInput.type === "minLength" ||
+              errors.nicknameInput.type === "maxLength") && (
+              <ErrorText>
+                3~30자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다
+              </ErrorText>
+            )}
           <Input
             type="password"
             name="passwordInput"
@@ -70,13 +102,20 @@ const RegisterPage = (props) => {
             placeholder="비밀번호"
           />
           {errors.passwordInput && errors.passwordInput.type === "required" && (
-            <p>유효하지 않은 비밀번호입니다.</p>
+            <ErrorText>유효하지 않은 비밀번호입니다.</ErrorText>
           )}
           {errors.passwordInput &&
             errors.passwordInput.type === "minLength" && (
-              <p>비밀번호는 최소 6자 이상이어야 합니다.</p>
+              <ErrorText>비밀번호는 최소 6자 이상이어야 합니다.</ErrorText>
             )}
-          <Button type="submit">가입</Button>
+          <Button type="submit" ref={submitBtn}>
+            가입
+          </Button>
+          <Button blur ref={loadingBtn} className="hide">
+            <Loading>
+              <AiOutlineLoading />
+            </Loading>
+          </Button>
         </RegisterForm>
         <SmallText>
           가입하면 Instagram의 <span>약관, 데이터 정책</span> 및{" "}
@@ -116,6 +155,9 @@ const Section = styled.section`
 const RegisterForm = styled.form`
   display: flex;
   flex-direction: column;
+  .hide {
+    display: none;
+  }
 `;
 
 const Logo = styled.h1`
@@ -161,4 +203,25 @@ const LoginBtn = styled.button`
   color: ${palette.ActivatedColor};
   font-size: 15px;
   font-weight: bold;
+`;
+
+const ErrorText = styled.p`
+  margin-bottom: 5px;
+  color: red;
+  font-size: 14px;
+`;
+
+const Rotation = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg)
+  }
+`;
+
+const Loading = styled.span`
+  svg {
+    animation: ${Rotation} 1s linear infinite;
+  }
 `;
