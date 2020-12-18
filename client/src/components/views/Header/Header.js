@@ -3,13 +3,12 @@ import { Link, withRouter } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 import { AiFillCloseCircle } from "react-icons/ai";
 import RightMenu from "./Section/RightMenu";
-import logo from "../../../assets/instagram_logo.png";
+import logo from "../../../assets/instagram_logo_small.png";
 import { palette, Inner } from "../../../styles/Theme";
 import styled from "styled-components";
-import Input from "../../../styles/common/Input";
 
 function Header(props) {
-  const pathLocation = props.match.path;
+  const pathLocation = props.location.pathname;
   if (pathLocation === "/login" || pathLocation === "/accounts") {
     return <div></div>;
   } else {
@@ -19,9 +18,9 @@ function Header(props) {
           <Link to="/">
             <Logo src={logo} alt="instagram" />
           </Link>
-          <SearchBox>
+          {/* <SearchBox>
             <Input type="text" placeholder="검색" search />
-          </SearchBox>
+          </SearchBox> */}
           <RightMenu />
         </Inner>
       </HeaderWarp>

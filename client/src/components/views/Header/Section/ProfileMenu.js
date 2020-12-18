@@ -2,7 +2,7 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 
 function ProfileMenu(props) {
-  const { visible, onClose, children } = props;
+  const { onClose, children } = props;
   const close = () => {
     onClose();
   };

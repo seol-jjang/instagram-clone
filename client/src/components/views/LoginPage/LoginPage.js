@@ -55,7 +55,9 @@ const LoginPage = (props) => {
           )}
           <Button type="submit">로그인</Button>
         </LoginForm>
-        {loginFailMessage && <ErrorText>{loginFailMessage}</ErrorText>}
+        {loginFailMessage && (
+          <ErrorText className="login-error">{loginFailMessage}</ErrorText>
+        )}
       </Section>
       <Section>
         <Span>계정이 없으신가요?</Span>
@@ -72,18 +74,19 @@ export default withRouter(LoginPage);
 const Section = styled.section`
   max-width: 350px;
   margin: 0 auto;
+  margin-top: 60px;
   padding: 20px 40px;
   background-color: #fff;
   border: 1px solid #dbdbdb;
-  &:first-child {
-    margin-top: 3rem;
-    margin-bottom: 10px;
-  }
   &:last-child {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 10px;
     padding: 25px 40px;
+  }
+  .login-error {
+    margin-top: 7px;
   }
 `;
 

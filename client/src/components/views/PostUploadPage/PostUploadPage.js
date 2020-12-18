@@ -2,9 +2,9 @@ import Axios from "axios";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { Inner, MainContents } from "../../../styles/Theme";
+import styled from "styled-components";
+import { Inner } from "../../../styles/Theme";
 import FileUpload from "../../utils/FileUpload";
-import Header from "../Header/Header";
 
 function PostUploadPage(props) {
   const [description, setDescription] = useState("");
@@ -40,23 +40,30 @@ function PostUploadPage(props) {
     });
   };
   return (
-    <MainContents>
+    <>
       <Inner>
-        <form onSubmit={onSubmit} encType="multipart/form-data">
-          <FileUpload refreshFunction={updateImages} />
-          <textarea onChange={onTextChange} value={description}></textarea>
-          <button type="submit">게시</button>
-        </form>
-        {images.map((image, index) => (
-          <img
-            src={`http://localhost:5000/${image}`}
-            alt={`postImg_${index}`}
-            key={index}
-          />
-        ))}
+        <ContentsSection>
+          <form onSubmit={onSubmit} encType="multipart/form-data">
+            <FileUpload refreshFunction={updateImages} />
+            <textarea onChange={onTextChange} value={description}></textarea>
+            <button type="submit">게시</button>
+          </form>
+          {images.map((image, index) => (
+            <img
+              src={`http://localhost:5000/${image}`}
+              alt={`postImg_${index}`}
+              key={index}
+            />
+          ))}
+        </ContentsSection>
       </Inner>
-    </MainContents>
+    </>
   );
 }
 
 export default withRouter(PostUploadPage);
+
+const ContentsSection = styled.section`
+  position: relative;
+  margin-top: 85px;
+`;

@@ -137,17 +137,15 @@ export default withRouter(RegisterPage);
 const Section = styled.section`
   max-width: 350px;
   margin: 0 auto;
+  margin-top: 60px;
   padding: 20px 40px;
   background-color: #fff;
   border: 1px solid #dbdbdb;
-  &:first-child {
-    margin-top: 3rem;
-    margin-bottom: 10px;
-  }
   &:last-child {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 10px;
     padding: 25px 40px;
   }
 `;

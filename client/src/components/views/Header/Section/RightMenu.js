@@ -8,13 +8,13 @@ import { IoPaperPlaneOutline } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import Button from "../../../../styles/common/Button";
 import styled from "styled-components";
-import { palette } from "../../../../styles/Theme";
+import { palette, SmallProfileIcon } from "../../../../styles/Theme";
 import ProfileMenu from "./ProfileMenu";
 
 function RightMenu(props) {
   const [menuVisible, setMenuVisible] = useState(false);
   const user = useSelector((state) => state.user);
-  const pathLocation = props.match.path;
+  const pathLocation = props.location.pathname;
   const onClickLogout = () => {
     Axios.get("/api/users/logout").then((response) => {
       if (response.data.success) {
@@ -77,17 +77,17 @@ function RightMenu(props) {
           </li>
           {user.userData && (
             <li>
-              <ProfileIcon onClick={onClickProfile}>
+              <SmallProfileIcon onClick={onClickProfile}>
                 <img
                   src={`http://localhost:5000/${user.userData.profileImage}`}
                   alt="userProfile"
                 />
-              </ProfileIcon>
+              </SmallProfileIcon>
             </li>
           )}
         </MenuList>
         {menuVisible && (
-          <ProfileMenu onClose={onClickProfile} visible={menuVisible}>
+          <ProfileMenu onClose={onClickProfile}>
             <ProfileMenuList>
               <li>
                 <CgProfile size="18px" />
@@ -125,19 +125,9 @@ const MenuList = styled.ul`
     &:not(:first-child) {
       margin-left: 20px;
     }
-  }
-`;
-
-const ProfileIcon = styled.span`
-  display: flex;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-  img {
-    width: 100%;
-    height: 100%;
+    button {
+      margin: 0;
+    }
   }
 `;
 
