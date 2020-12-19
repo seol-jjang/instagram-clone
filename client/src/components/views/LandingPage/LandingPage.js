@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import {
   AddText,
@@ -10,7 +9,7 @@ import {
 } from "../../../styles/Theme";
 import MainSection from "./Section/MainSection";
 
-const LandingPage = (props) => {
+const LandingPage = () => {
   const user = useSelector((state) => state.user);
 
   if (user.userData && user.userData.isAuth) {
@@ -31,10 +30,8 @@ const LandingPage = (props) => {
                     </LargeProfileIcon>
                     <div>
                       <UserNickname>{user.userData.nickname}</UserNickname>
-                      {user.userData.name !== "" ? (
+                      {user.userData.name !== "" && (
                         <AddText>{user.userData.name}</AddText>
-                      ) : (
-                        ""
                       )}
                     </div>
                   </>
@@ -59,7 +56,7 @@ const LandingPage = (props) => {
   }
 };
 
-export default withRouter(LandingPage);
+export default LandingPage;
 
 const ContentsSection = styled.section`
   position: relative;

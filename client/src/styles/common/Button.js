@@ -2,6 +2,16 @@ import React from "react";
 import styled, { css } from "styled-components";
 import { palette } from "../Theme";
 
+const colorStyle = css`
+  ${(props) =>
+    props.gray &&
+    css`
+      background-color: ${palette.backgroundGray};
+      color: ${palette.blackColor};
+      border: 1px solid ${palette.borderColor};
+    `}
+`;
+
 const opacityStyle = css`
   ${(props) =>
     props.blur &&
@@ -23,6 +33,7 @@ const StyleButton = styled.button`
   font-size: 14px;
 
   ${opacityStyle}
+  ${colorStyle}
 `;
 
 const Button = React.forwardRef((props, ref) => {

@@ -68,4 +68,24 @@ router.get("/logout", auth, (req, res) => {
   });
 });
 
+router.post("/searchUser", (req, res) => {
+  User.findOne({ nickname: req.body.nickname }, (err, user) => {
+    if (err) throw err;
+    if (!user) {
+      return res.json({
+        success: false
+      });
+    }
+    return res.json({
+      success: true,
+      userData: {
+        _id: user._id,
+        name: user.name,
+        nickname: user.nickname,
+        profileImage: user.profileImage
+      }
+    });
+  });
+});
+
 module.exports = router;

@@ -1,8 +1,27 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
+import { RiSettings4Line } from "react-icons/ri";
+import { CgProfile } from "react-icons/cg";
+import { palette } from "../../../../styles/Theme";
+import Axios from "axios";
+import { Link, useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function ProfileMenu(props) {
-  const { onClose, children } = props;
+  const user = useSelector((state) => state.user);
+  const { onClose } = props;
+  const history = useHistory();
+
+  const onClickLogout = () => {
+    Axios.get("/api/users/logout").then((response) => {
+      if (response.data.success) {
+        history.push("/login");
+      } else {
+        alert("로그아웃하는 데 실패했습니다.");
+      }
+    });
+  };
+
   const close = () => {
     onClose();
   };
@@ -11,7 +30,23 @@ function ProfileMenu(props) {
       <Circle />
       <MenuWrapper onClick={close}>
         <Triangle />
-        <MenuInner>{children}</MenuInner>
+        <MenuInner>
+          <ProfileMenuList>
+            <li>
+              <Link to={`/user/${user.userData.nickname}`}>
+                <CgProfile size="18px" />
+                <span>프로필</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/">
+                <RiSettings4Line size="20px" />
+                <span>설정</span>
+              </Link>
+            </li>
+            <li onClick={onClickLogout}>로그아웃</li>
+          </ProfileMenuList>
+        </MenuInner>
       </MenuWrapper>
       <MenuOverlay onClick={close} />
     </>
@@ -75,6 +110,32 @@ const Circle = styled.div`
   height: 28px;
   border-radius: 50%;
   border: 1px solid black;
+`;
+
+const ProfileMenuList = styled.ul`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  li {
+    cursor: pointer;
+    padding: 10px 15px;
+    a {
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+      span {
+        margin-left: 10px;
+      }
+    }
+    &:last-child {
+      border-top: 1px solid ${palette.borderColor};
+      padding: 13px 15px;
+    }
+    &:hover {
+      background-color: #fbfbfb;
+    }
+  }
 `;
 
 export default ProfileMenu;

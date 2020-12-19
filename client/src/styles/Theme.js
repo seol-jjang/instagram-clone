@@ -64,3 +64,15 @@ export const LargeProfileIcon = styled.span`
     height: 100%;
   }
 `;
+
+export const XLargeProfileIcon = styled.span`
+  display: block;
+  width: 168px;
+  height: 168px;
+  border-radius: 50%;
+  overflow: hidden;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+`;
