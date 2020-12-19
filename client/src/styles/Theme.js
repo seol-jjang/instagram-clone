@@ -67,8 +67,8 @@ export const LargeProfileIcon = styled.span`
 
 export const XLargeProfileIcon = styled.span`
   display: block;
-  width: 168px;
-  height: 168px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   overflow: hidden;
   img {
