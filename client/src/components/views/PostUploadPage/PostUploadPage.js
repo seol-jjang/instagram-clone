@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
+import Button from "../../../styles/common/Button";
 import { Inner } from "../../../styles/Theme";
 import FileUpload from "../../utils/FileUpload";
 
@@ -22,13 +23,14 @@ function PostUploadPage(props) {
   };
   const onSubmit = (event) => {
     event.preventDefault();
-
+    if (images.length === 0) {
+      return alert("이미지를 하나 이상 올려야 합니다");
+    }
     const postObj = {
       userFrom: user.userData._id,
       description: description,
       filePath: images
     };
-
     Axios.post("/api/post/uploadPost", postObj).then((response) => {
       if (response.data.success) {
         setTimeout(() => {
@@ -39,6 +41,15 @@ function PostUploadPage(props) {
       }
     });
   };
+  const onDelete = (image) => {
+    const currentIndex = images.indexOf(image);
+
+    let newImages = [...images];
+    newImages.splice(currentIndex, 1);
+
+    setImages(newImages);
+  };
+
   return (
     <>
       <Inner>
@@ -46,12 +57,13 @@ function PostUploadPage(props) {
           <form onSubmit={onSubmit} encType="multipart/form-data">
             <FileUpload refreshFunction={updateImages} />
             <textarea onChange={onTextChange} value={description}></textarea>
-            <button type="submit">게시</button>
+            <Button type="submit">게시</Button>
           </form>
           {images.map((image, index) => (
             <img
               src={`http://localhost:5000/${image}`}
               alt={`postImg_${index}`}
+              onClick={() => onDelete(image)}
               key={index}
             />
           ))}

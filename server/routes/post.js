@@ -49,4 +49,17 @@ router.get("/getPosts", (req, res) => {
     });
 });
 
+router.post("/getUserPost", (req, res) => {
+  Post.find({ userFrom: req.body.userFrom })
+    .sort({ createdAt: -1 })
+    .exec((err, post) => {
+      if (err) return res.status(400).json({ success: false, err });
+      res.status(200).json({
+        success: true,
+        postLength: post.length,
+        post: post
+      });
+    });
+});
+
 module.exports = router;

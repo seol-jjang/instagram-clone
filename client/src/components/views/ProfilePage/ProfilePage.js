@@ -12,11 +12,14 @@ import {
   UserNickname,
   palette
 } from "../../../styles/Theme";
+import Userfeed from "./Section/Userfeed";
 
 function ProfilePage(props) {
   const [profileUser, setProfileUser] = useState([]);
   const [followed, setFollowed] = useState(false);
   const [follower, setFollower] = useState(0);
+  const [following, setFollowing] = useState(0);
+  const [postCount, setPostCount] = useState(0);
   const user = useSelector((state) => state.user);
   const path = useParams();
 
@@ -44,11 +47,21 @@ function ProfilePage(props) {
       }
     });
 
-    let followVariable = { userTo: profileUser._id };
-    Axios.post("/api/follow/followerNumber", followVariable).then(
+    let followerVariable = { userTo: profileUser._id };
+    Axios.post("/api/follow/followerNumber", followerVariable).then(
       (response) => {
         if (response.data.success) {
           setFollower(response.data.followerNumber);
+        } else {
+          alert("팔로워를 불러오는 데 실패했습니다");
+        }
+      }
+    );
+    let followingVariable = { userFrom: profileUser._id };
+    Axios.post("/api/follow/followingNumber", followingVariable).then(
+      (response) => {
+        if (response.data.success) {
+          setFollowing(response.data.followingNumber);
         } else {
           alert("팔로워를 불러오는 데 실패했습니다");
         }
@@ -81,6 +94,11 @@ function ProfilePage(props) {
       });
     }
   };
+
+  const postCountUpdate = (count) => {
+    setPostCount(count);
+  };
+
   return (
     <Inner>
       <ContentsSection>
@@ -122,19 +140,20 @@ function ProfilePage(props) {
               </div>
               <FollowInfo>
                 <li>
-                  게시물 <span>0</span>
+                  게시물 <span>{postCount}</span>
                 </li>
                 <li>
                   팔로워 <span>{follower}</span>
                 </li>
                 <li>
-                  팔로우 <span>0</span>
+                  팔로우 <span>{following}</span>
                 </li>
               </FollowInfo>
               <UserNickname>{profileUser.name}</UserNickname>
             </UserDetail>
           </UserInfo>
         )}
+        <Userfeed profileUser={profileUser} postCountUpdate={postCountUpdate} />
       </ContentsSection>
     </Inner>
   );

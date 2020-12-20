@@ -4,11 +4,22 @@ const router = express.Router();
 const { Follow } = require("../models/Follow");
 
 router.post("/followerNumber", (req, res) => {
-  Follow.find({ userTo: req.body.userTo }).exec((err, follow) => {
+  Follow.find({ userTo: req.body.userTo, userFrom: req.body.userFrom }).exec(
+    (err, follow) => {
+      if (err) return res.status(400).send(err);
+      return res.status(200).json({
+        success: true,
+        followerNumber: follow.length
+      });
+    }
+  );
+});
+router.post("/followingNumber", (req, res) => {
+  Follow.find({ userFrom: req.body.userFrom }).exec((err, follow) => {
     if (err) return res.status(400).send(err);
     return res.status(200).json({
       success: true,
-      followerNumber: follow.length
+      followingNumber: follow.length
     });
   });
 });
