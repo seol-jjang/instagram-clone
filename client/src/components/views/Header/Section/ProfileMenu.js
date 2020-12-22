@@ -2,15 +2,15 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 import { RiSettings4Line } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
-import { palette } from "../../../../styles/Theme";
 import Axios from "axios";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { palette } from "../../../../styles/Theme";
 
 function ProfileMenu(props) {
   const user = useSelector((state) => state.user);
-  const { onClose } = props;
   const history = useHistory();
+  const { onClose } = props;
 
   const onClickLogout = () => {
     Axios.get("/api/users/logout").then((response) => {
@@ -31,7 +31,7 @@ function ProfileMenu(props) {
       <MenuWrapper onClick={close}>
         <Triangle />
         <MenuInner>
-          <ProfileMenuList>
+          <ul>
             <li>
               <Link to={`/user/${user.userData.nickname}`}>
                 <CgProfile size="18px" />
@@ -45,13 +45,15 @@ function ProfileMenu(props) {
               </Link>
             </li>
             <li onClick={onClickLogout}>로그아웃</li>
-          </ProfileMenuList>
+          </ul>
         </MenuInner>
       </MenuWrapper>
-      <MenuOverlay onClick={close} />
+      <MenuBackground onClick={close} />
     </>
   );
 }
+
+export default ProfileMenu;
 
 const slideFade = keyframes`
     100% {
@@ -82,9 +84,34 @@ const MenuInner = styled.div`
   max-width: 230px;
   border-radius: 7px;
   background-color: white;
+  ul {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  ul li {
+    cursor: pointer;
+    padding: 10px 15px;
+    a {
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+      span {
+        margin-left: 10px;
+      }
+    }
+    &:last-child {
+      border-top: 1px solid ${palette.borderColor};
+      padding: 13px 15px;
+    }
+    &:hover {
+      background-color: #fbfbfb;
+    }
+  }
 `;
 
-const MenuOverlay = styled.div`
+const MenuBackground = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -111,31 +138,3 @@ const Circle = styled.div`
   border-radius: 50%;
   border: 1px solid black;
 `;
-
-const ProfileMenuList = styled.ul`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  li {
-    cursor: pointer;
-    padding: 10px 15px;
-    a {
-      display: flex;
-      align-items: center;
-      font-size: 15px;
-      span {
-        margin-left: 10px;
-      }
-    }
-    &:last-child {
-      border-top: 1px solid ${palette.borderColor};
-      padding: 13px 15px;
-    }
-    &:hover {
-      background-color: #fbfbfb;
-    }
-  }
-`;
-
-export default ProfileMenu;

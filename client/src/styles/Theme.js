@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const palette = {
   borderColor: "#dbdbdb",
@@ -18,12 +18,53 @@ export const Inner = styled.div`
 export const MainContents = styled.main``;
 
 export const UserNickname = styled.p`
-  font-size: 15px;
+  font-size: 14px;
   font-weight: bold;
   color: ${palette.blackColor};
+  ${(props) =>
+    props.large &&
+    css`
+      font-size: 28px;
+      font-weight: normal;
+    `}
 `;
-export const AddText = styled.p`
+export const SubText = styled.p`
+  font-size: 14px;
   color: ${palette.grayText};
+`;
+
+const ProfileIconSize = {
+  small: {
+    width: "22px",
+    height: "22px"
+  },
+  medium: {
+    width: "32px",
+    height: "32px"
+  },
+  large: {
+    width: "56px",
+    height: "56px"
+  },
+  xLarge: {
+    width: "150px",
+    height: "150px"
+  }
+};
+
+export const ProfileIcon = styled.span`
+  display: block;
+  ${({ size }) => css`
+    width: ${ProfileIconSize[size].width};
+    height: ${ProfileIconSize[size].height};
+  `}
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  img {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export const SmallProfileIcon = styled.span`

@@ -10,11 +10,11 @@ import styled from "styled-components";
 function Header(props) {
   const pathLocation = props.location.pathname;
   if (pathLocation === "/login" || pathLocation === "/accounts") {
-    return <div></div>;
+    return <></>;
   } else {
     return (
       <HeaderWarp>
-        <Inner className="header__inner">
+        <Inner>
           <Link to="/">
             <Logo src={logo} alt="instagram" />
           </Link>
@@ -41,7 +41,7 @@ const HeaderWarp = styled.header`
   padding: 10px 15px;
   background-color: #ffffff;
   border-bottom: 1px solid ${palette.borderColor};
-  .header__inner {
+  & > div {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -60,20 +60,3 @@ const SearchBox = styled.div`
   width: 210px;
   height: 28px;
 `;
-
-// const FrontSearchBox = styled.div`
-//   cursor: text;
-//   z-index: 2;
-//   position: absolute;
-//   width: 100%;
-//   height: 100%;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   padding: 5px;
-//   background-color: #f7f7f7;
-//   border: 1px solid ${palette.borderColor};
-//   border-radius: 3px;
-//   font-size: 15px;
-//   color: ${palette.grayText};
-// `;

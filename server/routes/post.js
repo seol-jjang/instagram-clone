@@ -12,7 +12,7 @@ let storage = multer.diskStorage({
   },
   fileFilter: (req, file, cb) => {
     const ext = path.extname(file.originalname);
-    if (ext !== ".jpg" || ext !== ".png" || ext !== ".jpeg" || ext !== ".gif") {
+    if (ext !== ".jpg" || ext !== ".png" || ext !== ".jpeg") {
       return cb(res.status(400).end("jpg, png, jpeg, gif"), false);
     }
     cb(null, true);
@@ -56,10 +56,19 @@ router.post("/getUserPost", (req, res) => {
       if (err) return res.status(400).json({ success: false, err });
       res.status(200).json({
         success: true,
-        postLength: post.length,
         post: post
       });
     });
+});
+
+router.post("/getUserPostCount", (req, res) => {
+  Post.find({ userFrom: req.body.userFrom }).exec((err, post) => {
+    if (err) return res.status(400).json({ success: false, err });
+    res.status(200).json({
+      success: true,
+      postLength: post.length
+    });
+  });
 });
 
 module.exports = router;

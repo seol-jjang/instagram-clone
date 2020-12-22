@@ -7,9 +7,9 @@ import {
   UserNickname,
   LargeProfileIcon
 } from "../../../styles/Theme";
-import MainSection from "./Section/MainSection";
+import MainSection from "./Section/PostFactory";
 
-const LandingPage = () => {
+const MainPage = () => {
   const user = useSelector((state) => state.user);
 
   if (user.userData && user.userData.isAuth) {
@@ -56,7 +56,7 @@ const LandingPage = () => {
   }
 };
 
-export default LandingPage;
+export default MainPage;
 
 const ContentsSection = styled.section`
   position: relative;
@@ -64,6 +64,7 @@ const ContentsSection = styled.section`
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 20px;
+  overflow: hidden;
 `;
 
 const RightSection = styled.div`
@@ -72,6 +73,7 @@ const RightSection = styled.div`
 `;
 
 const UserInfo = styled.div`
+  position: fixed;
   display: flex;
   align-items: center;
   line-height: 1.2;

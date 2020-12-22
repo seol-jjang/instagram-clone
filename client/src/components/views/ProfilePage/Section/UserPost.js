@@ -2,35 +2,34 @@ import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-function Userfeed(props) {
-  const { profileUser, postCountUpdate } = props;
+function UserPost(props) {
+  const { profileUser } = props;
   const [post, setPost] = useState([]);
   useEffect(() => {
-    const variable = { userFrom: profileUser._id };
+    const variable = { userFrom: profileUser };
     Axios.post("/api/post/getUserPost", variable).then((response) => {
       if (response.data.success) {
         setPost(response.data.post);
-        postCountUpdate(response.data.postLength);
       } else {
         alert("게시글을 불러오는 데 실패했습니다.");
       }
     });
-  }, [postCountUpdate, profileUser._id]);
+  }, [profileUser]);
   return (
-    <Feed>
+    <PostSection>
       {post.map((post, index) => (
         <article key={index}>
           <img src={`http://localhost:5000/${post.filePath[0]}`} alt={index} />
         </article>
       ))}
-    </Feed>
+    </PostSection>
   );
 }
 
-export default Userfeed;
+export default UserPost;
 
-const Feed = styled.section`
-  margin-top: 100px;
+const PostSection = styled.div`
+  margin-top: 90px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
@@ -38,6 +37,7 @@ const Feed = styled.section`
     position: relative;
     height: 293px;
     border: 1px solid #ddd;
+    background-color: black;
   }
   img {
     position: absolute;

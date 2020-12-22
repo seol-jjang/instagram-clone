@@ -9,7 +9,7 @@ const postSchema = mongoose.Schema(
     },
     description: {
       type: String,
-      maxlength: 250
+      maxlength: 120
     },
     filePath: {
       type: Object,

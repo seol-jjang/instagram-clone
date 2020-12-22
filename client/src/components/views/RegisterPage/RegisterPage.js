@@ -18,7 +18,7 @@ const RegisterPage = (props) => {
   //const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/i;
   //const emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   const emailRegExp = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i;
-  const nickNameRegExp = /^[0-9a-z]([0-9a-z_.])*/i;
+  const nickNameRegExp = /^[0-9a-z]([0-9a-z_-])*/i;
 
   const onSubmit = (data) => {
     const lowerNickname = data.nicknameInput.toLowerCase();
@@ -47,7 +47,7 @@ const RegisterPage = (props) => {
     <>
       <Section>
         <Logo>instagram</Logo>
-        <LargeText>친구들의 사진과 동영상을 보려면 가입하세요.</LargeText>
+        <TitleText>친구들의 사진과 동영상을 보려면 가입하세요.</TitleText>
         <RegisterForm onSubmit={handleSubmit(onSubmit)}>
           <Input
             type="email"
@@ -112,18 +112,18 @@ const RegisterPage = (props) => {
             가입
           </Button>
           <Button blur ref={loadingBtn} className="hide">
-            <Loading>
+            <IconSpan>
               <AiOutlineLoading />
-            </Loading>
+            </IconSpan>
           </Button>
         </RegisterForm>
-        <SmallText>
+        <TermsText>
           가입하면 Instagram의 <span>약관, 데이터 정책</span> 및{" "}
           <span>쿠키 정책</span>에 동의하게 됩니다.
-        </SmallText>
+        </TermsText>
       </Section>
       <Section>
-        <Span>계정이 있으신가요?</Span>
+        <span>계정이 있으신가요?</span>
         <Link to="/login" replace>
           <LoginBtn>로그인</LoginBtn>
         </Link>
@@ -147,6 +147,9 @@ const Section = styled.section`
     align-items: center;
     margin-top: 10px;
     padding: 25px 40px;
+    span {
+      font-size: 15px;
+    }
   }
 `;
 
@@ -170,7 +173,7 @@ const Logo = styled.h1`
   text-indent: 110%;
 `;
 
-const SmallText = styled.p`
+const TermsText = styled.p`
   margin-top: 10px;
   font-size: 12px;
   color: ${palette.grayText};
@@ -182,7 +185,7 @@ const SmallText = styled.p`
   }
 `;
 
-const LargeText = styled.p`
+const TitleText = styled.p`
   margin: 10px auto;
   font-size: 16px;
   color: #8e8e8e;
@@ -190,10 +193,6 @@ const LargeText = styled.p`
   line-height: 1.4;
   font-weight: bold;
   word-break: keep-all;
-`;
-
-const Span = styled.span`
-  font-size: 15px;
 `;
 const LoginBtn = styled.button`
   cursor: pointer;
@@ -218,7 +217,7 @@ const Rotation = keyframes`
   }
 `;
 
-const Loading = styled.span`
+const IconSpan = styled.span`
   svg {
     animation: ${Rotation} 1s linear infinite;
   }

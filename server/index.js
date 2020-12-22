@@ -27,6 +27,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/post", require("./routes/post"));
 app.use("/api/follow", require("./routes/follow"));
+app.use("/api/comment", require("./routes/comment"));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

@@ -26,7 +26,7 @@ const StyleButton = styled.button`
   cursor: pointer;
   margin: 7px 0;
   padding: 7px;
-  border-radius: 3px;
+  border-radius: 4px;
   background-color: ${palette.ActivatedColor};
   color: white;
   font-weight: bold;

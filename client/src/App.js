@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import LandingPage from "./components/views/LandingPage/LandingPage";
+import MainPage from "./components/views/MainPage/MainPage";
 import RegisterPage from "./components/views/RegisterPage/RegisterPage";
 import LoginPage from "./components/views/LoginPage/LoginPage";
 import NotFound from "./components/views/NotFound/NotFound";
@@ -19,7 +19,7 @@ function App() {
         <Header />
         <Switch>
           <MainContents>
-            <Route exact path="/" component={Auth(LandingPage, true)} />
+            <Route exact path="/" component={Auth(MainPage, true)} />
             <Route exact path="/login" component={Auth(LoginPage, false)} />
             <Route
               exact

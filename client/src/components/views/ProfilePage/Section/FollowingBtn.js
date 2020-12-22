@@ -1,13 +1,15 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BiCheck } from "react-icons/bi";
-import Button from "../../../styles/common/Button";
+import Button from "../../../../styles/common/Button";
 
-function Following(props) {
+function FollowingBtn(props) {
   const [followed, setFollowed] = useState(false);
+  const { countFollower, userTo } = props;
+
   useEffect(() => {
     let variable = {
-      userTo: props.userTo,
+      userTo: userTo,
       userFrom: localStorage.getItem("ls")
     };
     Axios.post("/api/follow/followed", variable).then((response) => {
@@ -17,17 +19,18 @@ function Following(props) {
         alert("팔로우 정보를 받아오는 데 실패했습니다.");
       }
     });
-  }, [props.userTo]);
+  }, [userTo]);
 
   const onFollowing = () => {
     let followVariable = {
-      userTo: props.userTo,
-      userFrom: props.userFrom
+      userTo: userTo,
+      userFrom: localStorage.getItem("ls")
     };
     if (followed) {
       Axios.post("/api/follow/unFollow", followVariable).then((response) => {
         if (response.data.success) {
           setFollowed(!followed);
+          countFollower("minus");
         } else {
           alert("언팔로우하는 데 실패했습니다.");
         }
@@ -36,6 +39,7 @@ function Following(props) {
       Axios.post("/api/follow/following", followVariable).then((response) => {
         if (response.data.success) {
           setFollowed(!followed);
+          countFollower("plus");
         } else {
           alert("팔로잉하는 데 실패했습니다.");
         }
@@ -58,4 +62,4 @@ function Following(props) {
   );
 }
 
-export default Following;
+export default FollowingBtn;

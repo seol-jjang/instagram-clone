@@ -7,6 +7,10 @@ function FileUpload(props) {
       target: { files }
     } = event;
 
+    if (files.length > 10) {
+      alert("최대 10장까지 사진을 업로드할 수 있습니다.");
+      return;
+    }
     let formData = new FormData();
     const config = {
       header: { "context-type": "multipart/form-data" }
@@ -25,7 +29,12 @@ function FileUpload(props) {
   };
   return (
     <>
-      <input type="file" onChange={onFileChange} accept="image/*" multiple />
+      <input
+        type="file"
+        onChange={onFileChange}
+        accept="image/png, image/jpeg, image/jpg"
+        multiple
+      />
     </>
   );
 }

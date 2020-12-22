@@ -6,7 +6,7 @@ import { RiHomeFill, RiHomeLine } from "react-icons/ri";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import Button from "../../../../styles/common/Button";
 import styled from "styled-components";
-import { palette, SmallProfileIcon } from "../../../../styles/Theme";
+import { palette, ProfileIcon } from "../../../../styles/Theme";
 import ProfileMenu from "./ProfileMenu";
 
 function RightMenu(props) {
@@ -53,7 +53,7 @@ function RightMenu(props) {
           </li>
           <li>
             <Link to="/post/upload">
-              {pathLocation === "/post/upload" ? (
+              {pathLocation === "/post/upload" && !menuVisible ? (
                 <BsPlusCircleFill size="20px" />
               ) : (
                 <BsPlusCircle size="20px" />
@@ -62,12 +62,12 @@ function RightMenu(props) {
           </li>
           {user.userData && (
             <li>
-              <SmallProfileIcon onClick={onClickProfile}>
+              <ProfileIcon onClick={onClickProfile} size="small">
                 <img
                   src={`http://localhost:5000/${user.userData.profileImage}`}
                   alt="userProfile"
                 />
-              </SmallProfileIcon>
+              </ProfileIcon>
             </li>
           )}
         </MenuList>

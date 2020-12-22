@@ -3,23 +3,15 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams, withRouter } from "react-router-dom";
 import styled from "styled-components";
-import { BiCheck } from "react-icons/bi";
-import { RiSettings4Line } from "react-icons/ri";
 import Button from "../../../styles/common/Button";
-import {
-  Inner,
-  XLargeProfileIcon,
-  UserNickname,
-  palette
-} from "../../../styles/Theme";
-import Userfeed from "./Section/Userfeed";
+import { Inner, ProfileIcon, UserNickname } from "../../../styles/Theme";
+import UserPost from "./Section/UserPost";
+import FollowInfo from "./Section/FollowInfo";
+import FollowingBtn from "./Section/FollowingBtn";
 
 function ProfilePage(props) {
   const [profileUser, setProfileUser] = useState([]);
-  const [followed, setFollowed] = useState(false);
   const [follower, setFollower] = useState(0);
-  const [following, setFollowing] = useState(0);
-  const [postCount, setPostCount] = useState(0);
   const user = useSelector((state) => state.user);
   const path = useParams();
 
@@ -34,127 +26,58 @@ function ProfilePage(props) {
         setProfileUser(response.data.userData);
       }
     });
-
-    let variable = {
-      userTo: profileUser._id,
-      userFrom: localStorage.getItem("ls")
-    };
-    Axios.post("/api/follow/followed", variable).then((response) => {
-      if (response.data.success) {
-        setFollowed(response.data.followed);
-      } else {
-        alert("팔로우 정보를 받아오는 데 실패했습니다.");
-      }
-    });
-
-    let followerVariable = { userTo: profileUser._id };
-    Axios.post("/api/follow/followerNumber", followerVariable).then(
-      (response) => {
-        if (response.data.success) {
-          setFollower(response.data.followerNumber);
-        } else {
-          alert("팔로워를 불러오는 데 실패했습니다");
-        }
-      }
-    );
-    let followingVariable = { userFrom: profileUser._id };
-    Axios.post("/api/follow/followingNumber", followingVariable).then(
-      (response) => {
-        if (response.data.success) {
-          setFollowing(response.data.followingNumber);
-        } else {
-          alert("팔로워를 불러오는 데 실패했습니다");
-        }
-      }
-    );
   }, [path.nickname, profileUser._id, props.history]);
 
-  const onFollowing = () => {
-    let followVariable = {
-      userTo: profileUser._id,
-      userFrom: localStorage.getItem("ls")
-    };
-    if (followed) {
-      Axios.post("/api/follow/unFollow", followVariable).then((response) => {
-        if (response.data.success) {
-          setFollower(follower - 1);
-          setFollowed(!followed);
-        } else {
-          alert("언팔로우하는 데 실패했습니다.");
-        }
-      });
-    } else {
-      Axios.post("/api/follow/following", followVariable).then((response) => {
-        if (response.data.success) {
-          setFollower(follower + 1);
-          setFollowed(!followed);
-        } else {
-          alert("팔로잉하는 데 실패했습니다.");
-        }
-      });
-    }
+  const refreshFollower = (count) => {
+    setFollower(count);
   };
-
-  const postCountUpdate = (count) => {
-    setPostCount(count);
+  const countFollower = (value) => {
+    if (value === "minus") {
+      setFollower(follower - 1);
+    } else if (value === "plus") {
+      setFollower(follower + 1);
+    }
   };
 
   return (
     <Inner>
-      <ContentsSection>
-        {profileUser.profileImage && (
-          <UserInfo>
-            <div className="profile-image">
-              <XLargeProfileIcon>
+      {profileUser.profileImage && (
+        <ContentsSection>
+          <ProfileContainer>
+            <ProfileImage>
+              <ProfileIcon size="xLarge">
                 <img
                   src={`http://localhost:5000/${profileUser.profileImage}`}
                   alt="userProfile"
                 />
-              </XLargeProfileIcon>
-            </div>
-            <UserDetail>
+              </ProfileIcon>
+            </ProfileImage>
+            <ProfileDetail>
               <div>
-                <p className="user-nickname">{profileUser.nickname}</p>
+                <UserNickname large>{profileUser.nickname}</UserNickname>
                 {user.userData &&
                 user.userData.nickname !== profileUser.nickname ? (
-                  followed ? (
-                    <Button onClick={onFollowing} gray>
-                      팔로잉
-                      <span>
-                        <BiCheck />
-                      </span>
-                    </Button>
-                  ) : (
-                    <Button onClick={onFollowing}>팔로우</Button>
-                  )
+                  <FollowingBtn
+                    userTo={profileUser._id}
+                    countFollower={countFollower}
+                  />
                 ) : (
                   <>
                     <Button className="profile-edit" gray>
                       프로필 편집
                     </Button>
-                    <span>
-                      <RiSettings4Line size="30px" />
-                    </span>
                   </>
                 )}
               </div>
-              <FollowInfo>
-                <li>
-                  게시물 <span>{postCount}</span>
-                </li>
-                <li>
-                  팔로워 <span>{follower}</span>
-                </li>
-                <li>
-                  팔로우 <span>{following}</span>
-                </li>
-              </FollowInfo>
-              <UserNickname>{profileUser.name}</UserNickname>
-            </UserDetail>
-          </UserInfo>
-        )}
-        <Userfeed profileUser={profileUser} postCountUpdate={postCountUpdate} />
-      </ContentsSection>
+              <FollowInfo
+                profileUser={profileUser._id}
+                refreshFollower={refreshFollower}
+              />
+            </ProfileDetail>
+          </ProfileContainer>
+          <UserPost profileUser={profileUser._id} />
+        </ContentsSection>
+      )}
     </Inner>
   );
 }
@@ -166,50 +89,25 @@ const ContentsSection = styled.section`
   margin-top: 85px;
 `;
 
-const UserInfo = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  .profile-image {
-    justify-self: center;
-  }
+const ProfileContainer = styled.div`
+  display: flex;
 `;
 
-const UserDetail = styled.div`
-  & > div:first-child {
+const ProfileImage = styled.div`
+  flex-grow: 1;
+`;
+
+const ProfileDetail = styled.div`
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  & > div {
     display: flex;
     align-items: center;
-    & > span {
-      display: flex;
-    }
-  }
-  & > p {
-    font-size: 16px;
-  }
-  button {
-    margin-left: 20px;
-    padding: 6px 25px;
-  }
-  .profile-edit {
-    padding: 5px 10px;
-    margin-left: 20px;
-    margin-right: 15px;
-  }
-  .user-nickname {
-    font-size: 28px;
-    font-weight: normal;
-    color: ${palette.blackColor};
-  }
-`;
-
-const FollowInfo = styled.ul`
-  display: flex;
-  margin: 20px 0;
-  li {
-    &:not(:last-child) {
-      margin-right: 30px;
-    }
-    span {
-      font-weight: bold;
+    button {
+      margin: 0;
+      margin-left: 20px;
+      padding: 7px 10px;
     }
   }
 `;
