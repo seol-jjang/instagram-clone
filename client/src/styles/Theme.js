@@ -8,13 +8,26 @@ export const palette = {
   blackColor: "#262626"
 };
 
+export const viewportSize = {
+  mobile: "(max-width: 450px)",
+  tablet: "(max-width: 735px)",
+  laptop: "(max-width: 999px)",
+  desktop: "(min-width: 1000px)"
+};
+
 export const Inner = styled.div`
   position: relative;
   width: 935px;
-  max-width: 935px;
   margin: 0 auto;
-`;
 
+  @media ${viewportSize.laptop} {
+    width: 100%;
+    padding: 0 20px;
+  }
+  @media ${viewportSize.tablet} {
+    padding: 0;
+  }
+`;
 export const MainContents = styled.main``;
 
 export const UserNickname = styled.p`
@@ -61,57 +74,6 @@ export const ProfileIcon = styled.span`
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-`;
-
-export const SmallProfileIcon = styled.span`
-  display: block;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-`;
-
-export const MediumProfileIcon = styled.span`
-  display: block;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-`;
-
-export const LargeProfileIcon = styled.span`
-  display: block;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-`;
-
-export const XLargeProfileIcon = styled.span`
-  display: block;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  overflow: hidden;
   img {
     width: 100%;
     height: 100%;

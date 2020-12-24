@@ -5,7 +5,8 @@ import {
   Inner,
   SubText,
   UserNickname,
-  ProfileIcon
+  ProfileIcon,
+  viewportSize
 } from "../../../styles/Theme";
 import PostFactory from "./Section/PostFactory";
 
@@ -56,14 +57,28 @@ const ContentsSection = styled.section`
   grid-template-columns: 2fr 1fr;
   gap: 20px;
   overflow: hidden;
+
+  @media ${viewportSize.laptop} {
+    display: flex;
+    justify-content: center;
+  }
+  @media ${viewportSize.laptop} {
+    margin-top: 65px;
+  }
 `;
 
 const RightSection = styled.div`
   height: 100vh;
   padding: 20px 0 20px 10px;
+
+  @media ${viewportSize.laptop} {
+    display: none;
+  }
 `;
 
 const LeftSection = styled.div`
+  max-width: 614px;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;

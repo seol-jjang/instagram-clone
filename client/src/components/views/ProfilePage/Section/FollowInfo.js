@@ -1,6 +1,7 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { viewportSize } from "../../../../styles/Theme";
 
 function FollowInfo(props) {
   const { profileUser, refreshFollower } = props;
@@ -68,6 +69,16 @@ const DataList = styled.ul`
     }
     span {
       font-weight: bold;
+    }
+  }
+
+  @media ${viewportSize.tablet} {
+    width: 100%;
+    align-items: center;
+    li {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
   }
 `;

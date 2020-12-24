@@ -23,6 +23,9 @@ function AddComment(props) {
     };
     Axios.post("/api/comment/saveComment", variables).then((response) => {
       if (response.data.success) {
+        const variable = { postId: props.postId };
+        props.refreshComment(variable);
+        setComment("");
       } else {
         alert("댓글을 추가하는 데 실패했습니다.");
       }

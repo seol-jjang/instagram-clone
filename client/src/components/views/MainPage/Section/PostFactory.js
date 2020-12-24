@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import styled from "styled-components";
-import { IoPaperPlaneOutline } from "react-icons/io5";
 import { BsHeart, BsHeartFill, BsChat } from "react-icons/bs";
 import { VscBookmark } from "react-icons/vsc";
 import { palette, ProfileIcon, UserNickname } from "../../../../styles/Theme";
 import { Link } from "react-router-dom";
-import AddComment from "../../../utils/AddComment";
 import CommentFactory from "./CommentFactory";
+import ImageSlide from "../../../utils/ImageSlide";
 
 function PostFactory() {
   const [posts, setPosts] = useState([]);
-  const [comment, setComment] = useState("");
 
   useEffect(() => {
     Axios.get("/api/post/getPosts").then((response) => {
@@ -41,42 +39,32 @@ function PostFactory() {
             </Link>
           </Writer>
           <Picture>
-            {post.filePath.map((img, index) => (
-              <img
-                key={index}
-                src={`http://localhost:5000/${img}`}
-                alt={`postImage_${index}`}
-              />
-            ))}
+            <ImageSlide images={post.filePath} />
           </Picture>
+          <BtnUtil>
+            <div>
+              <button>
+                <BsHeart className="like-btn" />
+              </button>
+              <button>
+                <BsChat />
+              </button>
+            </div>
+            <div>
+              <button>
+                <VscBookmark />
+              </button>
+            </div>
+          </BtnUtil>
           <Details>
-            <BtnUtil>
-              <div>
-                <button>
-                  <BsHeart className="like-btn" />
-                </button>
-                <button>
-                  <BsChat />
-                </button>
-                <button>
-                  <IoPaperPlaneOutline />
-                </button>
-              </div>
-              <div>
-                <button>
-                  <VscBookmark />
-                </button>
-              </div>
-            </BtnUtil>
             <PostContent>
               <Link to={`/user/${post.userFrom.nickname}`}>
                 <UserNickname>{post.userFrom.nickname}</UserNickname>
               </Link>
               <Description>{post.description}</Description>
             </PostContent>
-            <CommentFactory postId={post._id} />
           </Details>
-          <AddComment />
+          <CommentFactory postId={post._id} />
         </Article>
       ))}
     </>
@@ -93,7 +81,7 @@ const Article = styled.article`
   margin-bottom: 60px;
 `;
 
-const Writer = styled.div`
+const Writer = styled.header`
   display: flex;
   align-items: center;
   padding: 13px 15px;
@@ -106,13 +94,10 @@ const Writer = styled.div`
 `;
 
 const Picture = styled.div`
+  position: relative;
   background-color: black;
   border-top: 1px solid ${palette.borderColor};
   border-bottom: 1px solid ${palette.borderColor};
-  img {
-    display: block;
-    width: 100%;
-  }
 `;
 
 const Details = styled.div`
@@ -124,7 +109,8 @@ const BtnUtil = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  padding: 12px;
+  padding-bottom: 0;
   button {
     padding: 0;
     cursor: pointer;

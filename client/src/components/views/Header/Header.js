@@ -4,7 +4,7 @@ import { BiSearch } from "react-icons/bi";
 import { AiFillCloseCircle } from "react-icons/ai";
 import RightMenu from "./Section/RightMenu";
 import logo from "../../../assets/instagram_logo_small.png";
-import { palette, Inner } from "../../../styles/Theme";
+import { palette, viewportSize } from "../../../styles/Theme";
 import styled from "styled-components";
 
 function Header(props) {
@@ -14,7 +14,7 @@ function Header(props) {
   } else {
     return (
       <HeaderWarp>
-        <Inner>
+        <HeaderInner>
           <Link to="/">
             <Logo src={logo} alt="instagram" />
           </Link>
@@ -22,7 +22,7 @@ function Header(props) {
             <Input type="text" placeholder="검색" search />
           </SearchBox> */}
           <RightMenu />
-        </Inner>
+        </HeaderInner>
       </HeaderWarp>
     );
   }
@@ -38,13 +38,22 @@ const HeaderWarp = styled.header`
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 10px 15px;
+  padding: 10px 0;
   background-color: #ffffff;
   border-bottom: 1px solid ${palette.borderColor};
   & > div {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+`;
+
+const HeaderInner = styled.div`
+  position: relative;
+  width: 935px;
+  margin: 0 auto;
+  @media ${viewportSize.laptop} {
+    padding: 0 10px;
   }
 `;
 

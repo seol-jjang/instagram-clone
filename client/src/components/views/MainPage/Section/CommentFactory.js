@@ -4,19 +4,15 @@ import { Link } from "react-router-dom";
 import { BsHeart } from "react-icons/bs";
 import { UserNickname, SubText } from "../../../../styles/Theme";
 import styled from "styled-components";
+import AddComment from "../../../utils/AddComment";
 
 function CommentFactory(props) {
   const [comments, setComments] = useState([]);
-  const [commentsCount, setCommentsCount] = useState([]);
+  const [commentsCount, setCommentsCount] = useState(0);
+
   useEffect(() => {
     const variable = { postId: props.postId };
-    Axios.post("/api/comment/getComments", variable).then((response) => {
-      if (response.data.success) {
-        setComments(response.data.comments);
-      } else {
-        alert("댓글 정보를 불러오는 데 실패했습니다.");
-      }
-    });
+    getComments(variable);
     Axios.post("/api/comment/getCommentsCount", variable).then((response) => {
       if (response.data.success) {
         setCommentsCount(response.data.commentCount);
@@ -25,6 +21,21 @@ function CommentFactory(props) {
       }
     });
   }, [props.postId]);
+
+  const getComments = (variable) => {
+    Axios.post("/api/comment/getComments", variable).then((response) => {
+      if (response.data.success) {
+        setComments(response.data.comments);
+      } else {
+        alert("댓글 정보를 불러오는 데 실패했습니다.");
+      }
+    });
+  };
+
+  const refreshComment = (variable) => {
+    getComments(variable);
+    setCommentsCount(commentsCount + 1);
+  };
   return (
     <>
       {comments.length !== 0 && (
@@ -49,6 +60,7 @@ function CommentFactory(props) {
           </section>
         </Comment>
       )}
+      <AddComment postId={props.postId} refreshComment={refreshComment} />
     </>
   );
 }
@@ -56,7 +68,8 @@ function CommentFactory(props) {
 export default CommentFactory;
 
 const Comment = styled.div`
-  margin-top: 7px;
+  padding: 12px;
+  padding-top: 0;
   display: flex;
   flex-direction: column;
   article {
