@@ -23,7 +23,7 @@ function CommentFactory(props) {
   }, [props.postId]);
 
   const getComments = (variable) => {
-    Axios.post("/api/comment/getComments", variable).then((response) => {
+    Axios.post("/api/comment/getCommentsLimit", variable).then((response) => {
       if (response.data.success) {
         setComments(response.data.comments);
       } else {
@@ -40,7 +40,7 @@ function CommentFactory(props) {
     <>
       {comments.length !== 0 && (
         <Comment>
-          <Link to={`/`}>
+          <Link to={`/p/${props.postId}`}>
             <SubText>댓글 {commentsCount}개 모두보기</SubText>
           </Link>
           <section>
@@ -50,7 +50,7 @@ function CommentFactory(props) {
                   <Link to={`/${comment.userFrom.nickname}`}>
                     <UserNickname>{comment.userFrom.nickname}</UserNickname>
                   </Link>
-                  <span>{comment.content}</span>
+                  <span className="comment">{comment.content}</span>
                 </div>
                 <button>
                   <BsHeart size="12px" />
@@ -81,7 +81,7 @@ const Comment = styled.div`
       a:hover {
         text-decoration: underline;
       }
-      span {
+      .comment {
         font-size: 14px;
         margin-left: 5px;
       }

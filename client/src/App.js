@@ -9,6 +9,7 @@ import PostUploadPage from "./components/views/PostUploadPage/PostUploadPage";
 import GlobalStyle from "./styles/GlobalStyle";
 import Header from "./components/views/Header/Header";
 import ProfilePage from "./components/views/ProfilePage/ProfilePage";
+import PostDetailPage from "./components/views/PostDetailPage/PostDetailPage";
 import { MainContents } from "./styles/Theme";
 
 function App() {
@@ -35,6 +36,11 @@ function App() {
               exact
               path="/user/:nickname"
               component={Auth(ProfilePage, null)}
+            />
+            <Route
+              exact
+              path="/p/:postId"
+              component={Auth(PostDetailPage, null)}
             />
             <Route exact path="/not-found" component={Auth(NotFound, null)} />
           </MainContents>

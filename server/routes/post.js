@@ -71,4 +71,16 @@ router.post("/getUserPostCount", (req, res) => {
   });
 });
 
+router.post("/getPostDetail", (req, res) => {
+  Post.findOne({ _id: req.body.postId })
+    .populate("userFrom")
+    .exec((err, post) => {
+      if (err) return res.status(400).json({ success: false, err });
+      res.status(200).json({
+        success: true,
+        post: post
+      });
+    });
+});
+
 module.exports = router;

@@ -16,7 +16,8 @@ const commentSchema = mongoose.Schema(
       ref: "Post"
     },
     content: {
-      type: String
+      type: String,
+      maxlength: 120
     }
   },
   { timestamps: true }

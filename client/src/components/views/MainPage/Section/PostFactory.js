@@ -29,7 +29,7 @@ function PostFactory() {
             <ProfileIcon size="medium">
               <Link to={`/user/${post.userFrom.nickname}`}>
                 <img
-                  src={post.userFrom.profileImage}
+                  src={`http://localhost:5000/${post.userFrom.profileImage}`}
                   alt={post.userFrom.nickname}
                 />
               </Link>
@@ -47,7 +47,9 @@ function PostFactory() {
                 <BsHeart className="like-btn" />
               </button>
               <button>
-                <BsChat />
+                <Link to={`/p/${post._id}`}>
+                  <BsChat />
+                </Link>
               </button>
             </div>
             <div>
@@ -102,7 +104,7 @@ const Picture = styled.div`
 
 const Details = styled.div`
   background-color: white;
-  padding: 12px;
+  padding: 5px 12px 8px;
 `;
 
 const BtnUtil = styled.div`
@@ -119,19 +121,17 @@ const BtnUtil = styled.div`
       margin-left: 10px;
     }
     svg {
-      width: 26px;
-      height: 26px;
-    }
-    .like-btn {
       width: 25px;
       height: 25px;
+    }
+    .like-btn {
+      padding-top: 2px;
     }
   }
 `;
 
 const PostContent = styled.span`
-  display: flex;
-  align-items: flex-start;
+  line-height: 1.1;
   a:hover {
     text-decoration: underline;
   }

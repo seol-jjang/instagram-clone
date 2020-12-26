@@ -30,10 +30,11 @@ export const Inner = styled.div`
 `;
 export const MainContents = styled.main``;
 
-export const UserNickname = styled.p`
+export const UserNickname = styled.span`
   font-size: 14px;
   font-weight: bold;
   color: ${palette.blackColor};
+  margin: 0;
   ${(props) =>
     props.large &&
     css`
