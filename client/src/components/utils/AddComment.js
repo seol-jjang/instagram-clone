@@ -2,11 +2,13 @@ import Axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { AiFillCloseCircle } from "react-icons/ai";
 import { palette } from "../../styles/Theme";
 
 function AddComment(props) {
   const [comment, setComment] = useState("");
   const user = useSelector((state) => state.user);
+  const { refreshComment, postId, responseTo, refreshReplyComment } = props;
 
   const onChangeHandler = (event) => {
     setComment(event.target.value);
@@ -19,12 +21,13 @@ function AddComment(props) {
     const variables = {
       content: comment,
       userFrom: user.userData._id,
-      postId: props.postId
+      postId: postId,
+      responseTo: responseTo.commentId
     };
     Axios.post("/api/comment/saveComment", variables).then((response) => {
       if (response.data.success) {
-        const variable = { postId: props.postId };
-        props.refreshComment(variable);
+        const variable = { postId: postId };
+        refreshComment(variable);
         setComment("");
       } else {
         alert("댓글을 추가하는 데 실패했습니다.");
@@ -35,6 +38,17 @@ function AddComment(props) {
     <Comment>
       <div>
         <form onSubmit={onSubmit}>
+          {responseTo.length !== 0 && (
+            <span>
+              {`@${responseTo.nickname}`}
+              <button
+                className="delete-btn"
+                onClick={() => refreshReplyComment(null)}
+              >
+                <AiFillCloseCircle />
+              </button>
+            </span>
+          )}
           <textarea
             placeholder="댓글 달기..."
             onChange={onChangeHandler}
@@ -61,6 +75,20 @@ const Comment = styled.div`
   form {
     display: flex;
     align-items: center;
+    span {
+      margin-right: 5px;
+      display: flex;
+      color: gray;
+      .delete-btn {
+        margin-left: 5px;
+        padding: 0;
+        background-color: transparent;
+        color: gray;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    }
     textarea {
       height: 18px;
       max-height: 80px;

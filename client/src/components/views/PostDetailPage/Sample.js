@@ -13,13 +13,12 @@ import {
 import ImageSlide from "../../utils/ImageSlide";
 import AddComment from "../../utils/AddComment";
 import ReplyComment from "./Section/ReplyComment";
-import SingleComment from "./Section/SingleComment";
 
 function PostDetailPage(props) {
   const params = useParams();
   const [post, setPost] = useState([]);
   const [comments, setComments] = useState([]);
-  const [responseTo, setResponseTo] = useState([]);
+  const [toUser, setToUser] = useState([]);
 
   useEffect(() => {
     Axios.post("/api/post/getPostDetail", params).then((response) => {
@@ -47,15 +46,8 @@ function PostDetailPage(props) {
     getComments(variable);
   };
 
-  const onReplyComment = (nickname, commentId) => {
-    if (nickname !== null) {
-      setResponseTo({
-        nickname,
-        commentId
-      });
-    } else {
-      setResponseTo([]);
-    }
+  const onReplyComment = (user) => {
+    setToUser(user);
   };
 
   return (
@@ -102,42 +94,44 @@ function PostDetailPage(props) {
                   </Writer>
                   {comments.length !== 0 && (
                     <Comment>
-                      {comments.map(
-                        (comment, index) =>
-                          !comment.responseTo && (
-                            <article key={index}>
+                      {comments.map((comment, index) => (
+                        <article key={index}>
+                          <Writer>
+                            <ProfileIcon
+                              size="medium"
+                              className="profile-image"
+                            >
+                              <Link to={`/user/${comment.userFrom.nickname}`}>
+                                <img
+                                  src={`http://localhost:5000/${comment.userFrom.profileImage}`}
+                                  alt={comment.userFrom.nickname}
+                                />
+                              </Link>
+                            </ProfileIcon>
+                            <ContentWrap>
                               <div>
-                                <Writer>
-                                  <ProfileIcon
-                                    size="medium"
-                                    className="profile-image"
-                                  >
-                                    <Link
-                                      to={`/user/${comment.userFrom.nickname}`}
-                                    >
-                                      <img
-                                        src={`http://localhost:5000/${comment.userFrom.profileImage}`}
-                                        alt={comment.userFrom.nickname}
-                                      />
-                                    </Link>
-                                  </ProfileIcon>
-                                  <SingleComment
-                                    comment={comment}
-                                    refreshReplyComment={onReplyComment}
-                                  />
-                                </Writer>
-                                <button>
-                                  <BsHeart size="12px" />
-                                </button>
+                                <Link to={`/${comment.userFrom.nickname}`}>
+                                  <UserNickname>
+                                    {comment.userFrom.nickname}
+                                  </UserNickname>
+                                </Link>
+                                <span className="comment">
+                                  {comment.content}
+                                </span>
                               </div>
-                              <ReplyComment
-                                comments={comments}
-                                refreshReplyComment={onReplyComment}
-                                parentCommentId={comment._id}
-                              />
-                            </article>
-                          )
-                      )}
+                              <button
+                                onClick={() => onReplyComment(comment.userFrom)}
+                              >
+                                답글 달기
+                              </button>
+                            </ContentWrap>
+                          </Writer>
+                          <button>
+                            <BsHeart size="12px" />
+                          </button>
+                          <ReplyComment />
+                        </article>
+                      ))}
                     </Comment>
                   )}
                 </ScrollContainer>
@@ -162,8 +156,7 @@ function PostDetailPage(props) {
                   <AddComment
                     postId={post._id}
                     refreshComment={refreshComment}
-                    refreshReplyComment={onReplyComment}
-                    responseTo={responseTo}
+                    toUser={toUser}
                   />
                 </UtilContainer>
               </PostContents>
@@ -244,6 +237,16 @@ const Writer = styled.div`
   }
 `;
 
+const ContentWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  button {
+    color: gray;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+`;
+
 const Description = styled.span`
   font-size: 14px;
   white-space: pre-line;
@@ -285,12 +288,10 @@ const Comment = styled.section`
   flex-direction: column;
   article {
     display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    & > div:first-child {
+    justify-content: space-between;
+    margin-top: 7px;
+    div {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
       a:hover {
         text-decoration: underline;
       }
