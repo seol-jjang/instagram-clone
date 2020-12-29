@@ -28,6 +28,7 @@ app.use("/api/users", require("./routes/users"));
 app.use("/api/post", require("./routes/post"));
 app.use("/api/follow", require("./routes/follow"));
 app.use("/api/comment", require("./routes/comment"));
+app.use("/api/like", require("./routes/like"));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

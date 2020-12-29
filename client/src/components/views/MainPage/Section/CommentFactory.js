@@ -1,14 +1,15 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { BsHeart } from "react-icons/bs";
 import { UserNickname, SubText } from "../../../../styles/Theme";
 import styled from "styled-components";
 import AddComment from "../../../utils/AddComment";
+import LikeBtn from "../../../utils/LikeBtn";
 
 function CommentFactory(props) {
   const [comments, setComments] = useState([]);
   const [commentsCount, setCommentsCount] = useState(0);
+  const [likeNumber, setLikeNumber] = useState(0);
 
   useEffect(() => {
     const variable = { postId: props.postId };
@@ -22,6 +23,10 @@ function CommentFactory(props) {
     });
   }, [props.postId]);
 
+  const refreshLike = (likeNumber) => {
+    setLikeNumber(likeNumber);
+  };
+
   const getComments = (variable) => {
     Axios.post("/api/comment/getCommentsLimit", variable).then((response) => {
       if (response.data.success) {
@@ -32,10 +37,10 @@ function CommentFactory(props) {
     });
   };
 
-  const refreshComment = (variable) => {
-    getComments(variable);
-    setCommentsCount(commentsCount + 1);
+  const refreshComment = (likes) => {
+    setCommentsCount(likes);
   };
+
   return (
     <>
       {comments.length !== 0 && (
@@ -52,9 +57,7 @@ function CommentFactory(props) {
                   </Link>
                   <span className="comment">{comment.content}</span>
                 </div>
-                <button>
-                  <BsHeart size="12px" />
-                </button>
+                <LikeBtn commentId={comment._id} refreshLike={refreshLike} />
               </article>
             ))}
           </section>
@@ -91,6 +94,9 @@ const Comment = styled.div`
       padding: 0;
       display: flex;
       background-color: transparent;
+    }
+    .like {
+      fill: #ff1b3e;
     }
   }
 `;

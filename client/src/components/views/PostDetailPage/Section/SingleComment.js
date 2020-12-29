@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BsHeart, BsHeartFill, BsChat } from "react-icons/bs";
-import { ProfileIcon, UserNickname } from "../../../../styles/Theme";
+import { UserNickname } from "../../../../styles/Theme";
 import styled from "styled-components";
 
 function SingleComment(props) {
@@ -17,13 +16,18 @@ function SingleComment(props) {
               </Link>
               <span className="comment">{comment.content}</span>
             </div>
-            <button
-              onClick={() =>
-                refreshReplyComment(comment.userFrom.nickname, comment._id)
-              }
-            >
-              답글 달기
-            </button>
+            <div>
+              {/* {props.likeNumber > 0 && (
+                <button>좋아요 {props.likeNumber}개</button>
+              )} */}
+              <button
+                onClick={() =>
+                  refreshReplyComment(comment.userFrom.nickname, comment._id)
+                }
+              >
+                답글 달기
+              </button>
+            </div>
           </ContentWrap>
         </>
       )}
@@ -36,9 +40,13 @@ export default SingleComment;
 const ContentWrap = styled.div`
   display: flex;
   flex-direction: column;
-  button {
-    color: gray;
-    font-weight: bold;
-    margin-top: 5px;
+  div:last-child {
+    display: flex;
+    button {
+      color: gray;
+      font-weight: bold;
+      margin-top: 5px;
+      margin-right: 10px;
+    }
   }
 `;

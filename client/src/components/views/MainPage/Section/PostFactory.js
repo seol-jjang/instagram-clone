@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import styled from "styled-components";
-import { BsHeart, BsHeartFill, BsChat } from "react-icons/bs";
+import { BsChat } from "react-icons/bs";
 import { VscBookmark } from "react-icons/vsc";
 import { palette, ProfileIcon, UserNickname } from "../../../../styles/Theme";
 import { Link } from "react-router-dom";
 import CommentFactory from "./CommentFactory";
 import ImageSlide from "../../../utils/ImageSlide";
+import LikeBtn from "../../../utils/LikeBtn";
+import LikeNumber from "./LikeNumber";
 
 function PostFactory() {
   const [posts, setPosts] = useState([]);
+  const [likeNumber, setLikeNumber] = useState(0);
 
   useEffect(() => {
     Axios.get("/api/post/getPosts").then((response) => {
@@ -20,6 +23,10 @@ function PostFactory() {
       }
     });
   }, []);
+
+  const refreshLike = (likeNumber) => {
+    setLikeNumber(likeNumber);
+  };
 
   return (
     <>
@@ -43,9 +50,7 @@ function PostFactory() {
           </Picture>
           <BtnUtil>
             <div>
-              <button>
-                <BsHeart className="like-btn" />
-              </button>
+              <LikeBtn postId={post._id} refreshLike={refreshLike} />
               <button>
                 <Link to={`/p/${post._id}`}>
                   <BsChat />
@@ -107,6 +112,13 @@ const Details = styled.div`
   padding: 5px 12px 8px;
 `;
 
+const LikeText = styled.p`
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: ${palette.blackColor};
+`;
+
 const BtnUtil = styled.div`
   display: flex;
   justify-content: space-between;
@@ -126,6 +138,9 @@ const BtnUtil = styled.div`
     }
     .like-btn {
       padding-top: 2px;
+    }
+    .like {
+      fill: #ff1b3e;
     }
   }
 `;

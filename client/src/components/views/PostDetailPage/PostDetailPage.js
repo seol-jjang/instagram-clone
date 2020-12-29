@@ -2,7 +2,7 @@ import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { BsHeart, BsHeartFill, BsChat } from "react-icons/bs";
+import { BsChat } from "react-icons/bs";
 import { VscBookmark } from "react-icons/vsc";
 import {
   Inner,
@@ -14,12 +14,14 @@ import ImageSlide from "../../utils/ImageSlide";
 import AddComment from "../../utils/AddComment";
 import ReplyComment from "./Section/ReplyComment";
 import SingleComment from "./Section/SingleComment";
+import LikeBtn from "../../utils/LikeBtn";
 
 function PostDetailPage(props) {
   const params = useParams();
   const [post, setPost] = useState([]);
   const [comments, setComments] = useState([]);
   const [responseTo, setResponseTo] = useState([]);
+  const [likeNumber, setLikeNumber] = useState(0);
 
   useEffect(() => {
     Axios.post("/api/post/getPostDetail", params).then((response) => {
@@ -31,7 +33,7 @@ function PostDetailPage(props) {
         alert("게시글을 불러오는 데 실패했습니다.");
       }
     });
-  }, [params]);
+  }, [params, props.userId]);
 
   const getComments = (variable) => {
     Axios.post("/api/comment/getComments", variable).then((response) => {
@@ -45,6 +47,10 @@ function PostDetailPage(props) {
 
   const refreshComment = (variable) => {
     getComments(variable);
+  };
+
+  const refreshLike = (likeNumber) => {
+    setLikeNumber(likeNumber);
   };
 
   const onReplyComment = (nickname, commentId) => {
@@ -124,11 +130,13 @@ function PostDetailPage(props) {
                                   <SingleComment
                                     comment={comment}
                                     refreshReplyComment={onReplyComment}
+                                    likeNumber={likeNumber}
                                   />
                                 </Writer>
-                                <button>
-                                  <BsHeart size="12px" />
-                                </button>
+                                <LikeBtn
+                                  commentId={comment._id}
+                                  refreshLike={refreshLike}
+                                />
                               </div>
                               <ReplyComment
                                 comments={comments}
@@ -144,9 +152,7 @@ function PostDetailPage(props) {
                 <UtilContainer>
                   <BtnUtil>
                     <div>
-                      <button>
-                        <BsHeart className="like-btn" />
-                      </button>
+                      <LikeBtn postId={post._id} refreshLike={refreshLike} />
                       <button>
                         <Link to={`/p/${post._id}`}>
                           <BsChat />
@@ -224,7 +230,7 @@ const PostContents = styled.div`
 `;
 
 const ScrollContainer = styled.div`
-  height: 300px;
+  height: 310px;
   overflow: scroll;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
@@ -275,7 +281,10 @@ const BtnUtil = styled.div`
       height: 25px;
     }
     .like-btn {
-      padding-top: 2px;
+      padding-top: 1px;
+    }
+    .like {
+      fill: #ff1b3e;
     }
   }
 `;

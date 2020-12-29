@@ -41,7 +41,7 @@ function FollowInfo(props) {
         }
       }
     );
-  });
+  }, [profileUser, refreshFollower]);
   return (
     <DataList>
       <li>

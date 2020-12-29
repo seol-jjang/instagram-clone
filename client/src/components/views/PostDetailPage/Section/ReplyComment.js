@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { BsHeart, BsHeartFill, BsChat } from "react-icons/bs";
-import { ProfileIcon, UserNickname } from "../../../../styles/Theme";
+import { ProfileIcon } from "../../../../styles/Theme";
 import SingleComment from "./SingleComment";
+import LikeBtn from "../../../utils/LikeBtn";
 
 function ReplyComment(props) {
   const { comments, refreshReplyComment, parentCommentId } = props;
   const [replyCommentNumber, setReplyCommentNumber] = useState(0);
   const [openReplyComment, setOpenReplyComment] = useState(false);
+  const [likeNumber, setLikeNumber] = useState(0);
 
   useEffect(() => {
     let commentNumber = 0;
@@ -20,6 +21,11 @@ function ReplyComment(props) {
     });
     setReplyCommentNumber(commentNumber);
   }, [comments, parentCommentId]);
+
+  const refreshLike = (likeNumber) => {
+    setLikeNumber(likeNumber);
+  };
+
   const renderReplyComment = (parentCommentId) =>
     comments.map(
       (comment, index) =>
@@ -40,9 +46,7 @@ function ReplyComment(props) {
                   refreshReplyComment={refreshReplyComment}
                 />
               </Writer>
-              <button>
-                <BsHeart size="12px" />
-              </button>
+              <LikeBtn commentId={comment._id} refreshLike={refreshLike} />
             </div>
             <ReplyComment
               comments={comments}

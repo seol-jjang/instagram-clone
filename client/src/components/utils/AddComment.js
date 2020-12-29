@@ -38,7 +38,7 @@ function AddComment(props) {
     <Comment>
       <div>
         <form onSubmit={onSubmit}>
-          {responseTo.length !== 0 && (
+          {responseTo && responseTo.length !== 0 && (
             <span>
               {`@${responseTo.nickname}`}
               <button
