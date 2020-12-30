@@ -57,7 +57,7 @@ function LikeBtn(props) {
     <>
       {likeAction ? (
         <button onClick={onClickLike}>
-          <BsHeartFill className="like-btn like" />
+          <BsHeartFill className="like-btn" fill="#ff1b3e" />
         </button>
       ) : (
         <button onClick={onClickLike}>

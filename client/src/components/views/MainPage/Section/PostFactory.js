@@ -63,6 +63,7 @@ function PostFactory() {
               </button>
             </div>
           </BtnUtil>
+          <LikeNumber likeNumber={likeNumber} postId={post._id} />
           <Details>
             <PostContent>
               <Link to={`/user/${post.userFrom.nickname}`}>
@@ -110,13 +111,6 @@ const Picture = styled.div`
 const Details = styled.div`
   background-color: white;
   padding: 5px 12px 8px;
-`;
-
-const LikeText = styled.p`
-  margin-bottom: 8px;
-  font-size: 14px;
-  font-weight: bold;
-  color: ${palette.blackColor};
 `;
 
 const BtnUtil = styled.div`

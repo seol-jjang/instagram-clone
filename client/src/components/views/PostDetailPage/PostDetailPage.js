@@ -33,7 +33,19 @@ function PostDetailPage(props) {
         alert("게시글을 불러오는 데 실패했습니다.");
       }
     });
-  }, [params, props.userId]);
+
+    const likeVariable = {
+      postId: post._id
+    };
+
+    Axios.post("/api/like/getLikes", likeVariable).then((response) => {
+      if (response.data.success) {
+        setLikeNumber(response.data.likes.length);
+      } else {
+        alert("좋아요 정보를 가져오는 데 실패했습니다.");
+      }
+    });
+  }, [params, post._id, props.userId]);
 
   const getComments = (variable) => {
     Axios.post("/api/comment/getComments", variable).then((response) => {
@@ -165,6 +177,7 @@ function PostDetailPage(props) {
                       </button>
                     </div>
                   </BtnUtil>
+                  <LikeText>좋아요 {likeNumber}개</LikeText>
                   <AddComment
                     postId={post._id}
                     refreshComment={refreshComment}
@@ -230,7 +243,7 @@ const PostContents = styled.div`
 `;
 
 const ScrollContainer = styled.div`
-  height: 310px;
+  height: 290px;
   overflow: scroll;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
@@ -265,7 +278,7 @@ const UtilContainer = styled.div`
 `;
 
 const BtnUtil = styled.div`
-  padding: 10px 15px;
+  padding: 10px 15px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -283,10 +296,15 @@ const BtnUtil = styled.div`
     .like-btn {
       padding-top: 1px;
     }
-    .like {
-      fill: #ff1b3e;
-    }
   }
+`;
+
+const LikeText = styled.p`
+  padding: 5px 15px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  color: ${palette.blackColor};
 `;
 
 const Comment = styled.section`

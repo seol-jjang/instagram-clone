@@ -1,7 +1,7 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { UserNickname, SubText } from "../../../../styles/Theme";
+import { UserNickname, SubText, palette } from "../../../../styles/Theme";
 import styled from "styled-components";
 import AddComment from "../../../utils/AddComment";
 import LikeBtn from "../../../utils/LikeBtn";
@@ -9,6 +9,7 @@ import LikeBtn from "../../../utils/LikeBtn";
 function CommentFactory(props) {
   const [comments, setComments] = useState([]);
   const [commentsCount, setCommentsCount] = useState(0);
+  const [responseTo, setResponseTo] = useState([]);
   const [likeNumber, setLikeNumber] = useState(0);
 
   useEffect(() => {
@@ -37,8 +38,8 @@ function CommentFactory(props) {
     });
   };
 
-  const refreshComment = (likes) => {
-    setCommentsCount(likes);
+  const refreshComment = () => {
+    setCommentsCount(commentsCount + 1);
   };
 
   return (
@@ -63,7 +64,11 @@ function CommentFactory(props) {
           </section>
         </Comment>
       )}
-      <AddComment postId={props.postId} refreshComment={refreshComment} />
+      <AddComment
+        postId={props.postId}
+        refreshComment={refreshComment}
+        responseTo={responseTo}
+      />
     </>
   );
 }
@@ -75,6 +80,7 @@ const Comment = styled.div`
   padding-top: 0;
   display: flex;
   flex-direction: column;
+  border-bottom: 1px solid ${palette.borderColor};
   article {
     display: flex;
     justify-content: space-between;

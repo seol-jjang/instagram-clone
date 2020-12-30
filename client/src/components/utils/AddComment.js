@@ -67,7 +67,6 @@ const Comment = styled.div`
   display: flex;
   align-items: center;
   min-height: 56px;
-  border-top: 1px solid ${palette.borderColor};
   & > div {
     width: 100%;
     padding: 5px 15px;
