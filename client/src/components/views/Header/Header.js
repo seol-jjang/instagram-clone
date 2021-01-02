@@ -52,8 +52,10 @@ const HeaderInner = styled.div`
   position: relative;
   width: 935px;
   margin: 0 auto;
+
   @media ${viewportSize.laptop} {
-    padding: 0 10px;
+    width: 100%;
+    padding: 0 15px;
   }
 `;
 

@@ -8,7 +8,8 @@ import {
   Inner,
   palette,
   ProfileIcon,
-  UserNickname
+  UserNickname,
+  viewportSize
 } from "../../../styles/Theme";
 import ImageSlide from "../../utils/ImageSlide";
 import AddComment from "../../utils/AddComment";
@@ -140,7 +141,11 @@ const Article = styled.article`
   display: flex;
   flex-direction: column;
   border: 1px solid ${palette.borderColor};
-  background-color: white;
+  @media ${viewportSize.tablet} {
+    margin-top: 55px;
+    border: 0;
+    border-bottom: 1px solid ${palette.borderColor};
+  }
 `;
 
 const WriteHeader = styled.header`
@@ -152,20 +157,37 @@ const WriteHeader = styled.header`
   display: flex;
   align-items: center;
   border-bottom: 1px solid #efefef;
+  background-color: white;
   a:hover {
     text-decoration: underline;
   }
   span {
     margin-right: 15px;
   }
+  @media ${viewportSize.tablet} {
+    position: static;
+    width: 100%;
+    height: 60px;
+  }
 `;
 
 const PictureWrap = styled.div`
-  max-width: 614px;
   min-height: 450px;
-  width: 100%;
-  background-color: black;
+  margin-right: 320px;
   border-right: 1px solid ${palette.borderColor};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #efefef;
+
+  @media ${viewportSize.laptop} {
+  }
+  @media ${viewportSize.tablet} {
+    max-width: 100%;
+    min-height: 0;
+    margin-right: 0;
+    border-right: 0;
+  }
 `;
 
 const ContentsContainer = styled.div`
@@ -176,8 +198,17 @@ const ContentsContainer = styled.div`
   width: 320px;
   display: flex;
   flex-direction: column;
+  background-color: white;
   & > section {
     order: 1;
+  }
+  @media ${viewportSize.tablet} {
+    position: static;
+    width: 100%;
+    padding-bottom: 60px;
+    & > section {
+      order: 0;
+    }
   }
 `;
 
@@ -187,6 +218,9 @@ const ScrollContainer = styled.ul`
   overflow-y: scroll;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
+    display: none;
+  }
+  @media ${viewportSize.tablet} {
     display: none;
   }
 `;
@@ -232,11 +266,4 @@ const BtnUtil = styled.section`
       fill: #ff1b3e;
     }
   }
-`;
-const LikeText = styled.p`
-  order: 1;
-  padding: 5px 15px;
-  font-size: 14px;
-  font-weight: bold;
-  color: ${palette.blackColor};
 `;

@@ -43,19 +43,16 @@ function ImageSlide(props) {
 export default ImageSlide;
 
 const Images = styled.ul`
-  justify-content: center;
   position: relative;
-  overflow-x: auto;
-  overflow-y: hidden;
+  display: block;
+  overflow: hidden;
+  padding-bottom: 100%;
   li {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     img {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      display: block;
       object-fit: cover;
     }
   }

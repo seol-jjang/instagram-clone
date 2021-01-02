@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import { useSelector } from "react-redux";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { palette } from "../../styles/Theme";
+import { palette, viewportSize } from "../../styles/Theme";
 
 function AddComment(props) {
   const { refreshComment, postId, responseTo, refreshReplyComment } = props;
@@ -96,6 +96,9 @@ const CommentFormSection = styled.section`
     css`
       border-top: 1px solid #efefef;
     `}
+  @media ${viewportSize.tablet} {
+    display: none;
+  }
   form {
     width: 100%;
     display: flex;

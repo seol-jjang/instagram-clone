@@ -3,7 +3,12 @@ import Axios from "axios";
 import styled from "styled-components";
 import { BsChat } from "react-icons/bs";
 import { VscBookmark } from "react-icons/vsc";
-import { palette, ProfileIcon, UserNickname } from "../../../../styles/Theme";
+import {
+  palette,
+  ProfileIcon,
+  UserNickname,
+  viewportSize
+} from "../../../../styles/Theme";
 import { Link } from "react-router-dom";
 import ImageSlide from "../../../utils/ImageSlide";
 import LikeBtn from "../../../utils/LikeBtn";
@@ -86,6 +91,12 @@ const Article = styled.article`
   border: 1px solid ${palette.borderColor};
   background-color: white;
   margin-bottom: 60px;
+
+  @media ${viewportSize.tablet} {
+    border: 0;
+    margin-bottom: 0;
+    padding-bottom: 20px;
+  }
 `;
 
 const WriteHeader = styled.header`

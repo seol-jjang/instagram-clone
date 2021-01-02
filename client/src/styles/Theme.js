@@ -22,9 +22,9 @@ export const Inner = styled.div`
 
   @media ${viewportSize.laptop} {
     width: 100%;
-    padding: 0 20px;
+    padding: 0 15px;
   }
-  @media ${viewportSize.tablet} {
+  @media ${viewportSize.laptop} {
     padding: 0;
   }
 `;

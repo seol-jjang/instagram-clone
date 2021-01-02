@@ -59,11 +59,12 @@ const ContentsSection = styled.section`
   overflow: hidden;
 
   @media ${viewportSize.laptop} {
+    margin-top: 65px;
     display: flex;
     justify-content: center;
   }
-  @media ${viewportSize.laptop} {
-    margin-top: 65px;
+  @media ${viewportSize.tablet} {
+    margin-top: 55px;
   }
 `;
 
@@ -81,6 +82,10 @@ const LeftSection = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  @media ${viewportSize.tablet} {
+    width: 100%;
+    max-width: 100%;
+  }
 `;
 
 const UserInfo = styled.div`
