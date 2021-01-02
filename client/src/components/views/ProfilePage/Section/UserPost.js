@@ -1,5 +1,6 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { viewportSize } from "../../../../styles/Theme";
 
@@ -20,7 +21,12 @@ function UserPost(props) {
     <PostSection>
       {post.map((post, index) => (
         <article key={index}>
-          <img src={`http://localhost:5000/${post.filePath[0]}`} alt={index} />
+          <Link to={`/p/${post._id}`}>
+            <img
+              src={`http://localhost:5000/${post.filePath[0]}`}
+              alt={index}
+            />
+          </Link>
         </article>
       ))}
     </PostSection>

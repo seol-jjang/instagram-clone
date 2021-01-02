@@ -43,6 +43,7 @@ function ImageSlide(props) {
 export default ImageSlide;
 
 const Images = styled.ul`
+  justify-content: center;
   position: relative;
   overflow-x: auto;
   overflow-y: hidden;

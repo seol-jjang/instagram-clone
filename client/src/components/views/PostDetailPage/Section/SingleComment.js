@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { UserNickname } from "../../../../styles/Theme";
+import { ProfileIcon, UserNickname } from "../../../../styles/Theme";
 import styled from "styled-components";
 import Axios from "axios";
+import LikeBtn from "../../../utils/LikeBtn";
 
 function SingleComment(props) {
   const { comment, refreshReplyComment } = props;
@@ -12,7 +13,6 @@ function SingleComment(props) {
     const likeVariable = {
       commentId: comment._id
     };
-
     Axios.post("/api/like/getLikes", likeVariable).then((response) => {
       if (response.data.success) {
         setLikeNumber(response.data.likes.length);
@@ -21,31 +21,47 @@ function SingleComment(props) {
       }
     });
   }, [comment._id]);
+
+  const refreshLike = (likeNumber) => {
+    setLikeNumber(likeNumber);
+  };
+
   return (
-    <>
+    <div>
       {comment.userFrom && (
         <>
-          <ContentWrap>
-            <div>
-              <Link to={`/${comment.userFrom.nickname}`}>
-                <UserNickname>{comment.userFrom.nickname}</UserNickname>
+          <Writer>
+            <ProfileIcon size="medium" className="profile-image">
+              <Link to={`/user/${comment.userFrom.nickname}`}>
+                <img
+                  src={`http://localhost:5000/${comment.userFrom.profileImage}`}
+                  alt={comment.userFrom.nickname}
+                />
               </Link>
-              <span className="comment">{comment.content}</span>
-            </div>
-            <div>
-              {likeNumber > 0 && <button>좋아요 {likeNumber}개</button>}
-              <button
-                onClick={() =>
-                  refreshReplyComment(comment.userFrom.nickname, comment._id)
-                }
-              >
-                답글 달기
-              </button>
-            </div>
-          </ContentWrap>
+            </ProfileIcon>
+            <ContentWrap>
+              <div>
+                <Link to={`/${comment.userFrom.nickname}`}>
+                  <UserNickname>{comment.userFrom.nickname}</UserNickname>
+                </Link>
+                <span className="comment">{comment.content}</span>
+              </div>
+              <div>
+                {likeNumber > 0 && <button>좋아요 {likeNumber}개</button>}
+                <button
+                  onClick={() =>
+                    refreshReplyComment(comment.userFrom.nickname, comment._id)
+                  }
+                >
+                  답글 달기
+                </button>
+              </div>
+            </ContentWrap>
+          </Writer>
+          <LikeBtn commentId={comment._id} refreshLike={refreshLike} />
         </>
       )}
-    </>
+    </div>
   );
 }
 
@@ -62,5 +78,16 @@ const ContentWrap = styled.div`
       margin-top: 5px;
       margin-right: 10px;
     }
+  }
+`;
+const Writer = styled.div`
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  .profile-image {
+    margin-right: 15px;
+  }
+  .description {
+    margin-left: 10px;
   }
 `;

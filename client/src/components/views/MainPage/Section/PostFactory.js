@@ -5,13 +5,15 @@ import { BsChat } from "react-icons/bs";
 import { VscBookmark } from "react-icons/vsc";
 import { palette, ProfileIcon, UserNickname } from "../../../../styles/Theme";
 import { Link } from "react-router-dom";
-import CommentFactory from "./CommentFactory";
 import ImageSlide from "../../../utils/ImageSlide";
 import LikeBtn from "../../../utils/LikeBtn";
-import LikeNumber from "./LikeNumber";
+import LikeNumber from "../../../utils/LikeNumber";
+import DetailContent from "./DetailContent";
+import AddComment from "../../../utils/AddComment";
 
 function PostFactory() {
   const [posts, setPosts] = useState([]);
+  const [refreshPostId, setRefreshPostId] = useState();
   const [likeNumber, setLikeNumber] = useState(0);
 
   useEffect(() => {
@@ -28,11 +30,15 @@ function PostFactory() {
     setLikeNumber(likeNumber);
   };
 
+  const refreshComment = (variable) => {
+    setRefreshPostId(variable);
+  };
+
   return (
     <>
       {posts.map((post, index) => (
         <Article key={index}>
-          <Writer>
+          <WriteHeader>
             <ProfileIcon size="medium">
               <Link to={`/user/${post.userFrom.nickname}`}>
                 <img
@@ -44,35 +50,28 @@ function PostFactory() {
             <Link to={`/user/${post.userFrom.nickname}`}>
               <UserNickname>{post.userFrom.nickname}</UserNickname>
             </Link>
-          </Writer>
-          <Picture>
+          </WriteHeader>
+          <PictureWrap>
             <ImageSlide images={post.filePath} />
-          </Picture>
-          <BtnUtil>
-            <div>
-              <LikeBtn postId={post._id} refreshLike={refreshLike} />
-              <button>
-                <Link to={`/p/${post._id}`}>
-                  <BsChat />
-                </Link>
-              </button>
-            </div>
-            <div>
+          </PictureWrap>
+          <ContentsContainer>
+            <BtnUtil>
+              <div>
+                <LikeBtn postId={post._id} refreshLike={refreshLike} />
+                <button>
+                  <Link to={`/p/${post._id}`}>
+                    <BsChat />
+                  </Link>
+                </button>
+              </div>
               <button>
                 <VscBookmark />
               </button>
-            </div>
-          </BtnUtil>
-          <LikeNumber likeNumber={likeNumber} postId={post._id} />
-          <Details>
-            <PostContent>
-              <Link to={`/user/${post.userFrom.nickname}`}>
-                <UserNickname>{post.userFrom.nickname}</UserNickname>
-              </Link>
-              <Description>{post.description}</Description>
-            </PostContent>
-          </Details>
-          <CommentFactory postId={post._id} />
+            </BtnUtil>
+            <LikeNumber postId={post._id} likeNumber={likeNumber} />
+            <DetailContent post={post} refreshPostId={refreshPostId} />
+          </ContentsContainer>
+          <AddComment postId={post._id} refreshComment={refreshComment} />
         </Article>
       ))}
     </>
@@ -89,7 +88,7 @@ const Article = styled.article`
   margin-bottom: 60px;
 `;
 
-const Writer = styled.header`
+const WriteHeader = styled.header`
   display: flex;
   align-items: center;
   padding: 13px 15px;
@@ -101,24 +100,21 @@ const Writer = styled.header`
   }
 `;
 
-const Picture = styled.div`
+const PictureWrap = styled.div`
   position: relative;
   background-color: black;
   border-top: 1px solid ${palette.borderColor};
   border-bottom: 1px solid ${palette.borderColor};
 `;
 
-const Details = styled.div`
-  background-color: white;
-  padding: 5px 12px 8px;
-`;
+const ContentsContainer = styled.div``;
 
-const BtnUtil = styled.div`
+const BtnUtil = styled.section`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px;
-  padding-bottom: 0;
+  padding: 0 12px;
+  margin: 12px 0 5px;
   button {
     padding: 0;
     cursor: pointer;
@@ -137,23 +133,4 @@ const BtnUtil = styled.div`
       fill: #ff1b3e;
     }
   }
-`;
-
-const PostContent = styled.span`
-  line-height: 1.1;
-  a:hover {
-    text-decoration: underline;
-  }
-  .elle {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-`;
-
-const Description = styled.span`
-  font-size: 14px;
-  margin-left: 5px;
-  white-space: pre-line;
 `;

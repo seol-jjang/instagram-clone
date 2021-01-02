@@ -18,6 +18,7 @@ const opacityStyle = css`
     css`
       opacity: 50%;
       cursor: default;
+      pointer-events: none;
     `}
 `;
 

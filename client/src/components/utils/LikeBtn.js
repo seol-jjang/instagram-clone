@@ -30,14 +30,16 @@ function LikeBtn(props) {
         alert("좋아요 정보를 가져오는 데 실패했습니다.");
       }
     });
-  }, [likeVariable, refreshLike, userId]);
+  }, [likeVariable, userId]);
 
   const onClickLike = () => {
     if (likeAction) {
       Axios.post("/api/like/unLike", likeVariable).then((response) => {
         if (response.data.success) {
           setLikeAction(false);
-          refreshLike(likes - 1);
+          if (refreshLike) {
+            refreshLike(likes - 1);
+          }
         } else {
           alert("좋아요를 취소하는 데 실패했습니다");
         }
@@ -46,7 +48,9 @@ function LikeBtn(props) {
       Axios.post("/api/like/plusLike", likeVariable).then((response) => {
         if (response.data.success) {
           setLikeAction(true);
-          refreshLike(likes + 1);
+          if (refreshLike) {
+            refreshLike(likes + 1);
+          }
         } else {
           alert("좋아요 하는 데 실패했습니다");
         }

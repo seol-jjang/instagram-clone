@@ -15,11 +15,13 @@ import AddComment from "../../utils/AddComment";
 import ReplyComment from "./Section/ReplyComment";
 import SingleComment from "./Section/SingleComment";
 import LikeBtn from "../../utils/LikeBtn";
+import CommentFactory from "./Section/CommentFactory";
+import LikeNumber from "../../utils/LikeNumber";
 
 function PostDetailPage(props) {
   const params = useParams();
   const [post, setPost] = useState([]);
-  const [comments, setComments] = useState([]);
+  const [newPostId, setNewPostId] = useState();
   const [responseTo, setResponseTo] = useState([]);
   const [likeNumber, setLikeNumber] = useState(0);
 
@@ -27,39 +29,11 @@ function PostDetailPage(props) {
     Axios.post("/api/post/getPostDetail", params).then((response) => {
       if (response.data.success) {
         setPost(response.data.post);
-        const variable = { postId: response.data.post._id };
-        getComments(variable);
       } else {
         alert("게시글을 불러오는 데 실패했습니다.");
       }
     });
-
-    const likeVariable = {
-      postId: post._id
-    };
-
-    Axios.post("/api/like/getLikes", likeVariable).then((response) => {
-      if (response.data.success) {
-        setLikeNumber(response.data.likes.length);
-      } else {
-        alert("좋아요 정보를 가져오는 데 실패했습니다.");
-      }
-    });
-  }, [params, post._id, props.userId]);
-
-  const getComments = (variable) => {
-    Axios.post("/api/comment/getComments", variable).then((response) => {
-      if (response.data.success) {
-        setComments(response.data.comments);
-      } else {
-        alert("댓글 정보를 불러오는 데 실패했습니다.");
-      }
-    });
-  };
-
-  const refreshComment = (variable) => {
-    getComments(variable);
-  };
+  }, [params]);
 
   const refreshLike = (likeNumber) => {
     setLikeNumber(likeNumber);
@@ -76,17 +50,59 @@ function PostDetailPage(props) {
     }
   };
 
+  const refreshComment = (variable) => {
+    setNewPostId(variable);
+  };
+
   return (
     <Inner>
-      <PostDetailWrap>
-        {post.userFrom && (
-          <>
-            <Picture>
-              <ImageSlide images={post.filePath} />
-            </Picture>
-            <InfoContainer>
-              <HeaderUser>
-                <ProfileIcon size="medium">
+      {post.userFrom && (
+        <Article>
+          <WriteHeader>
+            <ProfileIcon size="medium">
+              <Link to={`/user/${post.userFrom.nickname}`}>
+                <img
+                  src={`http://localhost:5000/${post.userFrom.profileImage}`}
+                  alt={post.userFrom.nickname}
+                />
+              </Link>
+            </ProfileIcon>
+            <Link to={`/user/${post.userFrom.nickname}`}>
+              <UserNickname>{post.userFrom.nickname}</UserNickname>
+            </Link>
+          </WriteHeader>
+          <PictureWrap>
+            <ImageSlide images={post.filePath} />
+          </PictureWrap>
+          <ContentsContainer>
+            <BtnUtil>
+              <div>
+                <LikeBtn postId={post._id} refreshLike={refreshLike} />
+                <button>
+                  <Link to={`/p/${post._id}`}>
+                    <BsChat />
+                  </Link>
+                </button>
+              </div>
+              <button>
+                <VscBookmark />
+              </button>
+            </BtnUtil>
+            <LikeNumber
+              postId={post._id}
+              newLikeNumber={likeNumber}
+              detailPage
+            />
+            <AddComment
+              postId={post._id}
+              refreshReplyComment={onReplyComment}
+              refreshComment={refreshComment}
+              responseTo={responseTo}
+              detailPage
+            />
+            <ScrollContainer>
+              <DetailContent>
+                <ProfileIcon size="medium" className="profile-image">
                   <Link to={`/user/${post.userFrom.nickname}`}>
                     <img
                       src={`http://localhost:5000/${post.userFrom.profileImage}`}
@@ -94,139 +110,48 @@ function PostDetailPage(props) {
                     />
                   </Link>
                 </ProfileIcon>
-                <Link to={`/user/${post.userFrom.nickname}`}>
-                  <UserNickname>{post.userFrom.nickname}</UserNickname>
-                </Link>
-              </HeaderUser>
-              <PostContents>
-                <ScrollContainer>
-                  <Writer>
-                    <ProfileIcon size="medium" className="profile-image">
-                      <Link to={`/user/${post.userFrom.nickname}`}>
-                        <img
-                          src={`http://localhost:5000/${post.userFrom.profileImage}`}
-                          alt={post.userFrom.nickname}
-                        />
-                      </Link>
-                    </ProfileIcon>
-                    <div>
-                      <Link to={`/user/${post.userFrom.nickname}`}>
-                        <UserNickname>{post.userFrom.nickname}</UserNickname>
-                      </Link>
-                      <Description className="description">
-                        {post.description}
-                      </Description>
-                    </div>
-                  </Writer>
-                  {comments.length !== 0 && (
-                    <Comment>
-                      {comments.map(
-                        (comment, index) =>
-                          !comment.responseTo && (
-                            <article key={index}>
-                              <div>
-                                <Writer>
-                                  <ProfileIcon
-                                    size="medium"
-                                    className="profile-image"
-                                  >
-                                    <Link
-                                      to={`/user/${comment.userFrom.nickname}`}
-                                    >
-                                      <img
-                                        src={`http://localhost:5000/${comment.userFrom.profileImage}`}
-                                        alt={comment.userFrom.nickname}
-                                      />
-                                    </Link>
-                                  </ProfileIcon>
-                                  <SingleComment
-                                    comment={comment}
-                                    refreshReplyComment={onReplyComment}
-                                    likeNumber={likeNumber}
-                                  />
-                                </Writer>
-                                <LikeBtn
-                                  commentId={comment._id}
-                                  refreshLike={refreshLike}
-                                />
-                              </div>
-                              <ReplyComment
-                                comments={comments}
-                                refreshReplyComment={onReplyComment}
-                                parentCommentId={comment._id}
-                              />
-                            </article>
-                          )
-                      )}
-                    </Comment>
-                  )}
-                </ScrollContainer>
-                <UtilContainer>
-                  <BtnUtil>
-                    <div>
-                      <LikeBtn postId={post._id} refreshLike={refreshLike} />
-                      <button>
-                        <Link to={`/p/${post._id}`}>
-                          <BsChat />
-                        </Link>
-                      </button>
-                    </div>
-                    <div>
-                      <button>
-                        <VscBookmark />
-                      </button>
-                    </div>
-                  </BtnUtil>
-                  <LikeText>좋아요 {likeNumber}개</LikeText>
-                  <AddComment
-                    postId={post._id}
-                    refreshComment={refreshComment}
-                    refreshReplyComment={onReplyComment}
-                    responseTo={responseTo}
-                  />
-                </UtilContainer>
-              </PostContents>
-            </InfoContainer>
-          </>
-        )}
-      </PostDetailWrap>
+                <div>
+                  <Link to={`/user/${post.userFrom.nickname}`}>
+                    <UserNickname>{post.userFrom.nickname}</UserNickname>
+                  </Link>
+                  <Description className="description">
+                    {post.description}
+                  </Description>
+                </div>
+              </DetailContent>
+              <CommentFactory
+                postId={post._id}
+                refreshReplyComment={onReplyComment}
+                newPostId={newPostId}
+              />
+            </ScrollContainer>
+          </ContentsContainer>
+        </Article>
+      )}
     </Inner>
   );
 }
 
 export default PostDetailPage;
 
-const PostDetailWrap = styled.section`
-  height: 100%;
+const Article = styled.article`
+  position: relative;
   margin-top: 80px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   border: 1px solid ${palette.borderColor};
   background-color: white;
 `;
 
-const Picture = styled.div`
-  max-width: 614px;
-  width: 100%;
-  position: relative;
-  background-color: black;
-`;
-
-const InfoContainer = styled.div`
-  position: relative;
-  flex-grow: 1;
-`;
-
-const HeaderUser = styled.header`
+const WriteHeader = styled.header`
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: white;
+  right: 0;
+  width: 320px;
+  height: 72px;
+  padding: 16px;
   display: flex;
   align-items: center;
-  padding: 13px 15px;
-  border-bottom: 1px solid ${palette.borderColor};
+  border-bottom: 1px solid #efefef;
   a:hover {
     text-decoration: underline;
   }
@@ -235,26 +160,41 @@ const HeaderUser = styled.header`
   }
 `;
 
-const PostContents = styled.div`
-  padding: 13px 15px;
-  & > div:first-child {
-    margin-top: 65px;
+const PictureWrap = styled.div`
+  max-width: 614px;
+  min-height: 450px;
+  width: 100%;
+  background-color: black;
+  border-right: 1px solid ${palette.borderColor};
+`;
+
+const ContentsContainer = styled.div`
+  position: absolute;
+  top: 72px;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  & > section {
+    order: 1;
   }
 `;
 
-const ScrollContainer = styled.div`
-  height: 290px;
-  overflow: scroll;
+const ScrollContainer = styled.ul`
+  padding: 16px;
+  height: calc(100% - 87px);
+  overflow-y: scroll;
   -ms-overflow-style: none;
   ::-webkit-scrollbar {
     display: none;
   }
 `;
 
-const Writer = styled.div`
+const DetailContent = styled.div`
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
   .profile-image {
     margin-right: 15px;
   }
@@ -268,20 +208,12 @@ const Description = styled.span`
   white-space: pre-line;
 `;
 
-const UtilContainer = styled.div`
-  background-color: white;
-  border-top: 1px solid ${palette.borderColor};
-  position: absolute;
-  width: 100%;
-  left: 0;
-  bottom: 0;
-`;
-
-const BtnUtil = styled.div`
-  padding: 10px 15px 0;
+const BtnUtil = styled.section`
+  padding: 10px 16px 7px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-top: 1px solid #efefef;
   button {
     padding: 0;
     cursor: pointer;
@@ -294,43 +226,17 @@ const BtnUtil = styled.div`
       height: 25px;
     }
     .like-btn {
-      padding-top: 1px;
+      padding-top: 2px;
+    }
+    .like {
+      fill: #ff1b3e;
     }
   }
 `;
-
 const LikeText = styled.p`
+  order: 1;
   padding: 5px 15px;
-  margin-bottom: 5px;
   font-size: 14px;
   font-weight: bold;
   color: ${palette.blackColor};
-`;
-
-const Comment = styled.section`
-  display: flex;
-  flex-direction: column;
-  article {
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    & > div:first-child {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      a:hover {
-        text-decoration: underline;
-      }
-      .comment {
-        font-size: 14px;
-        margin-left: 5px;
-      }
-    }
-    button {
-      cursor: pointer;
-      padding: 0;
-      display: flex;
-      background-color: transparent;
-    }
-  }
 `;

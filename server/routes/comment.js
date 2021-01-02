@@ -22,7 +22,7 @@ router.post("/getCommentsLimit", (req, res) => {
   Comment.find({ postId: req.body.postId })
     .populate("userFrom")
     .limit(2)
-    .sort({ createdAt: 1 })
+    .sort({ createdAt: -1 })
     .exec((err, comments) => {
       if (err) return res.status(400).send(err);
       res.status(200).json({ success: true, comments });
