@@ -13,13 +13,11 @@ import {
 } from "../../../styles/Theme";
 import ImageSlide from "../../utils/ImageSlide";
 import AddComment from "../../utils/AddComment";
-import ReplyComment from "./Section/ReplyComment";
-import SingleComment from "./Section/SingleComment";
 import LikeBtn from "../../utils/LikeBtn";
 import CommentFactory from "./Section/CommentFactory";
 import LikeNumber from "../../utils/LikeNumber";
 
-function PostDetailPage(props) {
+function PostDetailPage() {
   const params = useParams();
   const [post, setPost] = useState([]);
   const [newPostId, setNewPostId] = useState();
@@ -27,18 +25,34 @@ function PostDetailPage(props) {
   const [likeNumber, setLikeNumber] = useState(0);
 
   useEffect(() => {
-    Axios.post("/api/post/getPostDetail", params).then((response) => {
-      if (response.data.success) {
-        setPost(response.data.post);
-      } else {
-        alert("게시글을 불러오는 데 실패했습니다.");
-      }
-    });
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
+    Axios.post("/api/post/getPostDetail", params, {
+      cancelToken: source.token
+    })
+      .then((response) => {
+        if (!unmounted) {
+          if (response.data.success) {
+            setPost(response.data.post);
+          } else {
+            alert("게시글을 불러오는 데 실패했습니다.");
+          }
+        }
+      })
+      .catch(function (e) {
+        if (!unmounted) {
+          if (Axios.isCancel(e)) {
+            console.log("요청 취소: ", e.message);
+          } else {
+            console.log("오류 발생 ", e.message);
+          }
+        }
+      });
+    return function () {
+      unmounted = true;
+      source.cancel("Canceling in cleanup");
+    };
   }, [params]);
-
-  const refreshLike = (likeNumber) => {
-    setLikeNumber(likeNumber);
-  };
 
   const onReplyComment = (nickname, commentId) => {
     if (nickname !== null) {
@@ -49,6 +63,10 @@ function PostDetailPage(props) {
     } else {
       setResponseTo([]);
     }
+  };
+
+  const refreshLike = (likeNumber) => {
+    setLikeNumber(likeNumber);
   };
 
   const refreshComment = (variable) => {

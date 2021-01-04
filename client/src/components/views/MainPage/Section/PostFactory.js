@@ -22,13 +22,31 @@ function PostFactory() {
   const [likeNumber, setLikeNumber] = useState(0);
 
   useEffect(() => {
-    Axios.get("/api/post/getPosts").then((response) => {
-      if (response.data.success) {
-        setPosts(response.data.posts);
-      } else {
-        alert("피드 불러오기를 실패했습니다");
-      }
-    });
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
+    Axios.get("/api/post/getPosts", { cancelToken: source.token })
+      .then((response) => {
+        if (!unmounted) {
+          if (response.data.success) {
+            setPosts(response.data.posts);
+          } else {
+            alert("피드 불러오기를 실패했습니다");
+          }
+        }
+      })
+      .catch(function (e) {
+        if (!unmounted) {
+          if (Axios.isCancel(e)) {
+            console.log("요청 취소: ", e.message);
+          } else {
+            console.log("오류 발생 ", e.message);
+          }
+        }
+      });
+    return function () {
+      unmounted = true;
+      source.cancel("Canceling in cleanup");
+    };
   }, []);
 
   const refreshLike = (likeNumber) => {
@@ -73,7 +91,7 @@ function PostFactory() {
                 <VscBookmark />
               </button>
             </BtnUtil>
-            <LikeNumber postId={post._id} likeNumber={likeNumber} />
+            <LikeNumber postId={post._id} newLikeNumber={likeNumber} />
             <DetailContent post={post} refreshPostId={refreshPostId} />
           </ContentsContainer>
           <AddComment postId={post._id} refreshComment={refreshComment} />

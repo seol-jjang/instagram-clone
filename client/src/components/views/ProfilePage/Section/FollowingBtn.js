@@ -8,17 +8,38 @@ function FollowingBtn(props) {
   const { countFollower, userTo } = props;
 
   useEffect(() => {
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
+
     let variable = {
       userTo: userTo,
       userFrom: localStorage.getItem("ls")
     };
-    Axios.post("/api/follow/followed", variable).then((response) => {
-      if (response.data.success) {
-        setFollowed(response.data.followed);
-      } else {
-        alert("팔로우 정보를 받아오는 데 실패했습니다.");
-      }
-    });
+    Axios.post("/api/follow/followed", variable, {
+      cancelToken: source.token
+    })
+      .then((response) => {
+        if (!unmounted) {
+          if (response.data.success) {
+            setFollowed(response.data.followed);
+          } else {
+            alert("팔로우 정보를 받아오는 데 실패했습니다.");
+          }
+        }
+      })
+      .catch(function (e) {
+        if (!unmounted) {
+          if (Axios.isCancel(e)) {
+            console.log("요청 취소: ", e.message);
+          } else {
+            console.log("오류 발생 ", e.message);
+          }
+        }
+      });
+    return function () {
+      unmounted = true;
+      source.cancel("Canceling in cleanup");
+    };
   }, [userTo]);
 
   const onFollowing = () => {

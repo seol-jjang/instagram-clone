@@ -24,7 +24,7 @@ export const Inner = styled.div`
     width: 100%;
     padding: 0 15px;
   }
-  @media ${viewportSize.laptop} {
+  @media ${viewportSize.tablet} {
     padding: 0;
   }
 `;
@@ -59,6 +59,10 @@ const ProfileIconSize = {
   large: {
     width: "56px",
     height: "56px"
+  },
+  mlarge: {
+    width: "77px",
+    height: "77px"
   },
   xLarge: {
     width: "150px",

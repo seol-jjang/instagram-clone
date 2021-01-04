@@ -10,16 +10,36 @@ function SingleComment(props) {
   const [likeNumber, setLikeNumber] = useState(0);
 
   useEffect(() => {
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
     const likeVariable = {
       commentId: comment._id
     };
-    Axios.post("/api/like/getLikes", likeVariable).then((response) => {
-      if (response.data.success) {
-        setLikeNumber(response.data.likes.length);
-      } else {
-        alert("좋아요 정보를 가져오는 데 실패했습니다.");
-      }
-    });
+    Axios.post("/api/like/getLikes", likeVariable, {
+      cancelToken: source.token
+    })
+      .then((response) => {
+        if (!unmounted) {
+          if (response.data.success) {
+            setLikeNumber(response.data.likes.length);
+          } else {
+            alert("좋아요 정보를 가져오는 데 실패했습니다.");
+          }
+        }
+      })
+      .catch(function (e) {
+        if (!unmounted) {
+          if (Axios.isCancel(e)) {
+            console.log("요청 취소: ", e.message);
+          } else {
+            console.log("오류 발생 ", e.message);
+          }
+        }
+      });
+    return function () {
+      unmounted = true;
+      source.cancel("Canceling in cleanup");
+    };
   }, [comment._id]);
 
   const refreshLike = (likeNumber) => {

@@ -9,13 +9,11 @@ function AddComment(props) {
   const { refreshComment, postId, responseTo, refreshReplyComment } = props;
   const user = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
-  const [newResponseTo, setNewResponseTo] = useState([]);
   const submitBtnRef = useRef();
   const textareaRef = useRef();
 
   useEffect(() => {
     if (responseTo) {
-      setNewResponseTo(responseTo);
       textareaRef.current.focus();
     }
 
@@ -34,12 +32,22 @@ function AddComment(props) {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    const variables = {
-      content: comment,
-      userFrom: user.userData._id,
-      postId: postId,
-      responseTo: newResponseTo.commentId
-    };
+    let variables;
+    if (responseTo) {
+      variables = {
+        content: comment,
+        userFrom: user.userData._id,
+        postId: postId,
+        responseTo: responseTo.commentId
+      };
+    } else {
+      variables = {
+        content: comment,
+        userFrom: user.userData._id,
+        postId: postId
+      };
+    }
+
     Axios.post("/api/comment/saveComment", variables).then((response) => {
       if (response.data.success) {
         const variable = { postId: postId };
@@ -47,7 +55,6 @@ function AddComment(props) {
         setComment("");
         if (responseTo) {
           refreshReplyComment(null);
-          setNewResponseTo([]);
         }
       } else {
         alert("댓글을 추가하는 데 실패했습니다.");

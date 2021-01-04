@@ -17,19 +17,39 @@ function LikeBtn(props) {
   }
 
   useEffect(() => {
-    Axios.post("/api/like/getLikes", likeVariable).then((response) => {
-      if (response.data.success) {
-        setLikes(response.data.likes.length);
-        // eslint-disable-next-line array-callback-return
-        response.data.likes.map((like) => {
-          if (like.userId === userId) {
-            setLikeAction(true);
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
+    Axios.post("/api/like/getLikes", likeVariable, {
+      cancelToken: source.token
+    })
+      .then((response) => {
+        if (!unmounted) {
+          if (response.data.success) {
+            setLikes(response.data.likes.length);
+            // eslint-disable-next-line array-callback-return
+            response.data.likes.map((like) => {
+              if (like.userId === userId) {
+                setLikeAction(true);
+              }
+            });
+          } else {
+            alert("좋아요 정보를 가져오는 데 실패했습니다");
           }
-        });
-      } else {
-        alert("좋아요 정보를 가져오는 데 실패했습니다.");
-      }
-    });
+        }
+      })
+      .catch(function (e) {
+        if (!unmounted) {
+          if (Axios.isCancel(e)) {
+            console.log("요청 취소: ", e.message);
+          } else {
+            console.log("오류 발생 ", e.message);
+          }
+        }
+      });
+    return function () {
+      unmounted = true;
+      source.cancel("Canceling in cleanup");
+    };
   }, [likeVariable, userId]);
 
   const onClickLike = () => {

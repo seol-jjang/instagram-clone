@@ -11,24 +11,61 @@ function DetailContent(props) {
   const [commentsCount, setCommentsCount] = useState(0);
 
   useEffect(() => {
-    const variable = { postId: post._id };
-    if (refreshPostId || post._id) {
-      Axios.post("/api/comment/getCommentsCount", variable).then((response) => {
-        if (response.data.success) {
-          setCommentsCount(response.data.commentCount);
-        } else {
-          alert("댓글 정보를 불러오는 데 실패했습니다.");
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
+    let variable;
+    if (refreshPostId) {
+      variable = { postId: refreshPostId.postId };
+    } else {
+      variable = { postId: post._id };
+    }
+    Axios.post("/api/comment/getCommentsCount", variable, {
+      cancelToken: source.token
+    })
+      .then((response) => {
+        if (!unmounted) {
+          if (response.data.success) {
+            setCommentsCount(response.data.commentCount);
+          } else {
+            alert("댓글 정보를 불러오는 데 실패했습니다.");
+          }
+        }
+      })
+      .catch(function (e) {
+        if (!unmounted) {
+          if (Axios.isCancel(e)) {
+            console.log("요청 취소: ", e.message);
+          } else {
+            console.log("오류 발생 ", e.message);
+          }
         }
       });
 
-      Axios.post("/api/comment/getCommentsLimit", variable).then((response) => {
-        if (response.data.success) {
-          setComments(response.data.comments.reverse());
-        } else {
-          alert("댓글 정보를 불러오는 데 실패했습니다.");
+    Axios.post("/api/comment/getCommentsLimit", variable, {
+      cancelToken: source.token
+    })
+      .then((response) => {
+        if (!unmounted) {
+          if (response.data.success) {
+            setComments(response.data.comments.reverse());
+          } else {
+            alert("댓글 정보를 불러오는 데 실패했습니다.");
+          }
+        }
+      })
+      .catch(function (e) {
+        if (!unmounted) {
+          if (Axios.isCancel(e)) {
+            console.log("요청 취소: ", e.message);
+          } else {
+            console.log("오류 발생 ", e.message);
+          }
         }
       });
-    }
+    return function () {
+      unmounted = true;
+      source.cancel("Canceling in cleanup");
+    };
   }, [post._id, refreshPostId]);
 
   return (

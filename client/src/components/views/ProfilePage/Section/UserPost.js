@@ -8,14 +8,35 @@ function UserPost(props) {
   const { profileUser } = props;
   const [post, setPost] = useState([]);
   useEffect(() => {
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
     const variable = { userFrom: profileUser };
-    Axios.post("/api/post/getUserPost", variable).then((response) => {
-      if (response.data.success) {
-        setPost(response.data.post);
-      } else {
-        alert("게시글을 불러오는 데 실패했습니다.");
-      }
-    });
+
+    Axios.post("/api/post/getUserPost", variable, {
+      cancelToken: source.token
+    })
+      .then((response) => {
+        if (!unmounted) {
+          if (response.data.success) {
+            setPost(response.data.post);
+          } else {
+            alert("게시글을 불러오는 데 실패했습니다.");
+          }
+        }
+      })
+      .catch(function (e) {
+        if (!unmounted) {
+          if (Axios.isCancel(e)) {
+            console.log("요청 취소: ", e.message);
+          } else {
+            console.log("오류 발생 ", e.message);
+          }
+        }
+      });
+    return function () {
+      unmounted = true;
+      source.cancel("Canceling in cleanup");
+    };
   }, [profileUser]);
   return (
     <PostSection>
@@ -36,27 +57,29 @@ function UserPost(props) {
 export default UserPost;
 
 const PostSection = styled.div`
-  margin-top: 90px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(auto-fill, minmax(1fr, 1fr));
-  gap: 20px;
-
+  gap: 30px;
   @media ${viewportSize.laptop} {
     gap: 10px;
   }
   @media ${viewportSize.tablet} {
     gap: 1px;
   }
+
   article {
-    max-height: 293px;
+    padding-bottom: 100%;
     position: relative;
     border: 1px solid #ddd;
     background-color: black;
-  }
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 `;
