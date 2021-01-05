@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
+import { palette } from "./Theme";
 
 const GlobalStyle = createGlobalStyle`
     ${reset}
@@ -22,6 +23,7 @@ const GlobalStyle = createGlobalStyle`
     }
     * {
         box-sizing: border-box;
+        color: ${palette.blackColor}
     }
 
     a {

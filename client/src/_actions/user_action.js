@@ -1,5 +1,11 @@
 import Axios from "axios";
-import { LOGIN_USER, REGISTER_USER, AUTH_USER } from "./types";
+import {
+  LOGIN_USER,
+  REGISTER_USER,
+  AUTH_USER,
+  EDIT_USER,
+  EDIT_PASSWORD
+} from "./types";
 
 export function loginUser(dataToSubmit) {
   const request = Axios.post("/api/users/login", dataToSubmit).then(
@@ -16,6 +22,26 @@ export function registerUser(dataToSubmit) {
   );
   return {
     type: REGISTER_USER,
+    payload: request
+  };
+}
+
+export function editUser(dataToSubmit) {
+  const request = Axios.post("/api/users/edit", dataToSubmit).then(
+    (response) => response.data
+  );
+  return {
+    type: EDIT_USER,
+    payload: request
+  };
+}
+
+export function editPassword(dataToSubmit) {
+  const request = Axios.post("/api/users/editPassword", dataToSubmit).then(
+    (response) => response.data
+  );
+  return {
+    type: EDIT_PASSWORD,
     payload: request
   };
 }

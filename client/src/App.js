@@ -11,6 +11,8 @@ import Header from "./components/views/Header/Header";
 import ProfilePage from "./components/views/ProfilePage/ProfilePage";
 import PostDetailPage from "./components/views/PostDetailPage/PostDetailPage";
 import { MainContents } from "./styles/Theme";
+import ProfileEditPage from "./components/views/ProfileEditPage/ProfileEditPage";
+import PasswordEdit from "./components/views/ProfileEditPage/Section/PasswordEdit";
 
 function App() {
   return (
@@ -26,6 +28,16 @@ function App() {
               exact
               path="/accounts"
               component={Auth(RegisterPage, false)}
+            />
+            <Route
+              exact
+              path="/accounts/edit"
+              component={Auth(ProfileEditPage, true)}
+            />
+            <Route
+              exact
+              path="/accounts/password/change"
+              component={Auth(PasswordEdit, true)}
             />
             <Route
               exact

@@ -1,16 +1,26 @@
-import React from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useState, useEffect } from "react";
+import styled, { css, keyframes } from "styled-components";
 import { RiSettings4Line } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
 import Axios from "axios";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { palette } from "../../../../styles/Theme";
+import { palette, viewportSize } from "../../../../styles/Theme";
 
 function ProfileMenu(props) {
+  const { onClose, visible } = props;
   const user = useSelector((state) => state.user);
   const history = useHistory();
-  const { onClose } = props;
+  const [animate, setAnimate] = useState(false);
+  const [localVisible, setLocalVisible] = useState(visible);
+
+  useEffect(() => {
+    if (localVisible && !visible) {
+      setAnimate(true);
+      setTimeout(() => setAnimate(false), 200);
+    }
+    setLocalVisible(visible);
+  }, [localVisible, visible]);
 
   const onClickLogout = () => {
     Axios.get("/api/users/logout").then((response) => {
@@ -25,10 +35,10 @@ function ProfileMenu(props) {
   const close = () => {
     onClose();
   };
+  if (!animate && !visible) return null;
   return (
     <>
-      <Circle />
-      <MenuWrapper onClick={close}>
+      <MenuWrapper onClick={close} disappear={!visible}>
         <Triangle />
         <MenuInner>
           <ul>
@@ -39,7 +49,7 @@ function ProfileMenu(props) {
               </Link>
             </li>
             <li>
-              <Link to="/">
+              <Link to="/accounts/edit">
                 <RiSettings4Line size="20px" />
                 <span>설정</span>
               </Link>
@@ -56,14 +66,14 @@ function ProfileMenu(props) {
 export default ProfileMenu;
 
 const slideFade = keyframes`
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    0% {
-        transform: translateY(-10px);
-        opacity: 0;
-    }
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-5px);
+    opacity: 0;
+  }
 `;
 
 const MenuWrapper = styled.div`
@@ -75,7 +85,11 @@ const MenuWrapper = styled.div`
   border-radius: 7px;
   background-color: #fff;
   box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.09);
-  animation: ${slideFade} 0.5s forwards;
+  ${(props) =>
+    props.disappear &&
+    css`
+      animation: ${slideFade} 0.2s ease-out;
+    `}
 `;
 
 const MenuInner = styled.div`
@@ -128,13 +142,7 @@ const Triangle = styled.div`
   background-color: white;
   box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.0975);
   transform: rotate(45deg);
-`;
-
-const Circle = styled.div`
-  position: absolute;
-  right: -3px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1px solid black;
+  @media ${viewportSize.laptop} {
+    right: 35px;
+  }
 `;

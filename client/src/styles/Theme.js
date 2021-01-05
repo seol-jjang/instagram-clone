@@ -60,10 +60,6 @@ const ProfileIconSize = {
     width: "56px",
     height: "56px"
   },
-  mlarge: {
-    width: "77px",
-    height: "77px"
-  },
   xLarge: {
     width: "150px",
     height: "150px"

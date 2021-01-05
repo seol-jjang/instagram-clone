@@ -1,7 +1,7 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams, withRouter } from "react-router-dom";
+import { Link, useParams, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../styles/common/Button";
 import {
@@ -97,7 +97,7 @@ function ProfilePage(props) {
                   />
                 </ProfileIcon>
               ) : (
-                <ProfileIcon size="mlarge">
+                <ProfileIcon size="large">
                   <img
                     src={`http://localhost:5000/${profileUser.profileImage}`}
                     alt="userProfile"
@@ -115,11 +115,11 @@ function ProfilePage(props) {
                     countFollower={countFollower}
                   />
                 ) : (
-                  <>
+                  <Link to="/accounts/edit">
                     <Button className="profile-edit" gray>
                       프로필 편집
                     </Button>
-                  </>
+                  </Link>
                 )}
               </div>
               {windowSize && windowSize.width > 735 && (
@@ -183,6 +183,10 @@ const ProfileImage = styled.div`
 
   @media ${viewportSize.tablet} {
     flex-grow: 0;
+    & > span {
+      width: 77px;
+      height: 77px;
+    }
   }
 `;
 

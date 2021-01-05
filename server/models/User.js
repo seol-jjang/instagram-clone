@@ -57,6 +57,20 @@ userSchema.pre("save", function (next) {
   }
 });
 
+userSchema.methods.checkEmail = function (email, callback) {
+  User.findOne({ email: email }, function (err, user) {
+    if (err) return callback(err);
+    callback(null, user);
+  });
+};
+
+userSchema.methods.checkNickname = function (nickname, callback) {
+  User.findOne({ nickname: nickname }, function (err, user) {
+    if (err) return callback(err);
+    callback(null, user);
+  });
+};
+
 userSchema.methods.comparePassword = function (plainPassword, callback) {
   bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
     if (err) return callback(err);
@@ -87,6 +101,15 @@ userSchema.statics.findByToken = function (token, callback) {
       if (err) return callback(err);
       callback(null, user);
     });
+  });
+};
+
+userSchema.methods.updatePassword = function (plainPassword, callback) {
+  const user = this;
+  user.password = plainPassword;
+  user.save(function (err, user) {
+    if (err) return callback(err);
+    callback(null, user);
   });
 };
 

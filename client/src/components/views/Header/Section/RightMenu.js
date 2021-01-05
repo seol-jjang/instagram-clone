@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { BsPlusCircle, BsPlusCircleFill } from "react-icons/bs";
 import { RiHomeFill, RiHomeLine } from "react-icons/ri";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import Button from "../../../../styles/common/Button";
-import styled from "styled-components";
-import { palette, ProfileIcon } from "../../../../styles/Theme";
+import styled, { keyframes } from "styled-components";
+import { palette, ProfileIcon, viewportSize } from "../../../../styles/Theme";
 import ProfileMenu from "./ProfileMenu";
 
 function RightMenu(props) {
@@ -35,7 +35,7 @@ function RightMenu(props) {
     );
   } else {
     return (
-      <>
+      <div>
         <MenuList>
           <li>
             <Link to="/">
@@ -63,6 +63,8 @@ function RightMenu(props) {
           {user.userData && (
             <li>
               <ProfileIcon onClick={onClickProfile} size="small">
+                {(pathLocation === `/user/${user.userData.nickname}` ||
+                  menuVisible) && <Circle />}
                 <img
                   src={`http://localhost:5000/${user.userData.profileImage}`}
                   alt="userProfile"
@@ -71,8 +73,8 @@ function RightMenu(props) {
             </li>
           )}
         </MenuList>
-        {menuVisible && <ProfileMenu onClose={onClickProfile} />}
-      </>
+        <ProfileMenu onClose={onClickProfile} visible={menuVisible} />
+      </div>
     );
   }
 }
@@ -99,5 +101,17 @@ const MenuList = styled.ul`
     button {
       margin: 0;
     }
+  }
+`;
+const Circle = styled.span`
+  position: absolute;
+  top: 3px;
+  right: -3px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid black;
+  @media ${viewportSize.laptop} {
+    right: 12px;
   }
 `;

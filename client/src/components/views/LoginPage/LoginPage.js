@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -10,9 +10,23 @@ import Button from "../../../styles/common/Button";
 import { palette } from "../../../styles/Theme";
 
 const LoginPage = (props) => {
-  const { register, errors, handleSubmit } = useForm();
-  const [loginFailMessage, setLoginFailMessage] = useState();
+  const {
+    register,
+    errors,
+    handleSubmit,
+    formState: { dirtyFields }
+  } = useForm();
   const dispatch = useDispatch();
+  const [loginFailMessage, setLoginFailMessage] = useState();
+  const [btnDisabled, setBtnDisabled] = useState(false);
+
+  useEffect(() => {
+    if (dirtyFields.emailInput && dirtyFields.passwordInput) {
+      setBtnDisabled(true);
+    } else {
+      setBtnDisabled(false);
+    }
+  }, [dirtyFields.emailInput, dirtyFields.passwordInput]);
 
   const onSubmitHandler = (data) => {
     const body = {
@@ -53,7 +67,9 @@ const LoginPage = (props) => {
           {errors.passwordInput && errors.passwordInput.type === "required" && (
             <ErrorText>비밀번호를 입력해주세요</ErrorText>
           )}
-          <Button type="submit">로그인</Button>
+          <Button type="submit" blur={!btnDisabled}>
+            로그인
+          </Button>
         </LoginForm>
         {loginFailMessage && (
           <ErrorText className="login-error">{loginFailMessage}</ErrorText>

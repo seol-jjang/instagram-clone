@@ -9,7 +9,7 @@ function AddComment(props) {
   const { refreshComment, postId, responseTo, refreshReplyComment } = props;
   const user = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
-  const submitBtnRef = useRef();
+  const [btnDisabled, setBtnDisabled] = useState(true);
   const textareaRef = useRef();
 
   useEffect(() => {
@@ -17,9 +17,10 @@ function AddComment(props) {
       textareaRef.current.focus();
     }
 
-    submitBtnRef.current.disabled = true;
     if (comment !== "") {
-      submitBtnRef.current.disabled = false;
+      setBtnDisabled(false);
+    } else {
+      setBtnDisabled(true);
     }
   }, [comment, responseTo]);
 
@@ -81,7 +82,7 @@ function AddComment(props) {
           value={comment}
           ref={textareaRef}
         />
-        <button type="submit" ref={submitBtnRef}>
+        <button type="submit" disabled={btnDisabled}>
           게시
         </button>
       </form>

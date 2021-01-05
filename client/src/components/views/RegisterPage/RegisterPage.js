@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
@@ -11,14 +11,34 @@ import styled, { keyframes } from "styled-components";
 import { palette } from "../../../styles/Theme";
 
 const RegisterPage = (props) => {
-  const { register, errors, handleSubmit } = useForm();
+  const {
+    register,
+    errors,
+    handleSubmit,
+    formState: { isSubmitting, dirtyFields }
+  } = useForm();
   const dispatch = useDispatch();
-  const submitBtn = useRef();
-  const loadingBtn = useRef();
+  const [btnDisabled, setBtnDisabled] = useState(false);
   //const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/i;
   //const emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   const emailRegExp = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i;
-  const nickNameRegExp = /^[0-9a-z]([0-9a-z_-])*/i;
+  const nickNameRegExp = /^[0-9a-z]([0-9a-z_])*/i;
+
+  useEffect(() => {
+    if (
+      dirtyFields.emailInput &&
+      dirtyFields.nicknameInput &&
+      dirtyFields.passwordInput
+    ) {
+      setBtnDisabled(true);
+    } else {
+      setBtnDisabled(false);
+    }
+  }, [
+    dirtyFields.emailInput,
+    dirtyFields.nicknameInput,
+    dirtyFields.passwordInput
+  ]);
 
   const onSubmit = (data) => {
     const lowerNickname = data.nicknameInput.toLowerCase();
@@ -28,8 +48,6 @@ const RegisterPage = (props) => {
       nickname: lowerNickname,
       password: data.passwordInput
     };
-    submitBtn.current.classList.add("hide");
-    loadingBtn.current.classList.remove("hide");
     dispatch(registerUser(body)).then((response) => {
       if (response.payload.success) {
         setTimeout(() => {
@@ -37,8 +55,6 @@ const RegisterPage = (props) => {
         }, 1300);
       } else {
         alert(response.payload.message);
-        submitBtn.current.classList.remove("hide");
-        loadingBtn.current.classList.add("hide");
       }
     });
   };
@@ -92,7 +108,7 @@ const RegisterPage = (props) => {
               errors.nicknameInput.type === "minLength" ||
               errors.nicknameInput.type === "maxLength") && (
               <ErrorText>
-                3~30자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다
+                3~30자의 영문 소문자, 숫자와 밑줄(_)만 사용 가능합니다.
               </ErrorText>
             )}
           <Input
@@ -108,14 +124,17 @@ const RegisterPage = (props) => {
             errors.passwordInput.type === "minLength" && (
               <ErrorText>비밀번호는 최소 6자 이상이어야 합니다.</ErrorText>
             )}
-          <Button type="submit" ref={submitBtn}>
-            가입
-          </Button>
-          <Button blur ref={loadingBtn} className="hide">
-            <IconSpan>
-              <AiOutlineLoading />
-            </IconSpan>
-          </Button>
+          {isSubmitting ? (
+            <Button blur={isSubmitting}>
+              <IconSpan>
+                <AiOutlineLoading />
+              </IconSpan>
+            </Button>
+          ) : (
+            <Button type="submit" blur={!btnDisabled}>
+              가입
+            </Button>
+          )}
         </RegisterForm>
         <TermsText>
           가입하면 Instagram의 <span>약관, 데이터 정책</span> 및{" "}
@@ -156,9 +175,6 @@ const Section = styled.section`
 const RegisterForm = styled.form`
   display: flex;
   flex-direction: column;
-  .hide {
-    display: none;
-  }
 `;
 
 const Logo = styled.h1`
@@ -182,6 +198,7 @@ const TermsText = styled.p`
   word-break: keep-all;
   span {
     font-weight: bold;
+    color: #8e8e8e;
   }
 `;
 
