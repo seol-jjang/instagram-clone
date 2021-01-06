@@ -4,7 +4,8 @@ import {
   REGISTER_USER,
   AUTH_USER,
   EDIT_USER,
-  EDIT_PASSWORD
+  EDIT_PASSWORD,
+  UPLOAD_USER_IMAGE
 } from "./types";
 
 export function loginUser(dataToSubmit) {
@@ -42,6 +43,18 @@ export function editPassword(dataToSubmit) {
   );
   return {
     type: EDIT_PASSWORD,
+    payload: request
+  };
+}
+
+export function uploadUserImage(dataToSubmit, config) {
+  const request = Axios.post(
+    "/api/users/uploadProfileImage",
+    dataToSubmit,
+    config
+  ).then((response) => response.data);
+  return {
+    type: UPLOAD_USER_IMAGE,
     payload: request
   };
 }

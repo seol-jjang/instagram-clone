@@ -13,7 +13,12 @@ let storage = multer.diskStorage({
   fileFilter: (req, file, cb) => {
     const ext = path.extname(file.originalname);
     if (ext !== ".jpg" || ext !== ".png" || ext !== ".jpeg") {
-      return cb(res.status(400).end("jpg, png, jpeg, gif"), false);
+      return cb(
+        res
+          .status(400)
+          .end("jpg, png, jpeg 형식의 이미지만 업로드할 수 있습니다."),
+        false
+      );
     }
     cb(null, true);
   }

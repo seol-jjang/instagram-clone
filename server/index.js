@@ -24,6 +24,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use("/uploads", express.static("uploads"));
+app.use("/uploads_profileImage", express.static("uploads_profileImage"));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/post", require("./routes/post"));
 app.use("/api/follow", require("./routes/follow"));

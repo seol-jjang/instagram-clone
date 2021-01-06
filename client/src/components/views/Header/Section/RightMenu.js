@@ -110,7 +110,7 @@ const Circle = styled.span`
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 1px solid black;
+  border: 1px solid ${palette.blackColor};
   @media ${viewportSize.laptop} {
     right: 12px;
   }

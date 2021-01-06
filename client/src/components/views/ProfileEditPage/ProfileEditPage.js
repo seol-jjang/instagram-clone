@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import { useForm } from "react-hook-form";
+import { AiOutlineLoading } from "react-icons/ai";
 import Input from "../../../styles/common/Input";
 import { Inner, palette, ProfileIcon, SubText } from "../../../styles/Theme";
 import Button from "../../../styles/common/Button";
 import { editUser } from "../../../_actions/user_action";
 import { Link } from "react-router-dom";
+import ProfileImageUpload from "../../utils/ProfileImageUpload";
 
 function ProfileEditPage() {
   const user = useSelector((state) => state.user);
@@ -69,7 +71,9 @@ function ProfileEditPage() {
                 </ProfileIcon>
                 <div>
                   <h3>{user.userData.nickname}</h3>
-                  <button>프로필 사진 바꾸기</button>
+                  <form encType="multipart/form-data">
+                    <ProfileImageUpload />
+                  </form>
                 </div>
               </ImageContainer>
               <EditForm onSubmit={handleSubmit(onSubmit)}>
@@ -132,6 +136,15 @@ function ProfileEditPage() {
 
 export default ProfileEditPage;
 
+const Rotation = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg)
+  }
+`;
+
 const EditWrap = styled.div`
   display: flex;
   margin-top: 85px;
@@ -178,21 +191,13 @@ const ImageContainer = styled.div`
   line-height: 1.2;
   margin-top: 10px;
   & > span {
-    margin-right: 30px;
-    margin-left: 124px;
     width: 37px;
     height: 37px;
+    margin-left: 124px;
+    margin-right: 30px;
   }
   h3 {
     font-size: 20px;
-  }
-  button {
-    padding: 0;
-    background-color: transparent;
-    color: ${palette.ActivatedColor};
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
   }
 `;
 

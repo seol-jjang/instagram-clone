@@ -73,6 +73,7 @@ export const ProfileIcon = styled.span`
     height: ${ProfileIconSize[size].height};
   `}
   border-radius: 50%;
+  border: 1px solid ${palette.borderColor};
   overflow: hidden;
   cursor: pointer;
   img {
