@@ -61,19 +61,10 @@ router.post("/getUserPost", (req, res) => {
       if (err) return res.status(400).json({ success: false, err });
       res.status(200).json({
         success: true,
-        post: post
+        post: post,
+        postLength: post.length
       });
     });
-});
-
-router.post("/getUserPostCount", (req, res) => {
-  Post.find({ userFrom: req.body.userFrom }).exec((err, post) => {
-    if (err) return res.status(400).json({ success: false, err });
-    res.status(200).json({
-      success: true,
-      postLength: post.length
-    });
-  });
 });
 
 router.post("/getPostDetail", (req, res) => {

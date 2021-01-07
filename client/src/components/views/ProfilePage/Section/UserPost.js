@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { viewportSize } from "../../../../styles/Theme";
 
 function UserPost(props) {
-  const { profileUser } = props;
+  const { profileUser, refreshPostNumber } = props;
   const [post, setPost] = useState([]);
   useEffect(() => {
     let unmounted = false;
@@ -19,6 +19,7 @@ function UserPost(props) {
         if (!unmounted) {
           if (response.data.success) {
             setPost(response.data.post);
+            refreshPostNumber(response.data.postLength);
           } else {
             alert("게시글을 불러오는 데 실패했습니다.");
           }
@@ -37,7 +38,7 @@ function UserPost(props) {
       unmounted = true;
       source.cancel("Canceling in cleanup");
     };
-  }, [profileUser]);
+  }, [profileUser, refreshPostNumber]);
   return (
     <PostSection>
       {post.map((post, index) => (

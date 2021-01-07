@@ -18,6 +18,7 @@ import FollowingBtn from "./Section/FollowingBtn";
 function ProfilePage(props) {
   const [profileUser, setProfileUser] = useState([]);
   const [follower, setFollower] = useState(0);
+  const [postNumber, setPostNumber] = useState(0);
   const [windowSize, setWindowSize] = useState({
     width: undefined,
     height: undefined
@@ -72,15 +73,18 @@ function ProfilePage(props) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const refreshFollower = (count) => {
-    setFollower(count);
-  };
   const countFollower = (value) => {
     if (value === "minus") {
       setFollower(follower - 1);
     } else if (value === "plus") {
       setFollower(follower + 1);
     }
+  };
+  const refreshFollower = (count) => {
+    setFollower(count);
+  };
+  const refreshPostNumber = (count) => {
+    setPostNumber(count);
   };
 
   return (
@@ -127,22 +131,27 @@ function ProfilePage(props) {
                   <FollowInfo
                     profileUser={profileUser._id}
                     refreshFollower={refreshFollower}
+                    postNumber={postNumber}
                   />
-                  {profileUser.name && <h1>{profileUser.name}</h1>}
+                  <h1>{profileUser.name}</h1>
                 </>
               )}
             </ProfileDetail>
           </ProfileHeader>
           {windowSize && windowSize.width < 735 && (
             <>
-              {profileUser.name && <h1>{profileUser.name}</h1>}
+              <h1>{profileUser.name}</h1>
               <FollowInfo
                 profileUser={profileUser._id}
                 refreshFollower={refreshFollower}
+                postNumber={postNumber}
               />
             </>
           )}
-          <UserPost profileUser={profileUser._id} />
+          <UserPost
+            profileUser={profileUser._id}
+            refreshPostNumber={refreshPostNumber}
+          />
         </ContentsSection>
       )}
     </Inner>
@@ -168,9 +177,13 @@ const ContentsSection = styled.section`
 
 const ProfileHeader = styled.header`
   display: flex;
+  padding-bottom: 30px;
   margin-bottom: 30px;
+  border-bottom: 1px solid ${palette.borderColor};
   @media ${viewportSize.tablet} {
     margin: 0 16px 20px;
+    padding-bottom: 0;
+    border-bottom: 0;
   }
 `;
 

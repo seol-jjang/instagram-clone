@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { BsChat } from "react-icons/bs";
 import { VscBookmark } from "react-icons/vsc";
 import {
@@ -20,6 +20,7 @@ function PostFactory() {
   const [posts, setPosts] = useState([]);
   const [refreshPostId, setRefreshPostId] = useState();
   const [likeNumber, setLikeNumber] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     let unmounted = false;
@@ -57,6 +58,10 @@ function PostFactory() {
     setRefreshPostId(variable);
   };
 
+  const refreshCurrentImage = (number) => {
+    setCurrentSlide(number);
+  };
+
   return (
     <>
       {posts.map((post, index) => (
@@ -75,9 +80,25 @@ function PostFactory() {
             </Link>
           </WriteHeader>
           <PictureWrap>
-            <ImageSlide images={post.filePath} />
+            <ImageSlide
+              images={post.filePath}
+              refreshCurrentImage={refreshCurrentImage}
+            />
+            {post.filePath.length > 1 && (
+              <DotsWrap>
+                {post.filePath.map((img, index) =>
+                  index === currentSlide ? (
+                    <Dot key={index} current>
+                      {index + 1}
+                    </Dot>
+                  ) : (
+                    <Dot key={index}>{index + 1}</Dot>
+                  )
+                )}
+              </DotsWrap>
+            )}
           </PictureWrap>
-          <ContentsContainer>
+          <div>
             <BtnUtil>
               <div>
                 <LikeBtn postId={post._id} refreshLike={refreshLike} />
@@ -93,7 +114,7 @@ function PostFactory() {
             </BtnUtil>
             <LikeNumber postId={post._id} newLikeNumber={likeNumber} />
             <DetailContent post={post} refreshPostId={refreshPostId} />
-          </ContentsContainer>
+          </div>
           <AddComment postId={post._id} refreshComment={refreshComment} />
         </Article>
       ))}
@@ -134,6 +155,27 @@ const PictureWrap = styled.div`
   background-color: black;
   border-top: 1px solid ${palette.borderColor};
   border-bottom: 1px solid ${palette.borderColor};
+`;
+
+const DotsWrap = styled.div`
+  position: absolute;
+  left: calc(50% - 10px);
+  margin: 17px 0;
+  display: flex;
+`;
+
+const Dot = styled.span`
+  width: 5px;
+  height: 5px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background-color: #a8a8a8;
+  font-size: 0;
+  ${(props) =>
+    props.current &&
+    css`
+      background-color: #0095f6;
+    `}
 `;
 
 const ContentsContainer = styled.div``;

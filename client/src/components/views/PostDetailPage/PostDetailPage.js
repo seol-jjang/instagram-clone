@@ -23,6 +23,7 @@ function PostDetailPage() {
   const [newPostId, setNewPostId] = useState();
   const [responseTo, setResponseTo] = useState([]);
   const [likeNumber, setLikeNumber] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     let unmounted = false;
@@ -72,6 +73,9 @@ function PostDetailPage() {
   const refreshComment = (variable) => {
     setNewPostId(variable);
   };
+  const refreshCurrentImage = (number) => {
+    setCurrentSlide(number);
+  };
 
   return (
     <Inner>
@@ -91,7 +95,10 @@ function PostDetailPage() {
             </Link>
           </WriteHeader>
           <PictureWrap>
-            <ImageSlide images={post.filePath} />
+            <ImageSlide
+              images={post.filePath}
+              refreshCurrentImage={refreshCurrentImage}
+            />
           </PictureWrap>
           <ContentsContainer>
             <BtnUtil>
@@ -190,6 +197,7 @@ const WriteHeader = styled.header`
 `;
 
 const PictureWrap = styled.div`
+  position: relative;
   min-height: 450px;
   margin-right: 320px;
   border-right: 1px solid ${palette.borderColor};

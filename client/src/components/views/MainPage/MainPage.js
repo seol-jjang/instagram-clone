@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
   Inner,
@@ -24,14 +25,18 @@ const MainPage = () => {
             {user.userData && (
               <UserInfo>
                 <>
-                  <ProfileIcon size="large">
-                    <img
-                      src={`http://localhost:5000/${user.userData.profileImage}`}
-                      alt="userProfile"
-                    />
-                  </ProfileIcon>
+                  <Link to={`/user/${user.userData.nickname}`}>
+                    <ProfileIcon size="large">
+                      <img
+                        src={`http://localhost:5000/${user.userData.profileImage}`}
+                        alt="userProfile"
+                      />
+                    </ProfileIcon>
+                  </Link>
                   <div>
-                    <UserNickname>{user.userData.nickname}</UserNickname>
+                    <Link to={`/user/${user.userData.nickname}`}>
+                      <UserNickname>{user.userData.nickname}</UserNickname>
+                    </Link>
                     {user.userData.name !== "" && (
                       <SubText>{user.userData.name}</SubText>
                     )}

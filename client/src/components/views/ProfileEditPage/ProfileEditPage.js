@@ -4,7 +4,13 @@ import styled, { keyframes } from "styled-components";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading } from "react-icons/ai";
 import Input from "../../../styles/common/Input";
-import { Inner, palette, ProfileIcon, SubText } from "../../../styles/Theme";
+import {
+  Inner,
+  palette,
+  ProfileIcon,
+  SubText,
+  viewportSize
+} from "../../../styles/Theme";
 import Button from "../../../styles/common/Button";
 import { editUser } from "../../../_actions/user_action";
 import { Link } from "react-router-dom";
@@ -20,7 +26,7 @@ function ProfileEditPage() {
     reset,
     formState: { isDirty }
   } = useForm();
-  const nickNameRegExp = /^[0-9a-z]([0-9a-z_-])*/i;
+  const nickNameRegExp = /^[0-9a-z]([0-9a-z_])*/i;
 
   useEffect(() => {
     if (user.userData) {
@@ -136,20 +142,17 @@ function ProfileEditPage() {
 
 export default ProfileEditPage;
 
-const Rotation = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg)
-  }
-`;
-
 const EditWrap = styled.div`
   display: flex;
   margin-top: 85px;
   background-color: white;
   border: 1px solid ${palette.borderColor};
+
+  @media ${viewportSize.tablet} {
+    border: 0;
+    border-top: 1px solid ${palette.borderColor};
+    border-bottom: 1px solid ${palette.borderColor};
+  }
 `;
 
 const MenuList = styled.ul`
@@ -177,12 +180,20 @@ const MenuList = styled.ul`
       border-left: 2px solid ${palette.blackColor};
     }
   }
+
+  @media ${viewportSize.tablet} {
+    display: none;
+  }
 `;
 
 const EditContainer = styled.section`
   flex-grow: 3;
   padding: 20px;
   padding-bottom: 80px;
+
+  @media ${viewportSize.tablet} {
+    padding: 20px;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -198,6 +209,13 @@ const ImageContainer = styled.div`
   }
   h3 {
     font-size: 20px;
+  }
+  @media ${viewportSize.tablet} {
+    margin-top: 0;
+    & > span {
+      margin-left: 0;
+      margin-right: 20px;
+    }
   }
 `;
 
@@ -225,16 +243,29 @@ const FormItemWrap = styled.div`
   button {
     padding: 7px 10px;
   }
+
+  @media ${viewportSize.tablet} {
+    display: block;
+  }
 `;
 
 const LabelWrap = styled.div`
   margin-top: 7px;
   padding: 0 30px;
-  flex-basis: 190px;
+  width: 190px;
   text-align: end;
+
+  @media ${viewportSize.tablet} {
+    width: auto;
+    margin-top: 0;
+    margin-bottom: 7px;
+    padding: 0;
+    text-align: start;
+  }
 `;
 
 const InputWrap = styled.div`
+  max-width: 350px;
   flex-basis: 350px;
   p {
     margin-top: 10px;

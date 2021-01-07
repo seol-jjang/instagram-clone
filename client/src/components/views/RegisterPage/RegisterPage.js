@@ -15,10 +15,11 @@ const RegisterPage = (props) => {
     register,
     errors,
     handleSubmit,
-    formState: { isSubmitting, dirtyFields }
+    formState: { dirtyFields }
   } = useForm();
   const dispatch = useDispatch();
   const [btnDisabled, setBtnDisabled] = useState(false);
+  const [loading, setLoading] = useState(null);
   //const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/i;
   //const emailRegExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
   const emailRegExp = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i;
@@ -48,7 +49,9 @@ const RegisterPage = (props) => {
       nickname: lowerNickname,
       password: data.passwordInput
     };
+
     dispatch(registerUser(body)).then((response) => {
+      setLoading(true);
       if (response.payload.success) {
         setTimeout(() => {
           props.history.push("/login");
@@ -57,6 +60,7 @@ const RegisterPage = (props) => {
         alert(response.payload.message);
       }
     });
+    setLoading(false);
   };
 
   return (
@@ -124,8 +128,8 @@ const RegisterPage = (props) => {
             errors.passwordInput.type === "minLength" && (
               <ErrorText>비밀번호는 최소 6자 이상이어야 합니다.</ErrorText>
             )}
-          {isSubmitting ? (
-            <Button blur={isSubmitting}>
+          {loading ? (
+            <Button blur>
               <IconSpan>
                 <AiOutlineLoading />
               </IconSpan>
