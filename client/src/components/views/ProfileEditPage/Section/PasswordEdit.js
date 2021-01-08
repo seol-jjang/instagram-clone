@@ -1,13 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import Input from "../../../../styles/common/Input";
 import {
   Inner,
   palette,
   ProfileIcon,
-  SubText,
   viewportSize
 } from "../../../../styles/Theme";
 import Button from "../../../../styles/common/Button";
@@ -20,7 +19,6 @@ function PasswordEdit() {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const {
     register,
-    errors,
     handleSubmit,
     formState: { dirtyFields }
   } = useForm();

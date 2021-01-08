@@ -1,6 +1,5 @@
-import Axios from "axios";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { palette } from "../../styles/Theme";
 import { uploadUserImage } from "../../_actions/user_action";

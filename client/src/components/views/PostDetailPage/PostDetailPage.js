@@ -20,10 +20,9 @@ import LikeNumber from "../../utils/LikeNumber";
 function PostDetailPage() {
   const params = useParams();
   const [post, setPost] = useState([]);
-  const [newPostId, setNewPostId] = useState();
+  const [newComment, setNewComment] = useState([]);
   const [responseTo, setResponseTo] = useState([]);
   const [likeNumber, setLikeNumber] = useState(0);
-  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     let unmounted = false;
@@ -70,11 +69,8 @@ function PostDetailPage() {
     setLikeNumber(likeNumber);
   };
 
-  const refreshComment = (variable) => {
-    setNewPostId(variable);
-  };
-  const refreshCurrentImage = (number) => {
-    setCurrentSlide(number);
+  const refreshComment = (newComment) => {
+    setNewComment(newComment);
   };
 
   return (
@@ -95,10 +91,7 @@ function PostDetailPage() {
             </Link>
           </WriteHeader>
           <PictureWrap>
-            <ImageSlide
-              images={post.filePath}
-              refreshCurrentImage={refreshCurrentImage}
-            />
+            <ImageSlide images={post.filePath} detailPage />
           </PictureWrap>
           <ContentsContainer>
             <BtnUtil>
@@ -148,7 +141,7 @@ function PostDetailPage() {
               <CommentFactory
                 postId={post._id}
                 refreshReplyComment={onReplyComment}
-                newPostId={newPostId}
+                newComment={newComment}
               />
             </ScrollContainer>
           </ContentsContainer>

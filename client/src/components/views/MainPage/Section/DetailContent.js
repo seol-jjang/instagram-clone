@@ -3,22 +3,19 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { SubText, UserNickname } from "../../../../styles/Theme";
+import AddComment from "../../../utils/AddComment";
 import LikeBtn from "../../../utils/LikeBtn";
 
 function DetailContent(props) {
-  const { post, refreshPostId } = props;
+  const { post } = props;
   const [comments, setComments] = useState([]);
   const [commentsCount, setCommentsCount] = useState(0);
 
   useEffect(() => {
     let unmounted = false;
     let source = Axios.CancelToken.source();
-    let variable;
-    if (refreshPostId) {
-      variable = { postId: refreshPostId.postId };
-    } else {
-      variable = { postId: post._id };
-    }
+    const variable = { postId: post._id };
+
     Axios.post("/api/comment/getCommentsCount", variable, {
       cancelToken: source.token
     })
@@ -40,6 +37,12 @@ function DetailContent(props) {
           }
         }
       });
+  }, [post._id]);
+
+  useEffect(() => {
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
+    const variable = { postId: post._id };
 
     Axios.post("/api/comment/getCommentsLimit", variable, {
       cancelToken: source.token
@@ -66,39 +69,47 @@ function DetailContent(props) {
       unmounted = true;
       source.cancel("Canceling in cleanup");
     };
-  }, [post._id, refreshPostId]);
+  }, [post._id]);
+
+  const refreshComment = (newComment) => {
+    setComments(comments.concat(newComment));
+  };
 
   return (
-    <DetailContentsWrap>
-      <div>
-        <PostContent>
-          <Link to={`/user/${post.userFrom.nickname}`}>
-            <UserNickname>{post.userFrom.nickname}</UserNickname>
-          </Link>
-          <Description>{post.description}</Description>
-        </PostContent>
-      </div>
-      {comments.length !== 0 && (
-        <Comment>
-          <Link to={`/p/${props.postId}`}>
-            <SubText>댓글 {commentsCount}개 모두보기</SubText>
-          </Link>
-          <ul>
-            {comments.map((comment, index) => (
-              <li key={index}>
-                <div>
-                  <Link to={`/${comment.userFrom.nickname}`}>
-                    <UserNickname>{comment.userFrom.nickname}</UserNickname>
-                  </Link>
-                  <span className="comment">{comment.content}</span>
-                </div>
-                <LikeBtn commentId={comment._id} />
-              </li>
-            ))}
-          </ul>
-        </Comment>
-      )}
-    </DetailContentsWrap>
+    <>
+      <DetailContentsWrap>
+        <div>
+          <PostContent>
+            <Link to={`/user/${post.userFrom.nickname}`}>
+              <UserNickname>{post.userFrom.nickname}</UserNickname>
+            </Link>
+            <Description>{post.description}</Description>
+          </PostContent>
+        </div>
+        {comments.length !== 0 && (
+          <Comment>
+            <Link to={`/p/${props.postId}`}>
+              <SubText>댓글 {commentsCount}개 모두보기</SubText>
+            </Link>
+            <ul>
+              {comments.map((comment, index) => (
+                <li key={index}>
+                  <div>
+                    <Link to={`/${comment.userFrom.nickname}`}>
+                      <UserNickname>{comment.userFrom.nickname}</UserNickname>
+                    </Link>
+                    <span className="comment">{comment.content}</span>
+                  </div>
+                  <LikeBtn commentId={comment._id} />
+                </li>
+              ))}
+            </ul>
+          </Comment>
+        )}
+      </DetailContentsWrap>
+
+      <AddComment postId={post._id} refreshComment={refreshComment} />
+    </>
   );
 }
 

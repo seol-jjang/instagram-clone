@@ -160,7 +160,6 @@ router.post("/edit", auth, (req, res) => {
 router.post("/editPassword", auth, (req, res) => {
   User.findOne({ _id: req.user._id }, (err, user) => {
     user.comparePassword(req.body.prevPassword, (err, isMatch) => {
-      console.log(isMatch);
       if (!isMatch) {
         return res.json({
           success: false,

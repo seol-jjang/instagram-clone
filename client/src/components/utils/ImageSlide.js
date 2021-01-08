@@ -5,20 +5,20 @@ import {
   IoIosArrowDroprightCircle
 } from "react-icons/io";
 
-function ImageSlide(props) {
-  const TOTAL_SLIDES = props.images.length;
+function ImageSlide({ images, detailPage }) {
+  const TOTAL_SLIDES = images.length;
+  const [currentSlide, setCurrentSlide] = useState(0);
   const wrap = useRef();
   const slideRef = useRef();
-  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     const img = new Image();
-    img.src = `http://localhost:5000/${props.images[0]}`;
+    img.src = `http://localhost:5000/${images[0]}`;
 
     const width = img.width;
     const height = img.height;
     wrap.current.style.paddingBottom = `calc(${height}/${width} * 100%)`;
-  }, [props.images]);
+  }, [images]);
 
   useEffect(() => {
     slideRef.current.style.transition = "transform 0.3s ease-in-out";
@@ -28,13 +28,11 @@ function ImageSlide(props) {
   const nextSlide = () => {
     if (currentSlide <= TOTAL_SLIDES) {
       setCurrentSlide(currentSlide + 1);
-      props.refreshCurrentImage(currentSlide + 1);
     }
   };
   const prevSlide = () => {
     if (currentSlide !== 0) {
       setCurrentSlide(currentSlide - 1);
-      props.refreshCurrentImage(currentSlide - 1);
     }
   };
 
@@ -42,7 +40,7 @@ function ImageSlide(props) {
     <>
       <Images ref={wrap}>
         <SlideContainer ref={slideRef}>
-          {props.images.map((img, index) => (
+          {images.map((img, index) => (
             <li
               key={index}
               style={{
@@ -71,6 +69,23 @@ function ImageSlide(props) {
           )}
         </>
       )}
+      {!detailPage && (
+        <>
+          {TOTAL_SLIDES > 1 && (
+            <DotsWrap>
+              {images.map((img, index) =>
+                index === currentSlide ? (
+                  <Dot key={index} current>
+                    {index + 1}
+                  </Dot>
+                ) : (
+                  <Dot key={index}>{index + 1}</Dot>
+                )
+              )}
+            </DotsWrap>
+          )}
+        </>
+      )}
     </>
   );
 }
@@ -93,12 +108,12 @@ const btnStyle = css`
 
 const PrevArrowBtn = styled.button`
   ${btnStyle}
-  top: 50%;
+  top: calc(50% - 20px);
   left: 10px;
 `;
 const NextArrowBtn = styled.button`
   ${btnStyle}
-  top: 50%;
+  top: calc(50% - 20px);
   right: 10px;
 `;
 
@@ -106,6 +121,8 @@ const Images = styled.ul`
   display: flex;
   position: relative;
   overflow: hidden;
+  min-height: 100%;
+  padding-bottom: 100%;
 `;
 
 const SlideContainer = styled.div`
@@ -131,4 +148,27 @@ const SlideContainer = styled.div`
       object-fit: cover;
     }
   }
+`;
+
+const DotsWrap = styled.div`
+  position: absolute;
+  left: calc(50% - 15px);
+  margin: 17px 0;
+  display: flex;
+`;
+
+const Dot = styled.span`
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #a8a8a8;
+  font-size: 0;
+  &:not(:last-child) {
+    margin-right: 5px;
+  }
+  ${(props) =>
+    props.current &&
+    css`
+      background-color: #0095f6;
+    `}
 `;

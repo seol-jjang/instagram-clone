@@ -5,19 +5,15 @@ import ReplyComment from "./ReplyComment";
 import SingleComment from "./SingleComment";
 
 function CommentFactory(props) {
-  const { refreshReplyComment, postId, newPostId } = props;
+  const { refreshReplyComment, postId, newComment } = props;
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
     let unmounted = false;
     let source = Axios.CancelToken.source();
 
-    let variable;
-    if (newPostId) {
-      variable = { postId: newPostId.postId };
-    } else {
-      variable = { postId: postId };
-    }
+    const variable = { postId: postId };
+
     Axios.post("/api/comment/getComments", variable, {
       cancelToken: source.token
     })
@@ -43,7 +39,7 @@ function CommentFactory(props) {
       unmounted = true;
       source.cancel("Canceling in cleanup");
     };
-  }, [newPostId, postId]);
+  }, [postId, newComment]);
 
   return (
     <>

@@ -1,11 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { BsPlusCircle, BsPlusCircleFill } from "react-icons/bs";
 import { RiHomeFill, RiHomeLine } from "react-icons/ri";
 import { IoPaperPlaneOutline } from "react-icons/io5";
 import Button from "../../../../styles/common/Button";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { palette, ProfileIcon, viewportSize } from "../../../../styles/Theme";
 import ProfileMenu from "./ProfileMenu";
 

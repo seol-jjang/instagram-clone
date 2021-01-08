@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { AiOutlineLoading } from "react-icons/ai";
 import Input from "../../../styles/common/Input";
 import {
   Inner,

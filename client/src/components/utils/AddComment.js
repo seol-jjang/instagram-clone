@@ -1,8 +1,8 @@
 import Axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { useSelector } from "react-redux";
-import { AiFillCloseCircle } from "react-icons/ai";
+import { AiFillCloseCircle, AiOutlineLoading } from "react-icons/ai";
 import { palette, viewportSize } from "../../styles/Theme";
 
 function AddComment(props) {
@@ -10,6 +10,7 @@ function AddComment(props) {
   const user = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [btnDisabled, setBtnDisabled] = useState(true);
+  const [loading, setLoading] = useState(null);
   const textareaRef = useRef();
 
   useEffect(() => {
@@ -32,7 +33,7 @@ function AddComment(props) {
 
   const onSubmit = (event) => {
     event.preventDefault();
-
+    setLoading(true);
     let variables;
     if (responseTo) {
       variables = {
@@ -51,9 +52,9 @@ function AddComment(props) {
 
     Axios.post("/api/comment/saveComment", variables).then((response) => {
       if (response.data.success) {
-        const variable = { postId: postId };
-        refreshComment(variable);
+        refreshComment(response.data.result);
         setComment("");
+        setLoading(false);
         if (responseTo) {
           refreshReplyComment(null);
         }
@@ -63,34 +64,47 @@ function AddComment(props) {
     });
   };
   return (
-    <CommentFormSection detailPage={props.detailPage}>
-      <form onSubmit={onSubmit}>
-        {responseTo && responseTo.length !== 0 && (
+    <AddCommentContainer>
+      {loading && (
+        <Loading>
           <span>
-            {`@${responseTo.nickname}`}
-            <button
-              className="delete-btn"
-              onClick={() => refreshReplyComment(null)}
-            >
-              <AiFillCloseCircle />
-            </button>
+            <AiOutlineLoading />
           </span>
-        )}
-        <textarea
-          placeholder="댓글 달기..."
-          onChange={onChangeHandler}
-          value={comment}
-          ref={textareaRef}
-        />
-        <button type="submit" disabled={btnDisabled}>
-          게시
-        </button>
-      </form>
-    </CommentFormSection>
+        </Loading>
+      )}
+      <CommentFormSection detailPage={props.detailPage}>
+        <form onSubmit={onSubmit}>
+          {responseTo && responseTo.length !== 0 && (
+            <span>
+              {`@${responseTo.nickname}`}
+              <button
+                className="delete-btn"
+                onClick={() => refreshReplyComment(null)}
+              >
+                <AiFillCloseCircle />
+              </button>
+            </span>
+          )}
+          <textarea
+            placeholder="댓글 달기..."
+            onChange={onChangeHandler}
+            value={comment}
+            ref={textareaRef}
+          />
+          <button type="submit" disabled={btnDisabled}>
+            게시
+          </button>
+        </form>
+      </CommentFormSection>
+    </AddCommentContainer>
   );
 }
 
 export default AddComment;
+
+const AddCommentContainer = styled.section`
+  position: relative;
+`;
 
 const CommentFormSection = styled.section`
   margin-top: 10px;
@@ -147,6 +161,33 @@ const CommentFormSection = styled.section`
         cursor: default;
         pointer-events: none;
       }
+    }
+  }
+`;
+
+const Rotation = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg)
+  }
+`;
+
+const Loading = styled.div`
+  position: absolute;
+  top: 10px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.6);
+  span {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      animation: ${Rotation} 1s linear infinite;
     }
   }
 `;
