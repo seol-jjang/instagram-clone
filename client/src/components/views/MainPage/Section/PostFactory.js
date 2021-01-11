@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import styled from "styled-components";
 import { BsChat } from "react-icons/bs";
+import { IoIosMore } from "react-icons/io";
 import { VscBookmark } from "react-icons/vsc";
 import {
   palette,
@@ -14,10 +15,14 @@ import ImageSlide from "../../../utils/ImageSlide";
 import LikeBtn from "../../../utils/LikeBtn";
 import LikeNumber from "../../../utils/LikeNumber";
 import DetailContent from "./DetailContent";
+import Dialog from "../../../utils/Dialog";
 
 function PostFactory() {
   const [posts, setPosts] = useState([]);
   const [likeNumber, setLikeNumber] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [postId, setPostId] = useState("");
+  const [writer, setWriter] = useState("");
 
   useEffect(() => {
     let unmounted = false;
@@ -51,22 +56,37 @@ function PostFactory() {
     setLikeNumber(likeNumber);
   };
 
+  const onClickMore = (postId = "", userFrom = "") => {
+    setVisible(!visible);
+    setPostId(postId);
+    setWriter(userFrom);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
+
   return (
     <>
       {posts.map((post, index) => (
         <Article key={index}>
           <WriteHeader>
-            <ProfileIcon size="medium">
+            <div>
+              <ProfileIcon size="medium">
+                <Link to={`/user/${post.userFrom.nickname}`}>
+                  <img
+                    src={`http://localhost:5000/${post.userFrom.profileImage}`}
+                    alt={post.userFrom.nickname}
+                  />
+                </Link>
+              </ProfileIcon>
               <Link to={`/user/${post.userFrom.nickname}`}>
-                <img
-                  src={`http://localhost:5000/${post.userFrom.profileImage}`}
-                  alt={post.userFrom.nickname}
-                />
+                <UserNickname>{post.userFrom.nickname}</UserNickname>
               </Link>
-            </ProfileIcon>
-            <Link to={`/user/${post.userFrom.nickname}`}>
-              <UserNickname>{post.userFrom.nickname}</UserNickname>
-            </Link>
+            </div>
+            <MoreBtn onClick={() => onClickMore(post._id, post.userFrom._id)}>
+              <IoIosMore />
+            </MoreBtn>
           </WriteHeader>
           <PictureWrap>
             <ImageSlide images={post.filePath} />
@@ -90,6 +110,12 @@ function PostFactory() {
           </div>
         </Article>
       ))}
+      <Dialog
+        onClose={onClose}
+        visible={visible}
+        postId={postId}
+        writer={writer}
+      />
     </>
   );
 }
@@ -113,12 +139,29 @@ const Article = styled.article`
 const WriteHeader = styled.header`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 13px 15px;
+  & > div {
+    display: flex;
+    align-items: center;
+  }
   a:hover {
     text-decoration: underline;
   }
   span {
     margin-right: 15px;
+  }
+`;
+
+const MoreBtn = styled.button`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  background-color: transparent;
+  svg {
+    width: 20px;
+    height: 20px;
   }
 `;
 

@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { IoIosMore } from "react-icons/io";
 import { ProfileIcon, UserNickname } from "../../../../styles/Theme";
 import styled from "styled-components";
 import Axios from "axios";
 import LikeBtn from "../../../utils/LikeBtn";
+import Dialog from "../../../utils/Dialog";
 
 function SingleComment(props) {
   const { comment, refreshReplyComment } = props;
   const [likeNumber, setLikeNumber] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [commentId, setCommentId] = useState("");
+  const [writer, setWriter] = useState("");
+  const [btnHover, setBtnHover] = useState(false);
 
   useEffect(() => {
     let unmounted = false;
@@ -46,46 +52,87 @@ function SingleComment(props) {
     setLikeNumber(likeNumber);
   };
 
+  const onClickMore = (commentId = "", userFrom = "") => {
+    setVisible(!visible);
+    setCommentId(commentId);
+    setWriter(userFrom);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
+
   return (
-    <div>
-      {comment.userFrom && (
-        <>
-          <Writer>
-            <ProfileIcon size="medium" className="profile-image">
-              <Link to={`/user/${comment.userFrom.nickname}`}>
-                <img
-                  src={`http://localhost:5000/${comment.userFrom.profileImage}`}
-                  alt={comment.userFrom.nickname}
-                />
-              </Link>
-            </ProfileIcon>
-            <ContentWrap>
-              <div>
-                <Link to={`/${comment.userFrom.nickname}`}>
-                  <UserNickname>{comment.userFrom.nickname}</UserNickname>
+    <>
+      <CommentContainer>
+        {comment.userFrom && (
+          <>
+            <Writer>
+              <ProfileIcon size="medium" className="profile-image">
+                <Link to={`/user/${comment.userFrom.nickname}`}>
+                  <img
+                    src={`http://localhost:5000/${comment.userFrom.profileImage}`}
+                    alt={comment.userFrom.nickname}
+                  />
                 </Link>
-                <span className="comment">{comment.content}</span>
-              </div>
-              <div>
-                {likeNumber > 0 && <button>좋아요 {likeNumber}개</button>}
-                <button
-                  onClick={() =>
-                    refreshReplyComment(comment.userFrom.nickname, comment._id)
-                  }
-                >
-                  답글 달기
-                </button>
-              </div>
-            </ContentWrap>
-          </Writer>
-          <LikeBtn commentId={comment._id} refreshLike={refreshLike} />
-        </>
-      )}
-    </div>
+              </ProfileIcon>
+              <ContentWrap>
+                <div>
+                  <Link to={`/${comment.userFrom.nickname}`}>
+                    <UserNickname>{comment.userFrom.nickname}</UserNickname>
+                  </Link>
+                  <span className="comment">{comment.content}</span>
+                </div>
+                <div>
+                  {likeNumber > 0 && <button>좋아요 {likeNumber}개</button>}
+                  <button
+                    onClick={() =>
+                      refreshReplyComment(
+                        comment.userFrom.nickname,
+                        comment._id
+                      )
+                    }
+                  >
+                    답글 달기
+                  </button>
+                </div>
+              </ContentWrap>
+            </Writer>
+            <BtnUtil>
+              <MoreBtn
+                onClick={() => onClickMore(comment._id, comment.userFrom._id)}
+              >
+                <IoIosMore />
+              </MoreBtn>
+              <LikeBtn commentId={comment._id} refreshLike={refreshLike} />
+            </BtnUtil>
+          </>
+        )}
+      </CommentContainer>
+      <Dialog
+        onClose={onClose}
+        visible={visible}
+        commentId={commentId}
+        writer={writer}
+      />
+    </>
   );
 }
 
 export default SingleComment;
+
+const CommentContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  a:hover {
+    text-decoration: underline;
+  }
+  .comment {
+    font-size: 14px;
+    margin-left: 5px;
+  }
+`;
 
 const ContentWrap = styled.div`
   display: flex;
@@ -109,5 +156,24 @@ const Writer = styled.div`
   }
   .description {
     margin-left: 10px;
+  }
+`;
+
+const BtnUtil = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const MoreBtn = styled.button`
+  opacity: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  padding: 0;
+  background-color: transparent;
+  svg {
+    width: 20px;
+    height: 20px;
   }
 `;

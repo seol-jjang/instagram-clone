@@ -17,7 +17,7 @@ function ProfileMenu(props) {
   useEffect(() => {
     if (localVisible && !visible) {
       setAnimate(true);
-      setTimeout(() => setAnimate(false), 200);
+      setTimeout(() => setAnimate(false), 300);
     }
     setLocalVisible(visible);
   }, [localVisible, visible]);
@@ -71,7 +71,7 @@ const slideFade = keyframes`
     opacity: 1;
   }
   to {
-    transform: translateY(-5px);
+    transform: translateY(-30px);
     opacity: 0;
   }
 `;
@@ -88,7 +88,7 @@ const MenuWrapper = styled.div`
   ${(props) =>
     props.disappear &&
     css`
-      animation: ${slideFade} 0.2s ease-out;
+      animation: ${slideFade} 0.4s ease-out;
     `}
 `;
 

@@ -72,22 +72,10 @@ export default CommentFactory;
 const Comment = styled.ul`
   display: flex;
   flex-direction: column;
-  li {
+  & > li {
     display: flex;
     flex-direction: column;
     margin-top: 10px;
-    & > div:first-child {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      a:hover {
-        text-decoration: underline;
-      }
-      .comment {
-        font-size: 14px;
-        margin-left: 5px;
-      }
-    }
     button {
       cursor: pointer;
       padding: 0;
