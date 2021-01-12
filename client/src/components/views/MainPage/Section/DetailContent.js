@@ -37,12 +37,6 @@ function DetailContent(props) {
           }
         }
       });
-  }, [post._id]);
-
-  useEffect(() => {
-    let unmounted = false;
-    let source = Axios.CancelToken.source();
-    const variable = { postId: post._id };
 
     Axios.post("/api/comment/getCommentsLimit", variable, {
       cancelToken: source.token
@@ -88,7 +82,7 @@ function DetailContent(props) {
         </div>
         {comments.length !== 0 && (
           <Comment>
-            <Link to={`/p/${props.postId}`}>
+            <Link to={`/p/${post._id}`}>
               <SubText>댓글 {commentsCount}개 모두보기</SubText>
             </Link>
             <ul>

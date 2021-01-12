@@ -64,7 +64,10 @@ function SingleComment(props) {
 
   return (
     <>
-      <CommentContainer>
+      <CommentContainer
+        onMouseEnter={() => setBtnHover(true)}
+        onMouseLeave={() => setBtnHover(false)}
+      >
         {comment.userFrom && (
           <>
             <Writer>
@@ -99,11 +102,14 @@ function SingleComment(props) {
               </ContentWrap>
             </Writer>
             <BtnUtil>
-              <MoreBtn
-                onClick={() => onClickMore(comment._id, comment.userFrom._id)}
-              >
-                <IoIosMore />
-              </MoreBtn>
+              {btnHover && (
+                <MoreBtn
+                  onClick={() => onClickMore(comment._id, comment.userFrom._id)}
+                >
+                  <IoIosMore />
+                </MoreBtn>
+              )}
+
               <LikeBtn commentId={comment._id} refreshLike={refreshLike} />
             </BtnUtil>
           </>
@@ -165,7 +171,7 @@ const BtnUtil = styled.div`
 `;
 
 const MoreBtn = styled.button`
-  opacity: 1;
+  opacity: 0.7;
   cursor: pointer;
   display: flex;
   align-items: center;

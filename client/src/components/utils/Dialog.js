@@ -1,11 +1,12 @@
+import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import styled, { css, keyframes } from "styled-components";
 import { palette } from "../../styles/Theme";
 
 function Dialog(props) {
-  const { onClose, visible, postId, commentId, writer } = props;
+  const { onClose, visible, postId, commentId, writer, detailPage } = props;
   const user = useSelector((state) => state.user);
   const [animate, setAnimate] = useState(false);
   const [localVisible, setLocalVisible] = useState(visible);
@@ -22,13 +23,36 @@ function Dialog(props) {
     onClose();
   };
 
+  const onDelete = () => {
+    let body;
+    if (postId) {
+      body = { postId };
+      Axios.post("/api/post/removePost", body).then((response) => {
+        if (response.data.success) {
+          props.history.push("/");
+        } else {
+          alert("게시글을 삭제하는 데 실패했습니다.");
+        }
+      });
+    } else if (commentId) {
+      body = { commentId };
+      Axios.post("/api/comment/removeComment", body).then((response) => {
+        if (response.data.success) {
+          window.location.reload();
+        } else {
+          alert("댓글을 삭제하는 데 실패했습니다.");
+        }
+      });
+    }
+  };
+
   if (!animate && !visible) return null;
   return (
     <DarkBackground onClick={close} disappear={!visible}>
       <DialogBlock visible={visible}>
         <ul>
-          {user.userData._id === writer && <li>삭제</li>}
-          {postId && (
+          {user.userData._id === writer && <li onClick={onDelete}>삭제</li>}
+          {postId && !detailPage && (
             <li>
               <Link to={`/p/${postId}`}>게시물로 이동</Link>
             </li>
@@ -40,7 +64,7 @@ function Dialog(props) {
   );
 }
 
-export default Dialog;
+export default withRouter(Dialog);
 
 const appear = keyframes`
   from {

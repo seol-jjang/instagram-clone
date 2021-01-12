@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { BsChat } from "react-icons/bs";
+import { IoIosMore } from "react-icons/io";
 import { VscBookmark } from "react-icons/vsc";
 import {
   Inner,
@@ -16,6 +17,7 @@ import AddComment from "../../utils/AddComment";
 import LikeBtn from "../../utils/LikeBtn";
 import CommentFactory from "./Section/CommentFactory";
 import LikeNumber from "../../utils/LikeNumber";
+import Dialog from "../../utils/Dialog";
 
 function PostDetailPage() {
   const params = useParams();
@@ -23,6 +25,9 @@ function PostDetailPage() {
   const [newComment, setNewComment] = useState([]);
   const [responseTo, setResponseTo] = useState([]);
   const [likeNumber, setLikeNumber] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [postId, setPostId] = useState("");
+  const [writer, setWriter] = useState("");
 
   useEffect(() => {
     let unmounted = false;
@@ -73,22 +78,37 @@ function PostDetailPage() {
     setNewComment(newComment);
   };
 
+  const onClickMore = (postId = "", userFrom = "") => {
+    setVisible(!visible);
+    setPostId(postId);
+    setWriter(userFrom);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
+
   return (
     <Inner>
       {post.userFrom && (
         <Article>
           <WriteHeader>
-            <ProfileIcon size="medium">
+            <div>
+              <ProfileIcon size="medium">
+                <Link to={`/user/${post.userFrom.nickname}`}>
+                  <img
+                    src={`http://localhost:5000/${post.userFrom.profileImage}`}
+                    alt={post.userFrom.nickname}
+                  />
+                </Link>
+              </ProfileIcon>
               <Link to={`/user/${post.userFrom.nickname}`}>
-                <img
-                  src={`http://localhost:5000/${post.userFrom.profileImage}`}
-                  alt={post.userFrom.nickname}
-                />
+                <UserNickname>{post.userFrom.nickname}</UserNickname>
               </Link>
-            </ProfileIcon>
-            <Link to={`/user/${post.userFrom.nickname}`}>
-              <UserNickname>{post.userFrom.nickname}</UserNickname>
-            </Link>
+            </div>
+            <MoreBtn onClick={() => onClickMore(post._id, post.userFrom._id)}>
+              <IoIosMore />
+            </MoreBtn>
           </WriteHeader>
           <PictureWrap>
             <ImageSlide images={post.filePath} detailPage />
@@ -147,6 +167,13 @@ function PostDetailPage() {
           </ContentsContainer>
         </Article>
       )}
+      <Dialog
+        onClose={onClose}
+        visible={visible}
+        postId={postId}
+        writer={writer}
+        detailPage
+      />
     </Inner>
   );
 }
@@ -174,8 +201,13 @@ const WriteHeader = styled.header`
   padding: 16px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid #efefef;
   background-color: white;
+  & > div {
+    display: flex;
+    align-items: center;
+  }
   a:hover {
     text-decoration: underline;
   }
@@ -186,6 +218,18 @@ const WriteHeader = styled.header`
     position: static;
     width: 100%;
     height: 60px;
+  }
+`;
+
+const MoreBtn = styled.button`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  background-color: transparent;
+  svg {
+    width: 20px;
+    height: 20px;
   }
 `;
 

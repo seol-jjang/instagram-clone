@@ -79,4 +79,13 @@ router.post("/getPostDetail", (req, res) => {
     });
 });
 
+router.post("/removePost", (req, res) => {
+  Post.findOneAndDelete({ _id: req.body.postId }).exec((err, post) => {
+    if (err) return res.status(400).json({ success: false, err });
+    res.status(200).json({
+      success: true
+    });
+  });
+});
+
 module.exports = router;
