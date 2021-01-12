@@ -46,7 +46,7 @@ function App() {
             />
             <Route
               exact
-              path="/user/:nickname"
+              path="/:nickname"
               component={Auth(ProfilePage, null)}
             />
             <Route

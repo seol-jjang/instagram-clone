@@ -74,7 +74,7 @@ function DetailContent(props) {
       <DetailContentsWrap>
         <div>
           <PostContent>
-            <Link to={`/user/${post.userFrom.nickname}`}>
+            <Link to={`/${post.userFrom.nickname}`}>
               <UserNickname>{post.userFrom.nickname}</UserNickname>
             </Link>
             <Description>{post.description}</Description>

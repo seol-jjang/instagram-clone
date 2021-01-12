@@ -72,7 +72,7 @@ function SingleComment(props) {
           <>
             <Writer>
               <ProfileIcon size="medium" className="profile-image">
-                <Link to={`/user/${comment.userFrom.nickname}`}>
+                <Link to={`/${comment.userFrom.nickname}`}>
                   <img
                     src={`http://localhost:5000/${comment.userFrom.profileImage}`}
                     alt={comment.userFrom.nickname}

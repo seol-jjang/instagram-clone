@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { loginUser } from "../../../_actions/user_action";
 import logo from "../../../assets/instagram_logo.png";
 import Input from "../../../styles/common/Input";
@@ -75,7 +75,7 @@ const LoginPage = (props) => {
           <ErrorText className="login-error">{loginFailMessage}</ErrorText>
         )}
       </Section>
-      <Section>
+      <Section smallbox>
         <Span>계정이 없으신가요?</Span>
         <Link to="/accounts" replace>
           <AccountBtn>가입하기</AccountBtn>
@@ -94,13 +94,18 @@ const Section = styled.section`
   padding: 20px 40px;
   background-color: #fff;
   border: 1px solid #dbdbdb;
-  &:last-child {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    padding: 25px 40px;
-  }
+  ${(props) =>
+    props.smallbox &&
+    css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+      padding: 25px 40px;
+      span {
+        font-size: 15px;
+      }
+    `}
   .login-error {
     margin-top: 7px;
   }

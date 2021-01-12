@@ -1,16 +1,15 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import { BiSearch } from "react-icons/bi";
-import { AiFillCloseCircle } from "react-icons/ai";
 import RightMenu from "./Section/RightMenu";
 import logo from "../../../assets/instagram_logo_small.png";
 import { palette, viewportSize } from "../../../styles/Theme";
 import styled from "styled-components";
+import SearchBox from "./Section/SearchBox";
 
 function Header(props) {
   const pathLocation = props.location.pathname;
   if (pathLocation === "/login" || pathLocation === "/accounts") {
-    return <></>;
+    return null;
   } else {
     return (
       <HeaderWarp>
@@ -18,6 +17,7 @@ function Header(props) {
           <Link to="/">
             <Logo src={logo} alt="instagram" />
           </Link>
+          <SearchBox />
           {/* <SearchBox>
             <Input type="text" placeholder="검색" search />
           </SearchBox> */}
@@ -63,11 +63,4 @@ const Logo = styled.img`
   width: 103px;
   height: 100%;
   margin-top: 5px;
-`;
-
-const SearchBox = styled.div`
-  position: relative;
-  min-width: 125px;
-  width: 210px;
-  height: 28px;
 `;

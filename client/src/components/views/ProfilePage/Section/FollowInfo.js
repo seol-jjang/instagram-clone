@@ -61,6 +61,7 @@ function FollowInfo(props) {
       source.cancel("Canceling in cleanup");
     };
   }, [profileUser, refreshFollower]);
+
   return (
     <DataList>
       <li>

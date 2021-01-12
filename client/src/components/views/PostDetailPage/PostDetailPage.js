@@ -95,14 +95,14 @@ function PostDetailPage() {
           <WriteHeader>
             <div>
               <ProfileIcon size="medium">
-                <Link to={`/user/${post.userFrom.nickname}`}>
+                <Link to={`/${post.userFrom.nickname}`}>
                   <img
                     src={`http://localhost:5000/${post.userFrom.profileImage}`}
                     alt={post.userFrom.nickname}
                   />
                 </Link>
               </ProfileIcon>
-              <Link to={`/user/${post.userFrom.nickname}`}>
+              <Link to={`/${post.userFrom.nickname}`}>
                 <UserNickname>{post.userFrom.nickname}</UserNickname>
               </Link>
             </div>
@@ -142,7 +142,7 @@ function PostDetailPage() {
             <ScrollContainer>
               <DetailContent>
                 <ProfileIcon size="medium" className="profile-image">
-                  <Link to={`/user/${post.userFrom.nickname}`}>
+                  <Link to={`/${post.userFrom.nickname}`}>
                     <img
                       src={`http://localhost:5000/${post.userFrom.profileImage}`}
                       alt={post.userFrom.nickname}
@@ -150,7 +150,7 @@ function PostDetailPage() {
                   </Link>
                 </ProfileIcon>
                 <div>
-                  <Link to={`/user/${post.userFrom.nickname}`}>
+                  <Link to={`/${post.userFrom.nickname}`}>
                     <UserNickname>{post.userFrom.nickname}</UserNickname>
                   </Link>
                   <Description className="description">

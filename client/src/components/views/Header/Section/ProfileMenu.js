@@ -43,7 +43,7 @@ function ProfileMenu(props) {
         <MenuInner>
           <ul>
             <li>
-              <Link to={`/user/${user.userData.nickname}`}>
+              <Link to={`/${user.userData.nickname}`}>
                 <CgProfile size="18px" />
                 <span>프로필</span>
               </Link>

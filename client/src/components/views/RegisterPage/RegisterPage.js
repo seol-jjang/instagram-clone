@@ -7,7 +7,7 @@ import { registerUser } from "../../../_actions/user_action";
 import logo from "../../../assets/instagram_logo.png";
 import Input from "../../../styles/common/Input";
 import Button from "../../../styles/common/Button";
-import styled, { keyframes } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { palette } from "../../../styles/Theme";
 
 const RegisterPage = (props) => {
@@ -145,7 +145,7 @@ const RegisterPage = (props) => {
           <span>쿠키 정책</span>에 동의하게 됩니다.
         </TermsText>
       </Section>
-      <Section>
+      <Section smallbox>
         <span>계정이 있으신가요?</span>
         <Link to="/login" replace>
           <LoginBtn>로그인</LoginBtn>
@@ -164,16 +164,18 @@ const Section = styled.section`
   padding: 20px 40px;
   background-color: #fff;
   border: 1px solid #dbdbdb;
-  &:last-child {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    padding: 25px 40px;
-    span {
-      font-size: 15px;
-    }
-  }
+  ${(props) =>
+    props.smallbox &&
+    css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+      padding: 25px 40px;
+      span {
+        font-size: 15px;
+      }
+    `}
 `;
 
 const RegisterForm = styled.form`

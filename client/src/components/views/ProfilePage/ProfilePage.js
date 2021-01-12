@@ -1,7 +1,7 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useParams, withRouter } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../../styles/common/Button";
 import {
@@ -26,6 +26,7 @@ function ProfilePage(props) {
 
   const user = useSelector((state) => state.user);
   const path = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     let unmounted = false;
@@ -34,30 +35,32 @@ function ProfilePage(props) {
     const body = {
       nickname: path.nickname
     };
-    Axios.post("/api/users/searchUser", body)
-      .then((response) => {
-        if (!unmounted) {
-          if (!response.data.success) {
-            props.history.push(`/not-found`);
-          } else {
-            setProfileUser(response.data.userData);
+    if (path.nickname !== "login" && path.nickname !== "accounts") {
+      Axios.post("/api/users/searchUser", body)
+        .then((response) => {
+          if (!unmounted) {
+            if (!response.data.success) {
+              history.push("/not-found");
+            } else {
+              setProfileUser(response.data.userData);
+            }
           }
-        }
-      })
-      .catch(function (e) {
-        if (!unmounted) {
-          if (Axios.isCancel(e)) {
-            console.log("요청 취소: ", e.message);
-          } else {
-            console.log("오류 발생 ", e.message);
+        })
+        .catch(function (e) {
+          if (!unmounted) {
+            if (Axios.isCancel(e)) {
+              console.log("요청 취소: ", e.message);
+            } else {
+              console.log("오류 발생 ", e.message);
+            }
           }
-        }
-      });
+        });
+    }
     return function () {
       unmounted = true;
       source.cancel("Canceling in cleanup");
     };
-  }, [path.nickname, profileUser._id, props.history]);
+  }, [history, path.nickname, profileUser._id]);
 
   useEffect(() => {
     function handleResize() {
@@ -158,7 +161,7 @@ function ProfilePage(props) {
   );
 }
 
-export default withRouter(ProfilePage);
+export default ProfilePage;
 
 const ContentsSection = styled.section`
   position: relative;

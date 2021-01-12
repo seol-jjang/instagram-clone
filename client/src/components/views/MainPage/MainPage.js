@@ -25,7 +25,7 @@ const MainPage = () => {
             {user.userData && (
               <UserInfo>
                 <>
-                  <Link to={`/user/${user.userData.nickname}`}>
+                  <Link to={`/${user.userData.nickname}`}>
                     <ProfileIcon size="large">
                       <img
                         src={`http://localhost:5000/${user.userData.profileImage}`}
@@ -34,7 +34,7 @@ const MainPage = () => {
                     </ProfileIcon>
                   </Link>
                   <div>
-                    <Link to={`/user/${user.userData.nickname}`}>
+                    <Link to={`/${user.userData.nickname}`}>
                       <UserNickname>{user.userData.nickname}</UserNickname>
                     </Link>
                     {user.userData.name !== "" && (
