@@ -4,7 +4,7 @@ import RightMenu from "./Section/RightMenu";
 import logo from "../../../assets/instagram_logo_small.png";
 import { palette, viewportSize } from "../../../styles/Theme";
 import styled from "styled-components";
-import SearchBox from "./Section/SearchBox";
+import SearchContianer from "./Section/SearchContianer";
 
 function Header(props) {
   const pathLocation = props.location.pathname;
@@ -17,10 +17,7 @@ function Header(props) {
           <Link to="/">
             <Logo src={logo} alt="instagram" />
           </Link>
-          <SearchBox />
-          {/* <SearchBox>
-            <Input type="text" placeholder="검색" search />
-          </SearchBox> */}
+          <SearchContianer />
           <RightMenu />
         </HeaderInner>
       </HeaderWarp>

@@ -8,17 +8,20 @@ import {
 function ImageSlide({ images, detailPage }) {
   const TOTAL_SLIDES = images.length;
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [load, setLoad] = useState(false);
   const wrap = useRef();
   const slideRef = useRef();
 
   useEffect(() => {
-    const img = new Image();
-    img.src = `http://localhost:5000/${images[0]}`;
-
-    const width = img.width;
-    const height = img.height;
-    wrap.current.style.paddingBottom = `calc(${height}/${width} * 100%)`;
-  }, [images]);
+    if (load) {
+      const img = new Image();
+      img.src = `http://localhost:5000/${images[0]}`;
+      wrap.current.style.paddingBottom = `calc(${img.height}/${img.width} * 100%)`;
+    }
+    return () => {
+      setLoad(false);
+    };
+  }, [images, load]);
 
   useEffect(() => {
     slideRef.current.style.transition = "transform 0.3s ease-in-out";
@@ -38,7 +41,7 @@ function ImageSlide({ images, detailPage }) {
 
   return (
     <>
-      <Images ref={wrap}>
+      <Images ref={wrap} onLoad={() => setLoad(true)}>
         <SlideContainer ref={slideRef}>
           {images.map((img, index) => (
             <li
@@ -121,7 +124,6 @@ const Images = styled.ul`
   display: flex;
   position: relative;
   overflow: hidden;
-  min-height: 100%;
   padding-bottom: 100%;
 `;
 

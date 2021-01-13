@@ -1,34 +1,83 @@
 import React, { useEffect, useRef, useState } from "react";
+import Axios from "axios";
 import { BiSearch } from "react-icons/bi";
-import { AiFillCloseCircle } from "react-icons/ai";
-import styled from "styled-components";
+import { AiFillCloseCircle, AiOutlineLoading } from "react-icons/ai";
+import styled, { keyframes } from "styled-components";
 import { palette, viewportSize } from "../../../../styles/Theme";
+import SearchDialog from "./SearchDialog";
 
-function SearchBox() {
+function SearchContianer() {
+  const [searchData, setSearchData] = useState([]);
+  const [inputValue, setInputValue] = useState("");
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef();
 
   useEffect(() => {
     if (visible === true) {
       inputRef.current.focus();
+    } else {
+      setInputValue("");
+      setSearchData([]);
     }
   }, [visible]);
+
+  useEffect(() => {
+    if (inputValue !== "") {
+      setLoading(true);
+      const body = {
+        value: inputValue
+      };
+      Axios.post("/api/users/matchUser", body).then((response) => {
+        if (response.data.success) {
+          setSearchData(response.data.user);
+          setLoading(false);
+        } else {
+          setSearchData([]);
+          setLoading(false);
+        }
+      });
+    } else {
+      setSearchData([]);
+    }
+  }, [inputValue]);
+
+  const onChangeHandle = (event) => {
+    const {
+      target: { value }
+    } = event;
+
+    setInputValue(value);
+  };
 
   const onClickHandle = () => {
     setVisible(!visible);
   };
+
   return (
     <>
       <SearchForm>
-        <input type="text" placeholder="검색" ref={inputRef} />
+        <input
+          type="text"
+          placeholder="검색"
+          ref={inputRef}
+          value={inputValue}
+          onChange={onChangeHandle}
+        />
         {visible ? (
           <SearchInner>
             <span>
               <BiSearch />
             </span>
-            <span onClick={onClickHandle}>
-              <AiFillCloseCircle />
-            </span>
+            {loading ? (
+              <Loading>
+                <AiOutlineLoading />
+              </Loading>
+            ) : (
+              <span onClick={onClickHandle}>
+                <AiFillCloseCircle />
+              </span>
+            )}
           </SearchInner>
         ) : (
           <SearchCover onClick={onClickHandle}>
@@ -38,13 +87,20 @@ function SearchBox() {
             <span>검색</span>
           </SearchCover>
         )}
+        {visible && inputValue !== "" && (
+          <SearchDialog
+            onClose={onClickHandle}
+            visible={visible}
+            searchData={searchData}
+          />
+        )}
       </SearchForm>
       {visible && <Background onClick={onClickHandle}></Background>}
     </>
   );
 }
 
-export default SearchBox;
+export default SearchContianer;
 
 const SearchForm = styled.form`
   cursor: text;
@@ -57,13 +113,10 @@ const SearchForm = styled.form`
   border: 1px solid ${palette.borderColor};
   border-radius: 3px;
   font-size: 14px;
-  span {
-    color: #aaa;
-    svg {
-      width: 12px;
-      height: 12px;
-      fill: #aaa;
-    }
+  span svg {
+    width: 12px;
+    height: 12px;
+    fill: #aaa;
   }
   input {
     z-index: 2;
@@ -94,6 +147,9 @@ const SearchCover = styled.div`
   justify-content: center;
   border-radius: 3px;
   background-color: ${palette.backgroundGray};
+  span {
+    color: #aaa;
+  }
 `;
 
 const SearchInner = styled.div`
@@ -124,4 +180,19 @@ const Background = styled.div`
   left: 0;
   bottom: 0;
   z-index: 1;
+`;
+
+const Rotation = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg)
+  }
+`;
+
+const Loading = styled.span`
+  svg {
+    animation: ${Rotation} 1s linear infinite;
+  }
 `;

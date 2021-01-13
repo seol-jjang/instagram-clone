@@ -84,7 +84,7 @@ const RightSection = styled.div`
 
 const LeftSection = styled.div`
   max-width: 614px;
-  width: 100%;
+  width: 614px;
   display: flex;
   flex-direction: column;
   @media ${viewportSize.tablet} {

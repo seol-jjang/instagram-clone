@@ -144,6 +144,25 @@ router.post("/searchUser", (req, res) => {
   });
 });
 
+router.post("/matchUser", async function (req, res) {
+  let options;
+  options = [
+    { nickname: new RegExp(req.body.value, "gi") },
+    { name: new RegExp(req.body.value, "gi") }
+  ];
+  await User.find(
+    { $or: options },
+    { nickname: true, name: true, profileImage: true },
+    (err, user) => {
+      if (err) return res.json({ success: false, err });
+      return res.status(200).send({
+        success: true,
+        user
+      });
+    }
+  );
+});
+
 router.post("/edit", auth, (req, res) => {
   User.findOneAndUpdate(
     { _id: req.user._id },

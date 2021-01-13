@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { BsChat } from "react-icons/bs";
@@ -113,7 +113,6 @@ const MoreBtn = styled.button`
 
 const PictureWrap = styled.div`
   position: relative;
-  over
   background-color: black;
   border-top: 1px solid ${palette.borderColor};
   border-bottom: 1px solid ${palette.borderColor};

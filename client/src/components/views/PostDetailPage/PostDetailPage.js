@@ -141,14 +141,16 @@ function PostDetailPage() {
             />
             <ScrollContainer>
               <DetailContent>
-                <ProfileIcon size="medium" className="profile-image">
-                  <Link to={`/${post.userFrom.nickname}`}>
-                    <img
-                      src={`http://localhost:5000/${post.userFrom.profileImage}`}
-                      alt={post.userFrom.nickname}
-                    />
-                  </Link>
-                </ProfileIcon>
+                <div>
+                  <ProfileIcon size="medium" className="profile-image">
+                    <Link to={`/${post.userFrom.nickname}`}>
+                      <img
+                        src={`http://localhost:5000/${post.userFrom.profileImage}`}
+                        alt={post.userFrom.nickname}
+                      />
+                    </Link>
+                  </ProfileIcon>
+                </div>
                 <div>
                   <Link to={`/${post.userFrom.nickname}`}>
                     <UserNickname>{post.userFrom.nickname}</UserNickname>
@@ -296,11 +298,13 @@ const DetailContent = styled.div`
     margin-right: 15px;
   }
   .description {
+    word-break: keep-all;
     margin-left: 10px;
   }
 `;
 
 const Description = styled.span`
+  flex-basis: auto;
   font-size: 14px;
   white-space: pre-line;
 `;
