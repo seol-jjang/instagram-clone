@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const { User } = require("../models/User");
+const { Follow } = require("../models/Follow");
 const { auth } = require("../middleware/auth");
 
 let storage = multer.diskStorage({
@@ -161,6 +162,26 @@ router.post("/matchUser", async function (req, res) {
       });
     }
   );
+});
+
+router.post("/randomUser", auth, (req, res) => {
+  const userId = [];
+  Follow.find({ userFrom: req.user._id }, { userTo: true }, (err, user) => {
+    if (err) return res.json({ success: false, err });
+    user.map((user) => userId.push(user.userTo));
+    User.find(
+      { _id: { $nin: [...userId, req.user._id] } },
+      { password: false, token: false, email: false }
+    )
+      .limit(5)
+      .exec((err, user) => {
+        if (err) return res.json({ success: false, err });
+        return res.status(200).send({
+          success: true,
+          user
+        });
+      });
+  });
 });
 
 router.post("/edit", auth, (req, res) => {

@@ -10,6 +10,7 @@ import {
   viewportSize
 } from "../../../styles/Theme";
 import PostFactory from "./Section/PostFactory";
+import RandomUser from "./Section/RandomUser";
 
 const MainPage = () => {
   const user = useSelector((state) => state.user);
@@ -44,6 +45,7 @@ const MainPage = () => {
                 </>
               </UserInfo>
             )}
+            <RandomUser />
           </RightSection>
         </ContentsSection>
       </Inner>
@@ -74,8 +76,11 @@ const ContentsSection = styled.section`
 `;
 
 const RightSection = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
-  padding: 20px 0 20px 10px;
+  padding: 20px 0;
 
   @media ${viewportSize.laptop} {
     display: none;
@@ -94,11 +99,12 @@ const LeftSection = styled.div`
 `;
 
 const UserInfo = styled.div`
-  position: fixed;
+  position: absolute;
   display: flex;
   align-items: center;
   line-height: 1.2;
   margin-bottom: 25px;
+  padding-left: 10px;
   span {
     margin-right: 15px;
   }

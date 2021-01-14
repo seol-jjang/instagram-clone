@@ -27,7 +27,7 @@ function SearchDialog(props) {
   if (!animate && !visible) return null;
   return (
     <>
-      {searchData.length !== 0 ? (
+      {searchData.length !== 0 && (
         <MenuWrapper onClick={close}>
           <Triangle />
           <MenuInner>
@@ -48,17 +48,6 @@ function SearchDialog(props) {
                   </Link>
                 </li>
               ))}
-            </ul>
-          </MenuInner>
-        </MenuWrapper>
-      ) : (
-        <MenuWrapper onClick={close}>
-          <Triangle />
-          <MenuInner>
-            <ul>
-              <li>
-                <p>일치하는 사용자가 없습니다.</p>
-              </li>
             </ul>
           </MenuInner>
         </MenuWrapper>
