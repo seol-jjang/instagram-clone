@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const { Post } = require("../models/Post");
+const { Comment } = require("../models/Comment");
+const { Like } = require("../models/Like");
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -80,11 +82,28 @@ router.post("/getPostDetail", (req, res) => {
 });
 
 router.post("/removePost", (req, res) => {
+  const commentId = [];
   Post.findOneAndDelete({ _id: req.body.postId }).exec((err, post) => {
     if (err) return res.status(400).json({ success: false, err });
-    res.status(200).json({
-      success: true
-    });
+    Like.deleteMany({ postId: req.body.postId })
+      .then((result) => {
+        Comment.find({ postId: req.body.postId }).exec((err, comment) => {
+          if (err) return res.status(400).json({ success: false, err });
+          comment.map((comment) => commentId.push(comment.commentId));
+          Comment.deleteMany({ postId: req.body.postId })
+            .then((result) => {
+              Like.deleteMany({ commentId: { $nin: commentId } })
+                .then((result) => {
+                  res.status(200).json({
+                    success: true
+                  });
+                })
+                .catch((err) => res.status(400).json({ success: false, err }));
+            })
+            .catch((err) => res.status(400).json({ success: false, err }));
+        });
+      })
+      .catch((err) => res.status(400).json({ success: false, err }));
   });
 });
 

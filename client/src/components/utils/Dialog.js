@@ -29,7 +29,11 @@ function Dialog(props) {
       body = { postId };
       Axios.post("/api/post/removePost", body).then((response) => {
         if (response.data.success) {
-          props.history.push("/");
+          if (detailPage) {
+            props.history.push("/");
+          } else {
+            window.location.reload();
+          }
         } else {
           alert("게시글을 삭제하는 데 실패했습니다.");
         }

@@ -173,7 +173,7 @@ router.post("/randomUser", auth, (req, res) => {
       { _id: { $nin: [...userId, req.user._id] } },
       { password: false, token: false, email: false }
     )
-      .limit(5)
+      .limit(3)
       .exec((err, user) => {
         if (err) return res.json({ success: false, err });
         return res.status(200).send({

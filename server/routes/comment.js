@@ -2,6 +2,7 @@ const { response } = require("express");
 const express = require("express");
 const router = express.Router();
 const { Comment } = require("../models/Comment");
+const { Like } = require("../models/Like");
 
 router.post("/saveComment", (req, res) => {
   const comment = new Comment(req.body);
@@ -52,9 +53,13 @@ router.post("/getCommentsCount", (req, res) => {
 router.post("/removeComment", (req, res) => {
   Comment.findOneAndDelete({ _id: req.body.commentId }).exec((err, comment) => {
     if (err) return res.status(400).json({ success: false, err });
-    res.status(200).json({
-      success: true
-    });
+    Like.deleteMany({ commentId: req.body.commentId })
+      .then((result) =>
+        res.status(200).json({
+          success: true
+        })
+      )
+      .catch((err) => res.status(400).json({ success: false, err }));
   });
 });
 

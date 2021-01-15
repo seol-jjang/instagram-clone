@@ -67,6 +67,7 @@ function DetailContent(props) {
 
   const refreshComment = (newComment) => {
     setComments(comments.concat(newComment));
+    setCommentsCount(commentsCount + 1);
   };
 
   return (

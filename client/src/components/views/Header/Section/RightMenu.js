@@ -46,11 +46,11 @@ function RightMenu(props) {
               )}
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link to="/">
               <IoPaperPlaneOutline size="23px" />
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link to="/post/upload">
               {pathLocation === "/post/upload" && !menuVisible ? (
