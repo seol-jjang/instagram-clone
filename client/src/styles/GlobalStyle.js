@@ -6,9 +6,9 @@ import { palette } from "./Theme";
 
 const GlobalStyle = createGlobalStyle`
     ${reset}
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
     
     body {
+        @import url('https://fonts.googleapis.com/earlyaccess/notosanskr.css');
         margin: 0;
         box-sizing: border-box;
         font-family: 'Noto Sans KR', "Segoe UI", "맑은 고딕", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
