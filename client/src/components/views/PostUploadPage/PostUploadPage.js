@@ -167,6 +167,9 @@ const UploadForm = styled.form`
     outline: none;
     resize: none;
     background-color: white;
+    font-family: "Noto Sans KR", "Segoe UI", "맑은 고딕", "Roboto", "Oxygen",
+      "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+      sans-serif;
   }
   button {
     margin: 0;
