@@ -6,11 +6,13 @@ https://ppgram.herokuapp.com/
 
 - JavaScript
 - React
+- Redex
 - Styled Components
 
 ## 구현 기능
 
 - ✅ 회원 가입
+- 네이버, 카카오, 구글 회원가입
 - ✅ 로그인, 로그아웃
 - ✅ 회원 정보(프로필 이미지, 사용자 이름, 성명) 수정
 - 회원 탈퇴
