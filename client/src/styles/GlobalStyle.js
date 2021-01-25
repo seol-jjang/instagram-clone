@@ -6,7 +6,7 @@ import { palette } from "./Theme";
 
 const GlobalStyle = createGlobalStyle`
     ${reset}
-    @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+    @import url('//fonts.googleapis.com/earlyaccess/notosanskr.css');
     
     body {
         margin: 0;
