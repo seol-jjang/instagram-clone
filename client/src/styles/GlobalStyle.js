@@ -6,12 +6,12 @@ import { palette } from "./Theme";
 
 const GlobalStyle = createGlobalStyle`
     ${reset}
+    @import "url(//fonts.googleapis.com/earlyaccess/notosanskr.css)";
     
     body {
         margin: 0;
         box-sizing: border-box;
-        font-family: -apple-system, BlinkMacSystemFont,
-            "Segoe UI", "맑은 고딕", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+        font-family: 'Noto Sans KR', "Segoe UI", "맑은 고딕", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
             "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
