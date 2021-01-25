@@ -98,17 +98,11 @@ function ProfilePage(props) {
             <ProfileImage>
               {windowSize && windowSize.width > 735 ? (
                 <ProfileIcon size="xLarge">
-                  <img
-                    src={`http://localhost:5000/${profileUser.profileImage}`}
-                    alt="userProfile"
-                  />
+                  <img src={`${profileUser.profileImage}`} alt="userProfile" />
                 </ProfileIcon>
               ) : (
                 <ProfileIcon size="large">
-                  <img
-                    src={`http://localhost:5000/${profileUser.profileImage}`}
-                    alt="userProfile"
-                  />
+                  <img src={`${profileUser.profileImage}`} alt="userProfile" />
                 </ProfileIcon>
               )}
             </ProfileImage>

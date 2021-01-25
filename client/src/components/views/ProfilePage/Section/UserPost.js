@@ -44,10 +44,7 @@ function UserPost(props) {
       {post.map((post, index) => (
         <article key={index}>
           <Link to={`/p/${post._id}`}>
-            <img
-              src={`http://localhost:5000/${post.filePath[0]}`}
-              alt={index}
-            />
+            <img src={`${post.filePath[0]}`} alt={index} />
           </Link>
         </article>
       ))}

@@ -74,7 +74,7 @@ function SingleComment(props) {
               <ProfileIcon size="medium" className="profile-image">
                 <Link to={`/${comment.userFrom.nickname}`}>
                   <img
-                    src={`http://localhost:5000/${comment.userFrom.profileImage}`}
+                    src={`${comment.userFrom.profileImage}`}
                     alt={comment.userFrom.nickname}
                   />
                 </Link>

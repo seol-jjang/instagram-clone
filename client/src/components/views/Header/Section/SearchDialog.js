@@ -36,10 +36,7 @@ function SearchDialog(props) {
                 <li key={index}>
                   <Link to={`/${user.nickname}`}>
                     <ProfileIcon size="medium" className="profile-icon">
-                      <img
-                        src={`http://localhost:5000/${user.profileImage}`}
-                        alt="userProfile"
-                      />
+                      <img src={`${user.profileImage}`} alt="userProfile" />
                     </ProfileIcon>
                     <div>
                       <UserNickname>{user.nickname}</UserNickname>

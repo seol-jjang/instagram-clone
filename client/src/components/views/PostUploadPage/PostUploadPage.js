@@ -20,7 +20,7 @@ function PostUploadPage(props) {
   useEffect(() => {
     if (load) {
       const img = new Image();
-      img.src = `http://localhost:5000/${images[0]}`;
+      img.src = `${images[0]}`;
       wrap.current.style.paddingBottom = `calc(${img.height}/${img.width} * 100%)`;
     }
     return () => {
@@ -74,19 +74,15 @@ function PostUploadPage(props) {
 
     if (newImages.length > 0) {
       if (currentIndex === 0) {
-        sampleImageRef.current.src = `http://localhost:5000/${
-          images[currentIndex + 1]
-        }`;
+        sampleImageRef.current.src = `${images[currentIndex + 1]}`;
       } else {
-        sampleImageRef.current.src = `http://localhost:5000/${
-          images[currentIndex - 1]
-        }`;
+        sampleImageRef.current.src = `${images[currentIndex - 1]}`;
       }
     }
   };
 
   const onClickImage = (index) => {
-    sampleImageRef.current.src = `http://localhost:5000/${images[index]}`;
+    sampleImageRef.current.src = `${images[index]}`;
   };
 
   const updateImages = (newImage) => {
@@ -113,11 +109,7 @@ function PostUploadPage(props) {
           <SampleImages>
             {images.length > 0 && (
               <PictureWrap ref={wrap} onLoad={() => setLoad(true)}>
-                <img
-                  src={`http://localhost:5000/${images[0]}`}
-                  alt={`img`}
-                  ref={sampleImageRef}
-                />
+                <img src={`${images[0]}`} alt={`img`} ref={sampleImageRef} />
               </PictureWrap>
             )}
             <ImageList>
@@ -130,7 +122,7 @@ function PostUploadPage(props) {
                     <AiFillCloseCircle />
                   </button>
                   <img
-                    src={`http://localhost:5000/${image}`}
+                    src={`${image}`}
                     alt={`postImg_${index}`}
                     onClick={() => onClickImage(index)}
                   />

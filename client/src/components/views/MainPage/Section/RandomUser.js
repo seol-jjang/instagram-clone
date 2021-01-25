@@ -51,10 +51,7 @@ function RandomUser() {
                 <div>
                   <ProfileIcon size="medium">
                     <Link to={`/${user.nickname}`}>
-                      <img
-                        src={`http://localhost:5000/${user.profileImage}`}
-                        alt={user.nickname}
-                      />
+                      <img src={`${user.profileImage}`} alt={user.nickname} />
                     </Link>
                   </ProfileIcon>
                   <div>

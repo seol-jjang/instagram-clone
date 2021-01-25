@@ -16,7 +16,7 @@ function ProfileImageUpload(props) {
     const config = {
       header: { "context-type": "multipart/form-data" }
     };
-    formData.append("file", files[0]);
+    formData.append("attachment", files[0]);
 
     dispatch(uploadUserImage(formData, config)).then((response) => {
       if (response.payload.success) {

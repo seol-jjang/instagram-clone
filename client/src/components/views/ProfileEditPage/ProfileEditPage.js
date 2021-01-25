@@ -70,7 +70,7 @@ function ProfileEditPage() {
               <ImageContainer>
                 <ProfileIcon size="medium">
                   <img
-                    src={`http://localhost:5000/${user.userData.profileImage}`}
+                    src={`${user.userData.profileImage}`}
                     alt={user.userData.nickname}
                   />
                 </ProfileIcon>

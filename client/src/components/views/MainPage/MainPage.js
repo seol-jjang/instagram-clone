@@ -29,7 +29,7 @@ const MainPage = () => {
                   <Link to={`/${user.userData.nickname}`}>
                     <ProfileIcon size="large">
                       <img
-                        src={`http://localhost:5000/${user.userData.profileImage}`}
+                        src={`${user.userData.profileImage}`}
                         alt="userProfile"
                       />
                     </ProfileIcon>

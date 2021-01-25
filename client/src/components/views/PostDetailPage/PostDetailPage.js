@@ -97,7 +97,7 @@ function PostDetailPage() {
               <ProfileIcon size="medium">
                 <Link to={`/${post.userFrom.nickname}`}>
                   <img
-                    src={`http://localhost:5000/${post.userFrom.profileImage}`}
+                    src={`${post.userFrom.profileImage}`}
                     alt={post.userFrom.nickname}
                   />
                 </Link>
@@ -145,7 +145,7 @@ function PostDetailPage() {
                   <ProfileIcon size="medium" className="profile-image">
                     <Link to={`/${post.userFrom.nickname}`}>
                       <img
-                        src={`http://localhost:5000/${post.userFrom.profileImage}`}
+                        src={`${post.userFrom.profileImage}`}
                         alt={post.userFrom.nickname}
                       />
                     </Link>

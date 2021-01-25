@@ -15,7 +15,7 @@ function ImageSlide({ images, detailPage }) {
   useEffect(() => {
     if (load) {
       const img = new Image();
-      img.src = `http://localhost:5000/${images[0]}`;
+      img.src = `${images[0]}`;
       wrap.current.style.paddingBottom = `calc(${img.height}/${img.width} * 100%)`;
     }
     return () => {
@@ -50,10 +50,7 @@ function ImageSlide({ images, detailPage }) {
                 transform: `translateX(${index}00%)`
               }}
             >
-              <img
-                src={`http://localhost:5000/${img}`}
-                alt={`postImage_${index + 1}`}
-              />
+              <img src={`${img}`} alt={`postImage_${index + 1}`} />
             </li>
           ))}
         </SlideContainer>

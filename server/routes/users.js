@@ -4,45 +4,29 @@ const multer = require("multer");
 const { User } = require("../models/User");
 const { Follow } = require("../models/Follow");
 const { auth } = require("../middleware/auth");
+const { upload } = require("./upload");
 
-let storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads_profileImage/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`);
-  },
-  fileFilter: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    if (ext !== ".jpg" || ext !== ".png" || ext !== ".jpeg") {
-      return cb(
-        res
-          .status(400)
-          .end("jpg, png, jpeg 형식의 이미지만 업로드할 수 있습니다."),
-        false
+router.post(
+  "/uploadProfileImage",
+  auth,
+  upload.single("attachment"),
+  (req, res) => {
+    if (req.file) {
+      User.findOneAndUpdate(
+        { _id: req.user._id },
+        { profileImage: req.file.location },
+        (err, user) => {
+          if (err) return res.json({ success: false, err });
+          return res.status(200).send({
+            success: true
+          });
+        }
       );
+    } else {
+      return res.json({ success: false });
     }
-    cb(null, true);
   }
-});
-
-let upload = multer({ storage: storage }).single("file");
-
-router.post("/uploadProfileImage", auth, (req, res) => {
-  upload(req, res, (err) => {
-    if (err) return res.json({ success: false, err });
-    User.findOneAndUpdate(
-      { _id: req.user._id },
-      { profileImage: res.req.file.path },
-      (err, user) => {
-        if (err) return res.json({ success: false, err });
-        return res.status(200).send({
-          success: true
-        });
-      }
-    );
-  });
-});
+);
 
 router.post("/register", (req, res) => {
   //회원가입 시 필요한 정보를 client에서 받아오고 DB에 저장

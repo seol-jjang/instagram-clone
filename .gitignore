@@ -1,4 +1,5 @@
 node_modules
 dev.js
-uploads
-uploads_profileImage
+.env
+Procfile
+static.json

@@ -4,38 +4,16 @@ const multer = require("multer");
 const { Post } = require("../models/Post");
 const { Comment } = require("../models/Comment");
 const { Like } = require("../models/Like");
+const { upload } = require("./upload");
 
-let storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`);
-  },
-  fileFilter: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    if (ext !== ".jpg" || ext !== ".png" || ext !== ".jpeg") {
-      return cb(
-        res
-          .status(400)
-          .end("jpg, png, jpeg 형식의 이미지만 업로드할 수 있습니다."),
-        false
-      );
-    }
-    cb(null, true);
-  }
-});
-
-let upload = multer({ storage: storage }).array("attachment");
-
-router.post("/uploadImage", (req, res) => {
-  upload(req, res, (err) => {
-    if (err) return res.json({ success: false, err });
-
-    const images = res.req.files;
-    const path = images.map((image) => image.path);
+router.post("/uploadImage", upload.array("attachment"), (req, res) => {
+  if (req.files) {
+    const images = req.files;
+    const path = images.map((image) => image.location);
     return res.json({ success: true, path: path });
-  });
+  } else {
+    return res.json({ success: false });
+  }
 });
 
 router.post("/uploadPost", (req, res) => {

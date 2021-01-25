@@ -65,10 +65,7 @@ function RightMenu(props) {
               <ProfileIcon onClick={onClickProfile} size="small">
                 {(pathLocation === `/${user.userData.nickname}` ||
                   menuVisible) && <Circle />}
-                <img
-                  src={`http://localhost:5000/${user.userData.profileImage}`}
-                  alt="userProfile"
-                />
+                <img src={`${user.userData.profileImage}`} alt="userProfile" />
               </ProfileIcon>
             </li>
           )}
