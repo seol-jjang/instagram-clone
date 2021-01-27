@@ -81,7 +81,6 @@ const RightSection = styled.div`
   flex-direction: column;
   height: 100vh;
   padding: 20px 0;
-
   @media ${viewportSize.laptop} {
     display: none;
   }
@@ -99,7 +98,7 @@ const LeftSection = styled.div`
 `;
 
 const UserInfo = styled.div`
-  position: absolute;
+  position: fixed;
   display: flex;
   align-items: center;
   line-height: 1.2;

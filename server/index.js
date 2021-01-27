@@ -36,6 +36,7 @@ app.use("/api/post", require("./routes/post"));
 app.use("/api/follow", require("./routes/follow"));
 app.use("/api/comment", require("./routes/comment"));
 app.use("/api/like", require("./routes/like"));
+app.use("/api/scrap", require("./routes/scrap"));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));

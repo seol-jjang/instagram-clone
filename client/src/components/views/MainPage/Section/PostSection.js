@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { BsChat } from "react-icons/bs";
 import { IoIosMore } from "react-icons/io";
-import { VscBookmark } from "react-icons/vsc";
 import { palette, ProfileIcon, UserNickname } from "../../../../styles/Theme";
 import ImageSlide from "../../../utils/ImageSlide";
 import LikeBtn from "../../../utils/LikeBtn";
 import LikeNumber from "../../../utils/LikeNumber";
 import DetailContent from "./DetailContent";
 import Dialog from "../../../utils/Dialog";
+import ScrapBtn from "../../../utils/ScrapBtn";
 
 function PostSection(props) {
   const { post } = props;
@@ -63,9 +63,7 @@ function PostSection(props) {
               </Link>
             </button>
           </div>
-          <button>
-            <VscBookmark />
-          </button>
+          <ScrapBtn postId={post._id} />
         </BtnUtil>
         <LikeNumber postId={post._id} newLikeNumber={likeNumber} />
         <DetailContent post={post} />

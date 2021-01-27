@@ -11,8 +11,7 @@ const GlobalStyle = createGlobalStyle`
         @import url('https://fonts.googleapis.com/earlyaccess/notosanskr.css');
         margin: 0;
         box-sizing: border-box;
-        font-family: 'Noto Sans KR', "Segoe UI", "맑은 고딕", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
-            "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        font-family: 'Noto Sans KR', sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         background-color: #fafafa;

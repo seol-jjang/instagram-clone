@@ -99,6 +99,7 @@ const DataList = styled.ul`
     margin-bottom: 0;
     padding: 12px 0;
     border-top: 1px solid ${palette.borderColor};
+    border-bottom: 1px solid ${palette.borderColor};
     color: ${palette.grayText};
     font-size: 14px;
     li {

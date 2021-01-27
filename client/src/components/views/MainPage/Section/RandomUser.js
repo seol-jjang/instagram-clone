@@ -74,8 +74,7 @@ function RandomUser() {
 export default RandomUser;
 
 const ListWrap = styled.section`
-  width: 100%;
-  position: absolute;
+  position: fixed;
   margin-top: 80px;
   padding-left: 10px;
   display: flex;
@@ -103,6 +102,9 @@ const List = styled.ul`
     }
     & > div span {
       margin-right: 15px;
+    }
+    button {
+      margin-left: 130px;
     }
   }
 `;

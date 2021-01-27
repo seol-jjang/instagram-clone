@@ -14,19 +14,21 @@ import {
 import UserPost from "./Section/UserPost";
 import FollowInfo from "./Section/FollowInfo";
 import FollowingBtn from "./Section/FollowingBtn";
+import ScrapSection from "./Section/ScrapSection";
 
 function ProfilePage(props) {
+  const user = useSelector((state) => state.user);
+  const path = useParams();
+  const history = useHistory();
+
   const [profileUser, setProfileUser] = useState([]);
   const [follower, setFollower] = useState(0);
   const [postNumber, setPostNumber] = useState(0);
+  const [tabNumber, setTabNumber] = useState(0);
   const [windowSize, setWindowSize] = useState({
     width: undefined,
     height: undefined
   });
-
-  const user = useSelector((state) => state.user);
-  const path = useParams();
-  const history = useHistory();
 
   useEffect(() => {
     let unmounted = false;
@@ -145,10 +147,28 @@ function ProfilePage(props) {
               />
             </>
           )}
-          <UserPost
-            profileUser={profileUser._id}
-            refreshPostNumber={refreshPostNumber}
-          />
+          <ProfileNav>
+            <li
+              className={`${tabNumber === 0 ? `active` : ""}`}
+              onClick={() => setTabNumber(0)}
+            >
+              게시물
+            </li>
+            <li
+              className={`${tabNumber === 1 ? `active` : ""}`}
+              onClick={() => setTabNumber(1)}
+            >
+              저장됨
+            </li>
+          </ProfileNav>
+          {tabNumber === 0 ? (
+            <UserPost
+              profileUser={profileUser._id}
+              refreshPostNumber={refreshPostNumber}
+            />
+          ) : (
+            <ScrapSection profileUser={profileUser._id} />
+          )}
         </ContentsSection>
       )}
     </Inner>
@@ -175,7 +195,6 @@ const ContentsSection = styled.section`
 const ProfileHeader = styled.header`
   display: flex;
   padding-bottom: 30px;
-  margin-bottom: 30px;
   border-bottom: 1px solid ${palette.borderColor};
   @media ${viewportSize.tablet} {
     margin: 0 16px 20px;
@@ -231,6 +250,39 @@ const ProfileDetail = styled.div`
         margin-left: 10px;
         padding: 5px 10px;
       }
+    }
+  }
+`;
+
+const ProfileNav = styled.ul`
+  display: flex;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: bold;
+  li {
+    cursor: pointer;
+    margin-top: -1px;
+    padding: 20px 0;
+    border-top: 1px solid ${palette.borderColor};
+    color: ${palette.grayText};
+    &:first-child {
+      margin-right: 50px;
+    }
+  }
+  .active {
+    border-top: 1px solid ${palette.blackColor};
+    color: ${palette.blackColor};
+  }
+
+  @media ${viewportSize.tablet} {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    li {
+      display: flex;
+      justify-content: center;
+    }
+    li:first-child {
+      margin-right: 0px;
     }
   }
 `;

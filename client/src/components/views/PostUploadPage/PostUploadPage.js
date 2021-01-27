@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { AiFillCloseCircle } from "react-icons/ai";
 import Button from "../../../styles/common/Button";
-import { Inner, palette } from "../../../styles/Theme";
+import { Inner, palette, viewportSize } from "../../../styles/Theme";
 import FileUpload from "./FileUpload";
 
 function PostUploadPage(props) {
@@ -142,6 +142,9 @@ const ContentsSection = styled.section`
   position: relative;
   margin-top: 85px;
   margin-bottom: 50px;
+  @media ${viewportSize.tablet} {
+    margin-top: 55px;
+  }
 `;
 
 const UploadForm = styled.form`
@@ -157,6 +160,11 @@ const UploadForm = styled.form`
     justify-content: center;
     border: 1px solid ${palette.borderColor};
     background-color: white;
+    @media ${viewportSize.tablet} {
+      margin-bottom: 0;
+      border: 0;
+      border-bottom: 1px solid ${palette.borderColor};
+    }
   }
   textarea {
     height: 18px;
@@ -170,6 +178,10 @@ const UploadForm = styled.form`
     font-family: "Noto Sans KR", "Segoe UI", "맑은 고딕", "Roboto", "Oxygen",
       "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
       sans-serif;
+    @media ${viewportSize.tablet} {
+      border: 0;
+      border-bottom: 1px solid ${palette.borderColor};
+    }
   }
   button {
     margin: 0;
@@ -192,6 +204,10 @@ const SampleImages = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 20px;
+  @media ${viewportSize.tablet} {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const PictureWrap = styled.div`

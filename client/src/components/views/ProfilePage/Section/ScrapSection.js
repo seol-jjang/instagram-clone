@@ -4,22 +4,20 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { viewportSize } from "../../../../styles/Theme";
 
-function UserPost(props) {
-  const { profileUser, refreshPostNumber } = props;
-  const [post, setPost] = useState([]);
+function ScrapSection(props) {
+  const [scrap, setScrap] = useState([]);
   useEffect(() => {
     let unmounted = false;
     let source = Axios.CancelToken.source();
-    const variable = { userFrom: profileUser };
+    const variable = { userFrom: props.profileUser };
 
-    Axios.post("/api/post/getUserPost", variable, {
+    Axios.post("/api/scrap/getScrap", variable, {
       cancelToken: source.token
     })
       .then((response) => {
         if (!unmounted) {
           if (response.data.success) {
-            setPost(response.data.post);
-            refreshPostNumber(response.data.postLength);
+            setScrap(response.data.scrap);
           } else {
             alert("게시글을 불러오는 데 실패했습니다.");
           }
@@ -38,23 +36,31 @@ function UserPost(props) {
       unmounted = true;
       source.cancel("Canceling in cleanup");
     };
-  }, [profileUser, refreshPostNumber]);
+  }, [props.profileUser]);
   return (
-    <PostSection>
-      {post.map((post, index) => (
-        <article key={index}>
-          <Link to={`/p/${post._id}`}>
-            <img src={`${post.filePath[0]}`} alt={index} />
-          </Link>
-        </article>
-      ))}
-    </PostSection>
+    <>
+      {scrap.length > 0 ? (
+        <Section>
+          {scrap.map((post, index) => (
+            <article key={index}>
+              <Link to={`/p/${post.postId._id}`}>
+                <img src={`${post.postId.filePath[0]}`} alt={index} />
+              </Link>
+            </article>
+          ))}
+        </Section>
+      ) : (
+        <EmptySection>
+          <p>다른 사람의 게시글을 저장할 수 있습니다.</p>
+        </EmptySection>
+      )}
+    </>
   );
 }
 
-export default UserPost;
+export default ScrapSection;
 
-const PostSection = styled.div`
+const Section = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
@@ -64,7 +70,6 @@ const PostSection = styled.div`
   @media ${viewportSize.tablet} {
     gap: 1px;
   }
-
   article {
     padding-bottom: 100%;
     position: relative;
@@ -79,4 +84,10 @@ const PostSection = styled.div`
       object-fit: cover;
     }
   }
+`;
+
+const EmptySection = styled.div`
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
 `;
