@@ -2,26 +2,23 @@ import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { viewportSize } from "../../../../styles/Theme";
+import { Inner, viewportSize } from "../../../styles/Theme";
 
-function UserPost(props) {
-  const { profileUser, refreshPostNumber } = props;
-  const [posts, setPost] = useState([]);
+function ExplorePage() {
+  const [posts, setPosts] = useState([]);
+  const [load, setLoad] = useState(false);
+
   useEffect(() => {
     let unmounted = false;
     let source = Axios.CancelToken.source();
-    const variable = { userFrom: profileUser };
-
-    Axios.post("/api/post/getUserPost", variable, {
-      cancelToken: source.token
-    })
+    Axios.get("/api/post/getPosts", { cancelToken: source.token })
       .then((response) => {
         if (!unmounted) {
           if (response.data.success) {
-            setPost(response.data.post);
-            refreshPostNumber(response.data.postLength);
+            setPosts(response.data.posts);
+            setLoad(true);
           } else {
-            alert("게시글을 불러오는 데 실패했습니다.");
+            alert("피드 불러오기를 실패했습니다");
           }
         }
       })
@@ -38,23 +35,31 @@ function UserPost(props) {
       unmounted = true;
       source.cancel("Canceling in cleanup");
     };
-  }, [profileUser, refreshPostNumber]);
-  return (
-    <PostSection>
-      {posts.map((post, index) => (
-        <article key={index}>
-          <Link to={`/p/${post._id}`}>
-            <img src={`${post.filePath[0]}`} alt={index} />
-          </Link>
-        </article>
-      ))}
-    </PostSection>
-  );
+  }, []);
+  if (load) {
+    return (
+      <Inner>
+        <PostSection>
+          {posts.map((post, index) => (
+            <article key={index}>
+              <Link to={`/p/${post._id}`}>
+                <img src={`${post.filePath[0]}`} alt={index} />
+              </Link>
+            </article>
+          ))}
+        </PostSection>
+      </Inner>
+    );
+  } else {
+    return <div></div>;
+  }
 }
 
-export default UserPost;
+export default ExplorePage;
 
 const PostSection = styled.div`
+  position: relative;
+  margin-top: 85px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
@@ -63,6 +68,7 @@ const PostSection = styled.div`
   }
   @media ${viewportSize.tablet} {
     gap: 1px;
+    margin-top: 55px;
   }
 
   article {

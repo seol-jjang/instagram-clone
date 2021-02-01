@@ -1,7 +1,8 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { BsChat } from "react-icons/bs";
 import { IoIosMore } from "react-icons/io";
 import { VscBookmark } from "react-icons/vsc";
@@ -20,6 +21,7 @@ import LikeNumber from "../../utils/LikeNumber";
 import Dialog from "../../utils/Dialog";
 
 function PostDetailPage() {
+  const user = useSelector((state) => state.user);
   const params = useParams();
   const [post, setPost] = useState([]);
   const [newComment, setNewComment] = useState([]);
@@ -106,40 +108,46 @@ function PostDetailPage() {
                 <UserNickname>{post.userFrom.nickname}</UserNickname>
               </Link>
             </div>
-            <MoreBtn onClick={() => onClickMore(post._id, post.userFrom._id)}>
-              <IoIosMore />
-            </MoreBtn>
+            {user.userData.isAuth && (
+              <MoreBtn onClick={() => onClickMore(post._id, post.userFrom._id)}>
+                <IoIosMore />
+              </MoreBtn>
+            )}
           </WriteHeader>
           <PictureWrap>
             <ImageSlide images={post.filePath} detailPage />
           </PictureWrap>
-          <ContentsContainer>
-            <BtnUtil>
-              <div>
-                <LikeBtn postId={post._id} refreshLike={refreshLike} />
+          <ContentsContainer isAuth={user.userData.isAuth}>
+            {user.userData.isAuth && (
+              <BtnUtil>
+                <div>
+                  <LikeBtn postId={post._id} refreshLike={refreshLike} />
+                  <button>
+                    <Link to={`/p/${post._id}`}>
+                      <BsChat />
+                    </Link>
+                  </button>
+                </div>
                 <button>
-                  <Link to={`/p/${post._id}`}>
-                    <BsChat />
-                  </Link>
+                  <VscBookmark />
                 </button>
-              </div>
-              <button>
-                <VscBookmark />
-              </button>
-            </BtnUtil>
+              </BtnUtil>
+            )}
             <LikeNumber
               postId={post._id}
               newLikeNumber={likeNumber}
               detailPage
             />
-            <AddComment
-              postId={post._id}
-              refreshReplyComment={onReplyComment}
-              refreshComment={refreshComment}
-              responseTo={responseTo}
-              detailPage
-            />
-            <ScrollContainer>
+            {user.userData.isAuth && (
+              <AddComment
+                postId={post._id}
+                refreshReplyComment={onReplyComment}
+                refreshComment={refreshComment}
+                responseTo={responseTo}
+                detailPage
+              />
+            )}
+            <ScrollContainer isAuth={user.userData.isAuth}>
               <DetailContent>
                 <div>
                   <ProfileIcon size="medium" className="profile-image">
@@ -274,6 +282,11 @@ const ContentsContainer = styled.div`
     & > section {
       order: 0;
     }
+    ${(props) =>
+      !props.isAuth &&
+      css`
+        padding-top: 16px;
+      `}
   }
 `;
 
@@ -288,6 +301,12 @@ const ScrollContainer = styled.ul`
   @media ${viewportSize.tablet} {
     display: none;
   }
+  ${(props) =>
+    !props.isAuth &&
+    css`
+      height: calc(100% - 56px);
+      margin-bottom: 16px;
+    `}
 `;
 
 const DetailContent = styled.div`

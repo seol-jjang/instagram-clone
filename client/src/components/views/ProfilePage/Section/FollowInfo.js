@@ -100,6 +100,7 @@ const DataList = styled.ul`
     padding: 12px 0;
     border-top: 1px solid ${palette.borderColor};
     border-bottom: 1px solid ${palette.borderColor};
+    background-color: white;
     color: ${palette.grayText};
     font-size: 14px;
     li {

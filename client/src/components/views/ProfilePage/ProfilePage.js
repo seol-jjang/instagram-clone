@@ -37,7 +37,11 @@ function ProfilePage(props) {
     const body = {
       nickname: path.nickname
     };
-    if (path.nickname !== "login" && path.nickname !== "accounts") {
+    if (
+      path.nickname !== "login" &&
+      path.nickname !== "accounts" &&
+      path.nickname !== "explore"
+    ) {
       Axios.post("/api/users/searchUser", body)
         .then((response) => {
           if (!unmounted) {
@@ -111,18 +115,21 @@ function ProfilePage(props) {
             <ProfileDetail>
               <div>
                 <UserNickname large>{profileUser.nickname}</UserNickname>
-                {user.userData &&
-                user.userData.nickname !== profileUser.nickname ? (
-                  <FollowingBtn
-                    userTo={profileUser._id}
-                    countFollower={countFollower}
-                  />
-                ) : (
-                  <Link to="/accounts/edit">
-                    <Button className="profile-edit" gray>
-                      프로필 편집
-                    </Button>
-                  </Link>
+                {user.userData && user.userData.isAuth && (
+                  <>
+                    {user.userData.nickname !== profileUser.nickname ? (
+                      <FollowingBtn
+                        userTo={profileUser._id}
+                        countFollower={countFollower}
+                      />
+                    ) : (
+                      <Link to="/accounts/edit">
+                        <Button className="profile-edit" gray>
+                          프로필 편집
+                        </Button>
+                      </Link>
+                    )}
+                  </>
                 )}
               </div>
               {windowSize && windowSize.width > 735 && (
@@ -154,12 +161,14 @@ function ProfilePage(props) {
             >
               게시물
             </li>
-            <li
-              className={`${tabNumber === 1 ? `active` : ""}`}
-              onClick={() => setTabNumber(1)}
-            >
-              저장됨
-            </li>
+            {user.userData && user.userData.isAuth && (
+              <li
+                className={`${tabNumber === 1 ? `active` : ""}`}
+                onClick={() => setTabNumber(1)}
+              >
+                저장됨
+              </li>
+            )}
           </ProfileNav>
           {tabNumber === 0 ? (
             <UserPost
@@ -181,10 +190,11 @@ const ContentsSection = styled.section`
   position: relative;
   margin-top: 85px;
   @media ${viewportSize.tablet} {
-    margin-top: 75px;
+    margin-top: 0;
+    padding-top: 55px;
     h1 {
-      margin: 0 16px;
-      margin-bottom: 20px;
+      padding: 0 16px 20px;
+      background-color: white;
       font-size: 14px;
       font-weight: bold;
       color: ${palette.blackColor};
@@ -197,9 +207,9 @@ const ProfileHeader = styled.header`
   padding-bottom: 30px;
   border-bottom: 1px solid ${palette.borderColor};
   @media ${viewportSize.tablet} {
-    margin: 0 16px 20px;
-    padding-bottom: 0;
+    padding: 20px 16px 20px;
     border-bottom: 0;
+    background-color: white;
   }
 `;
 
@@ -209,7 +219,6 @@ const ProfileImage = styled.div`
   margin-right: 30px;
   display: flex;
   justify-content: center;
-
   @media ${viewportSize.tablet} {
     flex-grow: 0;
     & > span {
@@ -275,9 +284,10 @@ const ProfileNav = styled.ul`
   }
 
   @media ${viewportSize.tablet} {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    background-color: white;
     li {
+      flex-grow: 1;
       display: flex;
       justify-content: center;
     }

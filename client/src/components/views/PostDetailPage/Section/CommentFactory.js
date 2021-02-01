@@ -41,6 +41,13 @@ function CommentFactory(props) {
     };
   }, [postId, newComment]);
 
+  const refreshComment = (removeComment) => {
+    const newComments = comments.filter(
+      (comment) => comment._id !== removeComment
+    );
+    setComments(newComments);
+  };
+
   return (
     <>
       {comments.length !== 0 && (
@@ -52,10 +59,12 @@ function CommentFactory(props) {
                   <SingleComment
                     comment={comment}
                     refreshReplyComment={refreshReplyComment}
+                    refreshComment={refreshComment}
                   />
                   <ReplyComment
                     comments={comments}
                     refreshReplyComment={refreshReplyComment}
+                    refreshComment={refreshComment}
                     parentCommentId={comment._id}
                   />
                 </li>

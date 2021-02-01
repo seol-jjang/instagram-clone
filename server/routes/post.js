@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
+const { auth } = require("../middleware/auth");
+const { Follow } = require("../models/Follow");
 const { Post } = require("../models/Post");
 const { Comment } = require("../models/Comment");
 const { Like } = require("../models/Like");
+const { Scrap } = require("../models/Scrap");
 const { upload } = require("./upload");
 
 router.post("/uploadImage", upload.array("attachment"), (req, res) => {
@@ -33,6 +35,25 @@ router.get("/getPosts", (req, res) => {
       res.status(200).json({ success: true, posts });
     });
 });
+
+router.get("/getFollowingPosts", auth, (req, res) => {
+  const userFrom = [];
+  Follow.find({ userFrom: req.user._id }, { userFrom: true }).exec(
+    (err, users) => {
+      if (err) return res.status(400).send(err);
+      users.map((user) => userFrom.push(user.userFrom));
+      Post.find({ userFrom: { $in: [...userFrom, req.user._id] } })
+        .populate("userFrom")
+        .sort({ createdAt: -1 })
+        .exec((err, posts) => {
+          console.log(posts);
+          if (err) return res.status(400).send(err);
+          res.status(200).json({ success: true, posts });
+        });
+    }
+  );
+});
+//userfrom 으로 find 후 userTo로 find response
 
 router.post("/getUserPost", (req, res) => {
   Post.find({ userFrom: req.body.userFrom })
@@ -65,21 +86,27 @@ router.post("/removePost", (req, res) => {
     if (err) return res.status(400).json({ success: false, err });
     Like.deleteMany({ postId: req.body.postId })
       .then((result) => {
-        Comment.find({ postId: req.body.postId }).exec((err, comment) => {
-          if (err) return res.status(400).json({ success: false, err });
-          comment.map((comment) => commentId.push(comment.commentId));
-          Comment.deleteMany({ postId: req.body.postId })
-            .then((result) => {
-              Like.deleteMany({ commentId: { $nin: commentId } })
+        Scrap.deleteMany({ postId: req.body.postId })
+          .then((result) => {
+            Comment.find({ postId: req.body.postId }).exec((err, comment) => {
+              if (err) return res.status(400).json({ success: false, err });
+              comment.map((comment) => commentId.push(comment.commentId));
+              Comment.deleteMany({ postId: req.body.postId })
                 .then((result) => {
-                  res.status(200).json({
-                    success: true
-                  });
+                  Like.deleteMany({ commentId: { $nin: commentId } })
+                    .then((result) => {
+                      res.status(200).json({
+                        success: true
+                      });
+                    })
+                    .catch((err) =>
+                      res.status(400).json({ success: false, err })
+                    );
                 })
                 .catch((err) => res.status(400).json({ success: false, err }));
-            })
-            .catch((err) => res.status(400).json({ success: false, err }));
-        });
+            });
+          })
+          .catch((err) => res.status(400).json({ success: false, err }));
       })
       .catch((err) => res.status(400).json({ success: false, err }));
   });

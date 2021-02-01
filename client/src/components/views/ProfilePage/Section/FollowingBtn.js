@@ -1,11 +1,13 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BiCheck } from "react-icons/bi";
+import { useSelector } from "react-redux";
 import Button from "../../../../styles/common/Button";
 
 function FollowingBtn(props) {
-  const [followed, setFollowed] = useState(false);
   const { countFollower, userTo } = props;
+  const user = useSelector((state) => state.user);
+  const [followed, setFollowed] = useState(false);
 
   useEffect(() => {
     let unmounted = false;

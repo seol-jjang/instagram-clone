@@ -6,7 +6,15 @@ import styled, { css, keyframes } from "styled-components";
 import { palette } from "../../styles/Theme";
 
 function Dialog(props) {
-  const { onClose, visible, postId, commentId, writer, detailPage } = props;
+  const {
+    onClose,
+    visible,
+    postId,
+    commentId,
+    writer,
+    detailPage,
+    refreshComment
+  } = props;
   const user = useSelector((state) => state.user);
   const [animate, setAnimate] = useState(false);
   const [localVisible, setLocalVisible] = useState(visible);
@@ -42,7 +50,7 @@ function Dialog(props) {
       body = { commentId };
       Axios.post("/api/comment/removeComment", body).then((response) => {
         if (response.data.success) {
-          window.location.reload();
+          refreshComment(response.data.comment._id);
         } else {
           alert("댓글을 삭제하는 데 실패했습니다.");
         }

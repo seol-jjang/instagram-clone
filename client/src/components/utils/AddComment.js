@@ -148,11 +148,6 @@ const CommentFormSection = styled.section`
       outline: none;
       resize: none;
       background-color: transparent;
-      &::placeholder {
-        font-family: "Noto Sans KR", "Segoe UI", "맑은 고딕", "Roboto", "Oxygen",
-          "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-          sans-serif;
-      }
     }
     button {
       padding: 0;

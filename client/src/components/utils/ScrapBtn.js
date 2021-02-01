@@ -7,7 +7,7 @@ function ScrapBtn(props) {
   const userId = localStorage.getItem("ls");
 
   useEffect(() => {
-    let scrapVariable = { postId: props.postId, userId: userId };
+    let scrapVariable = { postId: props.postId };
     let unmounted = false;
     let source = Axios.CancelToken.source();
     Axios.post("/api/scrap/getScrap", scrapVariable, {
@@ -16,11 +16,12 @@ function ScrapBtn(props) {
       .then((response) => {
         if (!unmounted) {
           if (response.data.success) {
-            if (response.data.scrap.length > 0) {
-              setScrapAction(true);
-            } else {
-              setScrapAction(false);
-            }
+            // eslint-disable-next-line array-callback-return
+            response.data.scrap.map((scrap) => {
+              if (scrap.userFrom === userId) {
+                setScrapAction(true);
+              }
+            });
           } else {
             alert("스크랩 정보를 가져오는 데 실패했습니다");
           }
@@ -42,7 +43,7 @@ function ScrapBtn(props) {
   }, [props.postId, userId]);
 
   const onClickLike = () => {
-    let scrapVariable = { postId: props.postId, userId: userId };
+    let scrapVariable = { postId: props.postId, userFrom: userId };
     if (scrapAction) {
       Axios.post("/api/scrap/addScrap", scrapVariable).then((response) => {
         if (response.data.success) {

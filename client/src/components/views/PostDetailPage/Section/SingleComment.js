@@ -6,9 +6,11 @@ import styled from "styled-components";
 import Axios from "axios";
 import LikeBtn from "../../../utils/LikeBtn";
 import Dialog from "../../../utils/Dialog";
+import { useSelector } from "react-redux";
 
 function SingleComment(props) {
-  const { comment, refreshReplyComment } = props;
+  const { comment, refreshReplyComment, refreshComment } = props;
+  const user = useSelector((state) => state.user);
   const [likeNumber, setLikeNumber] = useState(0);
   const [visible, setVisible] = useState(false);
   const [commentId, setCommentId] = useState("");
@@ -62,32 +64,41 @@ function SingleComment(props) {
     setVisible(false);
   };
 
+  const onHover = () => {
+    if (user.userData.isAuth) {
+      if (btnHover) {
+        setBtnHover(false);
+      } else {
+        setBtnHover(true);
+      }
+    } else {
+      return;
+    }
+  };
+
   return (
     <>
-      <CommentContainer
-        onMouseEnter={() => setBtnHover(true)}
-        onMouseLeave={() => setBtnHover(false)}
-      >
-        {comment.userFrom && (
-          <>
-            <Writer>
-              <ProfileIcon size="medium" className="profile-image">
+      {comment.userFrom && (
+        <CommentContainer onMouseEnter={onHover} onMouseLeave={onHover}>
+          <Writer>
+            <ProfileIcon size="medium" className="profile-image">
+              <Link to={`/${comment.userFrom.nickname}`}>
+                <img
+                  src={`${comment.userFrom.profileImage}`}
+                  alt={comment.userFrom.nickname}
+                />
+              </Link>
+            </ProfileIcon>
+            <ContentWrap>
+              <div>
                 <Link to={`/${comment.userFrom.nickname}`}>
-                  <img
-                    src={`${comment.userFrom.profileImage}`}
-                    alt={comment.userFrom.nickname}
-                  />
+                  <UserNickname>{comment.userFrom.nickname}</UserNickname>
                 </Link>
-              </ProfileIcon>
-              <ContentWrap>
-                <div>
-                  <Link to={`/${comment.userFrom.nickname}`}>
-                    <UserNickname>{comment.userFrom.nickname}</UserNickname>
-                  </Link>
-                  <span className="comment">{comment.content}</span>
-                </div>
-                <div>
-                  {likeNumber > 0 && <button>좋아요 {likeNumber}개</button>}
+                <span className="comment">{comment.content}</span>
+              </div>
+              <div>
+                {likeNumber > 0 && <button>좋아요 {likeNumber}개</button>}
+                {user.userData && user.userData.isAuth && (
                   <button
                     onClick={() =>
                       refreshReplyComment(
@@ -98,9 +109,11 @@ function SingleComment(props) {
                   >
                     답글 달기
                   </button>
-                </div>
-              </ContentWrap>
-            </Writer>
+                )}
+              </div>
+            </ContentWrap>
+          </Writer>
+          {user.userData && user.userData.isAuth && (
             <BtnUtil>
               {btnHover && (
                 <MoreBtn
@@ -109,17 +122,17 @@ function SingleComment(props) {
                   <IoIosMore />
                 </MoreBtn>
               )}
-
               <LikeBtn commentId={comment._id} refreshLike={refreshLike} />
             </BtnUtil>
-          </>
-        )}
-      </CommentContainer>
+          )}
+        </CommentContainer>
+      )}
       <Dialog
         onClose={onClose}
         visible={visible}
         commentId={commentId}
         writer={writer}
+        refreshComment={refreshComment}
       />
     </>
   );

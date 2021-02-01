@@ -56,7 +56,8 @@ router.post("/removeComment", (req, res) => {
     Like.deleteMany({ commentId: req.body.commentId })
       .then((result) =>
         res.status(200).json({
-          success: true
+          success: true,
+          comment
         })
       )
       .catch((err) => res.status(400).json({ success: false, err }));

@@ -11,7 +11,7 @@ export default function (SpecificComponent, option, adminRoute = null) {
       dispatch(auth()).then((response) => {
         if (!response.payload.isAuth) {
           if (option) {
-            props.history.push("/login");
+            props.history.push("/explore");
           }
         } else {
           if (adminRoute && !response.payload.isAdmin) {

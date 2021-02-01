@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { BsPlusCircle, BsPlusCircleFill } from "react-icons/bs";
-import { RiHomeFill, RiHomeLine } from "react-icons/ri";
+import {
+  RiHomeFill,
+  RiHomeLine,
+  RiTimer2Line,
+  RiTimer2Fill
+} from "react-icons/ri";
 import { IoPaperPlaneOutline } from "react-icons/io5";
+import { BiPlus, BiPlusCircle } from "react-icons/bi";
 import Button from "../../../../styles/common/Button";
 import styled from "styled-components";
 import { palette, ProfileIcon, viewportSize } from "../../../../styles/Theme";
@@ -46,17 +51,21 @@ function RightMenu(props) {
               )}
             </Link>
           </li>
-          {/* <li>
-            <Link to="/">
-              <IoPaperPlaneOutline size="23px" />
+          <li>
+            <Link to="/explore">
+              {pathLocation === "/explore" && !menuVisible ? (
+                <RiTimer2Fill size="23px" />
+              ) : (
+                <RiTimer2Line size="23px" />
+              )}
             </Link>
-          </li> */}
+          </li>
           <li>
             <Link to="/post/upload">
               {pathLocation === "/post/upload" && !menuVisible ? (
-                <BsPlusCircleFill size="20px" />
+                <BiPlusCircle size="22px" />
               ) : (
-                <BsPlusCircle size="20px" />
+                <BiPlus size="22px" />
               )}
             </Link>
           </li>

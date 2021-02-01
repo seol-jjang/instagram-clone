@@ -46,7 +46,9 @@ const LoginPage = (props) => {
   return (
     <>
       <Section>
-        <Logo>instagram</Logo>
+        <Link to="/">
+          <Logo>instagram</Logo>
+        </Link>
         <LoginForm onSubmit={handleSubmit(onSubmitHandler)}>
           <Input
             type="email"

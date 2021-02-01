@@ -31,5 +31,16 @@ const GlobalStyle = createGlobalStyle`
         outline: none;
         border: none;
     }
+
+    textarea {
+        font-family: "Noto Sans KR", "Segoe UI", "맑은 고딕", "Roboto", "Oxygen",
+          "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+          sans-serif;
+        &::placeholder {
+        font-family: "Noto Sans KR", "Segoe UI", "맑은 고딕", "Roboto", "Oxygen",
+          "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+          sans-serif;
+      }
+    }
 `;
 export default GlobalStyle;

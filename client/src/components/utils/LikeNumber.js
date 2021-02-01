@@ -39,6 +39,7 @@ function LikeNumber(props) {
       source.cancel("Cancelling in cleanup");
     };
   }, [newLikeNumber, postId]);
+
   return (
     <>
       {likeNumber > 0 && (

@@ -3,7 +3,7 @@ const router = express.Router();
 const { Scrap } = require("../models/Scrap");
 
 router.post("/addScrap", (req, res) => {
-  let variable = { postId: req.body.postId, userFrom: req.body.userId };
+  let variable = { postId: req.body.postId, userFrom: req.body.userFrom };
 
   const scrap = new Scrap(variable);
 
@@ -13,7 +13,7 @@ router.post("/addScrap", (req, res) => {
   });
 });
 router.post("/removeScrap", (req, res) => {
-  let variable = { postId: req.body.postId, userFrom: req.body.userId };
+  let variable = { postId: req.body.postId, userFrom: req.body.userFrom };
 
   Scrap.findOneAndDelete(variable).exec((err, result) => {
     if (err) return res.status(400).send(err);
@@ -22,7 +22,7 @@ router.post("/removeScrap", (req, res) => {
 });
 
 router.post("/getScrap", (req, res) => {
-  Scrap.find({ userFrom: req.body.userFrom })
+  Scrap.find({ postId: req.body.postId })
     .sort({ createdAt: -1 })
     .populate("postId")
     .exec((err, scrap) => {
