@@ -6,7 +6,6 @@ import { Provider } from "react-redux";
 import promiseMiddleware from "redux-promise";
 import ReduxThunk from "redux-thunk";
 import Reducer from "./_reducers/index";
-import GlobalStyle from "./styles/GlobalStyle";
 
 const createStoreWithMiddleware = applyMiddleware(
   promiseMiddleware,
@@ -22,7 +21,6 @@ ReactDOM.render(
     )}
   >
     <App />
-    <GlobalStyle />
   </Provider>,
   document.getElementById("root")
 );

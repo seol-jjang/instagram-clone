@@ -7,6 +7,7 @@ import LoginPage from "./components/views/LoginPage/LoginPage";
 import NotFound from "./components/views/NotFound/NotFound";
 import Auth from "./hoc/authentication";
 import PostUploadPage from "./components/views/PostUploadPage/PostUploadPage";
+import GlobalStyle from "./styles/GlobalStyle";
 import Header from "./components/views/Header/Header";
 import ProfilePage from "./components/views/ProfilePage/ProfilePage";
 import PostDetailPage from "./components/views/PostDetailPage/PostDetailPage";
@@ -17,6 +18,7 @@ import PasswordEdit from "./components/views/ProfileEditPage/Section/PasswordEdi
 function App() {
   return (
     <>
+      <GlobalStyle />
       <Router>
         <Header />
         <Switch>

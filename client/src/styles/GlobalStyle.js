@@ -6,7 +6,6 @@ const GlobalStyle = createGlobalStyle`
     ${reset};
     
     body {
-        font-family: 'Noto Sans KR', sans-serif;
         margin: 0;
         box-sizing: border-box;
         -webkit-font-smoothing: antialiased;
@@ -14,6 +13,10 @@ const GlobalStyle = createGlobalStyle`
         background-color: #fafafa;
     }
     * {
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+        "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", 
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         box-sizing: border-box;
         color: ${palette.blackColor}
     }
