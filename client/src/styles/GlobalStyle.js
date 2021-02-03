@@ -13,10 +13,11 @@ const GlobalStyle = createGlobalStyle`
         background-color: #fafafa;
     }
     * {
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-        font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
-        "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", 
-        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-family:  Helvetica,
+		   'Apple SD Gothic Neo', 'Apple SD 산돌고딕 Neo', 
+		   '맑은 고딕', 'malgun gothic',
+		   'Microsoft NeoGothic', 
+		   'Droid sans', sans-serif;
         box-sizing: border-box;
         color: ${palette.blackColor}
     }
@@ -33,13 +34,12 @@ const GlobalStyle = createGlobalStyle`
     }
 
     textarea {
-        font-family: "Noto Sans KR", "Segoe UI", "맑은 고딕", "Roboto", "Oxygen",
-          "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-          sans-serif;
         &::placeholder {
-        font-family: "Noto Sans KR", "Segoe UI", "맑은 고딕", "Roboto", "Oxygen",
-          "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-          sans-serif;
+            font-family:  Helvetica,
+		   'Apple SD Gothic Neo', 'Apple SD 산돌고딕 Neo', 
+		   '맑은 고딕', 'malgun gothic',
+		   'Microsoft NeoGothic', 
+		   'Droid sans', sans-serif;
       }
     }
 `;
