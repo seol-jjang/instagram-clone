@@ -3,9 +3,11 @@ import reset from "styled-reset";
 import { palette } from "./Theme";
 
 const GlobalStyle = createGlobalStyle`
-    ${reset}
+    ${reset};
     
     body {
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        font-family: 'Noto Sans KR', sans-serif;
         margin: 0;
         box-sizing: border-box;
         -webkit-font-smoothing: antialiased;
