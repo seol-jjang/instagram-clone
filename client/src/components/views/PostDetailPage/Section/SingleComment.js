@@ -9,13 +9,13 @@ import Dialog from "../../../utils/Dialog";
 import { useSelector } from "react-redux";
 
 function SingleComment(props) {
-  const { comment, refreshReplyComment, refreshComment } = props;
+  const { comment, addReplyComment, deleteComment } = props;
   const user = useSelector((state) => state.user);
   const [likeNumber, setLikeNumber] = useState(0);
   const [visible, setVisible] = useState(false);
+  const [btnHover, setBtnHover] = useState(false);
   const [commentId, setCommentId] = useState("");
   const [writer, setWriter] = useState("");
-  const [btnHover, setBtnHover] = useState(false);
 
   useEffect(() => {
     let unmounted = false;
@@ -101,10 +101,7 @@ function SingleComment(props) {
                 {user.userData && user.userData.isAuth && (
                   <button
                     onClick={() =>
-                      refreshReplyComment(
-                        comment.userFrom.nickname,
-                        comment._id
-                      )
+                      addReplyComment(comment.userFrom.nickname, comment._id)
                     }
                   >
                     답글 달기
@@ -132,7 +129,7 @@ function SingleComment(props) {
         visible={visible}
         commentId={commentId}
         writer={writer}
-        refreshComment={refreshComment}
+        deleteComment={deleteComment}
       />
     </>
   );

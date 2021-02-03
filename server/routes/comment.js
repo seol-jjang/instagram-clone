@@ -11,7 +11,7 @@ router.post("/saveComment", (req, res) => {
     if (err) return res.json({ success: false, err });
 
     Comment.find({ _id: comment._id })
-      .populate("userFrom")
+      .populate("userFrom", "nickname profileImage")
       .exec((err, result) => {
         if (err) return res.json({ success: false, err });
         res.status(200).json({ success: true, result });
@@ -21,7 +21,7 @@ router.post("/saveComment", (req, res) => {
 
 router.post("/getCommentsLimit", (req, res) => {
   Comment.find({ postId: req.body.postId })
-    .populate("userFrom")
+    .populate("userFrom", "nickname profileImage")
     .limit(2)
     .sort({ createdAt: -1 })
     .exec((err, comments) => {
@@ -32,7 +32,7 @@ router.post("/getCommentsLimit", (req, res) => {
 
 router.post("/getComments", (req, res) => {
   Comment.find({ postId: req.body.postId })
-    .populate("userFrom")
+    .populate("userFrom", "nickname profileImage")
     .sort({ createdAt: 1 })
     .exec((err, comments) => {
       if (err) return res.status(400).send(err);
@@ -42,7 +42,7 @@ router.post("/getComments", (req, res) => {
 
 router.post("/getCommentsCount", (req, res) => {
   Comment.find({ postId: req.body.postId })
-    .populate("userFrom")
+    .populate("userFrom", "nickname profileImage")
     .sort({ createdAt: -1 })
     .exec((err, comments) => {
       if (err) return res.status(400).send(err);

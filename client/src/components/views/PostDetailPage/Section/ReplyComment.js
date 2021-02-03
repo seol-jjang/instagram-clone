@@ -3,12 +3,7 @@ import styled from "styled-components";
 import SingleComment from "./SingleComment";
 
 function ReplyComment(props) {
-  const {
-    comments,
-    refreshReplyComment,
-    parentCommentId,
-    refreshComment
-  } = props;
+  const { comments, addReplyComment, deleteComment, parentCommentId } = props;
   const [replyCommentNumber, setReplyCommentNumber] = useState(0);
   const [openReplyComment, setOpenReplyComment] = useState(false);
 
@@ -30,13 +25,13 @@ function ReplyComment(props) {
           <li key={index}>
             <SingleComment
               comment={comment}
-              refreshReplyComment={refreshReplyComment}
-              refreshComment={refreshComment}
+              addReplyComment={addReplyComment}
+              deleteComment={deleteComment}
             />
             <ReplyComment
               comments={comments}
-              refreshReplyComment={refreshReplyComment}
-              refreshComment={refreshComment}
+              addReplyComment={addReplyComment}
+              deleteComment={deleteComment}
               parentCommentId={comment._id}
             />
           </li>

@@ -1,7 +1,6 @@
-import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { BsChat } from "react-icons/bs";
 import { IoIosMore } from "react-icons/io";
@@ -19,30 +18,32 @@ import LikeBtn from "../../utils/LikeBtn";
 import CommentFactory from "./Section/CommentFactory";
 import LikeNumber from "../../utils/LikeNumber";
 import Dialog from "../../utils/Dialog";
+import Axios from "axios";
 
 function PostDetailPage() {
   const user = useSelector((state) => state.user);
   const params = useParams();
+  const history = useHistory();
+
   const [post, setPost] = useState([]);
-  const [newComment, setNewComment] = useState([]);
+  const [comments, setComments] = useState([]);
   const [responseTo, setResponseTo] = useState([]);
   const [likeNumber, setLikeNumber] = useState(0);
-  const [visible, setVisible] = useState(false);
   const [postId, setPostId] = useState("");
   const [writer, setWriter] = useState("");
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     let unmounted = false;
     let source = Axios.CancelToken.source();
-    Axios.post("/api/post/getPostDetail", params, {
-      cancelToken: source.token
-    })
+
+    Axios.post("/api/post/getPostDetail", params)
       .then((response) => {
         if (!unmounted) {
           if (response.data.success) {
             setPost(response.data.post);
           } else {
-            alert("게시글을 불러오는 데 실패했습니다.");
+            history.push("/not-found");
           }
         }
       })
@@ -55,11 +56,46 @@ function PostDetailPage() {
           }
         }
       });
+    Axios.post("/api/comment/getComments", params)
+      .then((response) => {
+        if (!unmounted) {
+          if (response.data.success) {
+            setComments(response.data.comments);
+          } else {
+            history.push("/not-found");
+          }
+        }
+      })
+      .catch(function (e) {
+        if (!unmounted) {
+          if (Axios.isCancel(e)) {
+            console.log("요청 취소: ", e.message);
+          } else {
+            console.log("오류 발생 ", e.message);
+          }
+        }
+      });
+
     return function () {
       unmounted = true;
       source.cancel("Canceling in cleanup");
     };
-  }, [params]);
+  }, [history, params]);
+
+  const refreshLike = (likeNumber) => {
+    setLikeNumber(likeNumber);
+  };
+
+  const addComment = (newComment) => {
+    setComments(comments.concat(newComment));
+  };
+
+  const deleteComment = (removeComment) => {
+    const newComments = comments.filter(
+      (comment) => comment._id !== removeComment
+    );
+    setComments(newComments);
+  };
 
   const onReplyComment = (nickname, commentId) => {
     if (nickname !== null) {
@@ -70,14 +106,6 @@ function PostDetailPage() {
     } else {
       setResponseTo([]);
     }
-  };
-
-  const refreshLike = (likeNumber) => {
-    setLikeNumber(likeNumber);
-  };
-
-  const refreshComment = (newComment) => {
-    setNewComment(newComment);
   };
 
   const onClickMore = (postId = "", userFrom = "") => {
@@ -92,7 +120,7 @@ function PostDetailPage() {
 
   return (
     <Inner>
-      {post.userFrom && (
+      {post.userFrom && comments && (
         <Article>
           <WriteHeader>
             <div>
@@ -141,8 +169,8 @@ function PostDetailPage() {
             {user.userData.isAuth && (
               <AddComment
                 postId={post._id}
-                refreshReplyComment={onReplyComment}
-                refreshComment={refreshComment}
+                addReplyComment={onReplyComment}
+                addComment={addComment}
                 responseTo={responseTo}
                 detailPage
               />
@@ -169,9 +197,9 @@ function PostDetailPage() {
                 </div>
               </DetailContent>
               <CommentFactory
-                postId={post._id}
-                refreshReplyComment={onReplyComment}
-                newComment={newComment}
+                addReplyComment={onReplyComment}
+                deleteComment={deleteComment}
+                comments={comments}
               />
             </ScrollContainer>
           </ContentsContainer>
@@ -193,6 +221,7 @@ export default PostDetailPage;
 const Article = styled.article`
   position: relative;
   margin-top: 80px;
+  margin-bottom: 80px;
   display: flex;
   flex-direction: column;
   border: 1px solid ${palette.borderColor};

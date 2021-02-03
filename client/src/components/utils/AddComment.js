@@ -6,7 +6,7 @@ import { AiFillCloseCircle, AiOutlineLoading } from "react-icons/ai";
 import { palette, viewportSize } from "../../styles/Theme";
 
 function AddComment(props) {
-  const { refreshComment, postId, responseTo, refreshReplyComment } = props;
+  const { addComment, postId, responseTo, addReplyComment } = props;
   const user = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [btnDisabled, setBtnDisabled] = useState(true);
@@ -52,11 +52,11 @@ function AddComment(props) {
 
     Axios.post("/api/comment/saveComment", variables).then((response) => {
       if (response.data.success) {
-        refreshComment(response.data.result);
+        addComment(response.data.result);
         setComment("");
         setLoading(false);
         if (responseTo) {
-          refreshReplyComment(null);
+          addReplyComment(null);
         }
       } else {
         alert("댓글을 추가하는 데 실패했습니다.");
@@ -79,7 +79,7 @@ function AddComment(props) {
               {`@${responseTo.nickname}`}
               <button
                 className="delete-btn"
-                onClick={() => refreshReplyComment(null)}
+                onClick={() => addReplyComment(null)}
               >
                 <AiFillCloseCircle />
               </button>

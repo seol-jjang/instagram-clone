@@ -21,44 +21,50 @@ function App() {
       <GlobalStyle />
       <Router>
         <Header />
-        <MainContents>
-          <Switch>
-            <Route exact path="/" component={Auth(FeedPage, true)} />
-            <Route exact path="/explore" component={Auth(ExplorePage, null)} />
-            <Route exact path="/login" component={Auth(LoginPage, false)} />
-            <Route
-              exact
-              path="/accounts"
-              component={Auth(RegisterPage, false)}
-            />
-            <Route
-              exact
-              path="/accounts/edit"
-              component={Auth(ProfileEditPage, true)}
-            />
-            <Route
-              exact
-              path="/accounts/password/change"
-              component={Auth(PasswordEdit, true)}
-            />
-            <Route
-              exact
-              path="/post/upload"
-              component={Auth(PostUploadPage, true)}
-            />
-            <Route
-              exact
-              path="/:nickname"
-              component={Auth(ProfilePage, null)}
-            />
-            <Route
-              exact
-              path="/p/:postId"
-              component={Auth(PostDetailPage, null)}
-            />
+        <Switch>
+          <MainContents>
+            <Switch>
+              <Route exact path="/" component={Auth(FeedPage, true)} />
+              <Route
+                exact
+                path="/explore"
+                component={Auth(ExplorePage, null)}
+              />
+              <Route exact path="/login" component={Auth(LoginPage, false)} />
+              <Route
+                exact
+                path="/accounts"
+                component={Auth(RegisterPage, false)}
+              />
+              <Route
+                exact
+                path="/accounts/edit"
+                component={Auth(ProfileEditPage, true)}
+              />
+              <Route
+                exact
+                path="/accounts/password/change"
+                component={Auth(PasswordEdit, true)}
+              />
+              <Route
+                exact
+                path="/post/upload"
+                component={Auth(PostUploadPage, true)}
+              />
+              <Route
+                exact
+                path="/:nickname"
+                component={Auth(ProfilePage, null)}
+              />
+              <Route
+                exact
+                path="/p/:postId"
+                component={Auth(PostDetailPage, null)}
+              />
+            </Switch>
             <Route exact path="/not-found" component={Auth(NotFound, null)} />
-          </Switch>
-        </MainContents>
+          </MainContents>
+        </Switch>
       </Router>
     </>
   );

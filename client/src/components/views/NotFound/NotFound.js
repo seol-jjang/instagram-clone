@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Inner } from "../../../styles/Theme";
 
-const NotFount = () => {
+const NotFound = () => {
   return (
     <Section>
       <Inner>
         <h2>죄송합니다. 페이지를 사용할 수 없습니다.</h2>
         <p>
-          클릭하신 링크가 잘못되었거나 페이지가 삭제되었습니다.{" "}
+          클릭하신 링크가 잘못되었거나 페이지가 삭제되었습니다.
           <Link to="/">Instagram으로 돌아가기</Link>
         </p>
       </Inner>
@@ -17,7 +17,7 @@ const NotFount = () => {
   );
 };
 
-export default NotFount;
+export default NotFound;
 
 const Section = styled.div`
   margin-top: 150px;

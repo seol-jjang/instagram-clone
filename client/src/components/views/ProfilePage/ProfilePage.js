@@ -48,7 +48,7 @@ function ProfilePage(props) {
             if (!response.data.success) {
               history.push("/not-found");
             } else {
-              setProfileUser(response.data.userData);
+              setProfileUser(response.data.user);
             }
           }
         })

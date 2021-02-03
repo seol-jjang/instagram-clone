@@ -13,7 +13,7 @@ function Dialog(props) {
     commentId,
     writer,
     detailPage,
-    refreshComment
+    deleteComment
   } = props;
   const user = useSelector((state) => state.user);
   const [animate, setAnimate] = useState(false);
@@ -50,7 +50,7 @@ function Dialog(props) {
       body = { commentId };
       Axios.post("/api/comment/removeComment", body).then((response) => {
         if (response.data.success) {
-          refreshComment(response.data.comment._id);
+          deleteComment(response.data.comment._id);
         } else {
           alert("댓글을 삭제하는 데 실패했습니다.");
         }
