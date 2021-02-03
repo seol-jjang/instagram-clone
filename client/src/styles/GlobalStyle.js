@@ -6,10 +6,8 @@ const GlobalStyle = createGlobalStyle`
     ${reset}
     
     body {
-        @import url('https://fonts.googleapis.com/earlyaccess/notosanskr.css');
         margin: 0;
         box-sizing: border-box;
-        font-family: 'Noto Sans KR', sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         background-color: #fafafa;
