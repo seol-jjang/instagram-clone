@@ -6,6 +6,11 @@ const GlobalStyle = createGlobalStyle`
     ${reset};
     
     body {
+        font-family:  Helvetica,
+		   'Apple SD Gothic Neo', 'Apple SD 산돌고딕 Neo', 
+		   '맑은 고딕', 'malgun gothic',
+		   'Microsoft NeoGothic', 
+		   'Droid sans', sans-serif;
         margin: 0;
         box-sizing: border-box;
         -webkit-font-smoothing: antialiased;
@@ -13,11 +18,6 @@ const GlobalStyle = createGlobalStyle`
         background-color: #fafafa;
     }
     * {
-        font-family:  Helvetica,
-		   'Apple SD Gothic Neo', 'Apple SD 산돌고딕 Neo', 
-		   '맑은 고딕', 'malgun gothic',
-		   'Microsoft NeoGothic', 
-		   'Droid sans', sans-serif;
         box-sizing: border-box;
         color: ${palette.blackColor}
     }
@@ -34,6 +34,11 @@ const GlobalStyle = createGlobalStyle`
     }
 
     textarea {
+        font-family:  Helvetica,
+		   'Apple SD Gothic Neo', 'Apple SD 산돌고딕 Neo', 
+		   '맑은 고딕', 'malgun gothic',
+		   'Microsoft NeoGothic', 
+		   'Droid sans', sans-serif;
         &::placeholder {
             font-family:  Helvetica,
 		   'Apple SD Gothic Neo', 'Apple SD 산돌고딕 Neo', 
