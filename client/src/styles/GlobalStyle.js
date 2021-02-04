@@ -6,7 +6,7 @@ const GlobalStyle = createGlobalStyle`
     ${reset};
     
     body {
-        font-family:  Helvetica,
+        font-family:
 		   'Apple SD Gothic Neo', 'Apple SD 산돌고딕 Neo', 
 		   '맑은 고딕', 'malgun gothic',
 		   'Microsoft NeoGothic', 
