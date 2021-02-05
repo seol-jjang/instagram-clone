@@ -47,6 +47,13 @@ export const SubText = styled.p`
   color: ${palette.grayText};
 `;
 
+export const ErrorText = styled.p`
+  margin-bottom: 5px;
+  color: red;
+  font-size: 14px;
+  text-align: center;
+`;
+
 const ProfileIconSize = {
   small: {
     width: "22px",

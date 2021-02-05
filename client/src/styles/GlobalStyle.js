@@ -6,7 +6,7 @@ const GlobalStyle = createGlobalStyle`
     ${reset};
     
     body {
-        font-family:
+        font-family: 
 		   'Apple SD Gothic Neo', 'Apple SD 산돌고딕 Neo', 
 		   '맑은 고딕', 'malgun gothic',
 		   'Microsoft NeoGothic', 
@@ -16,6 +16,7 @@ const GlobalStyle = createGlobalStyle`
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         background-color: #fafafa;
+        font-size: 14px;
     }
     * {
         box-sizing: border-box;

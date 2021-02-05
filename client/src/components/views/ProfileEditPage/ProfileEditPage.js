@@ -8,7 +8,8 @@ import {
   palette,
   ProfileIcon,
   SubText,
-  viewportSize
+  viewportSize,
+  ErrorText
 } from "../../../styles/Theme";
 import Button from "../../../styles/common/Button";
 import { editUser } from "../../../_actions/user_action";
@@ -38,6 +39,9 @@ function ProfileEditPage() {
 
   const onSubmit = (data) => {
     const lowerNickname = data.nicknameInput.toLowerCase();
+    if (data.nameInput === "") {
+      data.nameInput = null;
+    }
     const body = {
       name: data.nameInput,
       nickname: lowerNickname
@@ -62,9 +66,11 @@ function ProfileEditPage() {
               <Link to="/accounts/edit">
                 <li className="current">프로필 편집</li>
               </Link>
-              <Link to="/accounts/password/change">
-                <li>비밀번호 변경</li>
-              </Link>
+              {!user.userData.sns_type && (
+                <Link to="/accounts/password/change">
+                  <li>비밀번호 변경</li>
+                </Link>
+              )}
             </MenuList>
             <EditContainer>
               <ImageContainer>
@@ -102,7 +108,7 @@ function ProfileEditPage() {
                   <InputWrap>
                     <Input
                       type="text"
-                      id="nameInput"
+                      id="nicknameInput"
                       name="nicknameInput"
                       ref={register({
                         required: true,

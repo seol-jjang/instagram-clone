@@ -45,7 +45,7 @@ function ScrapBtn(props) {
   const onClickLike = () => {
     let scrapVariable = { postId: props.postId, userFrom: userId };
     if (scrapAction) {
-      Axios.post("/api/scrap/addScrap", scrapVariable).then((response) => {
+      Axios.post("/api/scrap/removeScrap", scrapVariable).then((response) => {
         if (response.data.success) {
           setScrapAction(false);
         } else {

@@ -93,28 +93,36 @@ function ImageSlide({ images, detailPage }) {
 export default ImageSlide;
 
 const btnStyle = css`
-  cursor: pointer;
   position: absolute;
-  width: 40px;
-  height: 40px;
+  top: 0;
+  bottom: 0;
+  width: 140px;
+  height: 100%;
+  cursor: pointer;
   background-color: transparent;
   opacity: 0.5;
   svg {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: calc(50% - 15px);
+    width: 30px;
+    height: 30px;
     fill: white;
   }
 `;
 
 const PrevArrowBtn = styled.button`
   ${btnStyle}
-  top: calc(50% - 20px);
-  left: 10px;
+  left: 0;
+  svg {
+    left: 20px;
+  }
 `;
 const NextArrowBtn = styled.button`
   ${btnStyle}
-  top: calc(50% - 20px);
-  right: 10px;
+  right: 0;
+  svg {
+    right: 20px;
+  }
 `;
 
 const Images = styled.ul`

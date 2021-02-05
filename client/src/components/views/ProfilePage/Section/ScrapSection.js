@@ -6,6 +6,7 @@ import { viewportSize } from "../../../../styles/Theme";
 
 function ScrapSection(props) {
   const [scrap, setScrap] = useState([]);
+
   useEffect(() => {
     let unmounted = false;
     let source = Axios.CancelToken.source();

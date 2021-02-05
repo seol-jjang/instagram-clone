@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -10,6 +10,7 @@ import {
   viewportSize
 } from "../../../styles/Theme";
 import ExplorePage from "../ExplorePage/ExplorePage";
+import NicknameCheck from "./NicknameCheck";
 import PostFactory from "./PostSection/PostFactory";
 import RandomUser from "./SubSection/RandomUser";
 
@@ -17,6 +18,9 @@ const FeedPage = () => {
   const user = useSelector((state) => state.user);
 
   if (user.userData && user.userData.isAuth) {
+    if (!user.userData.nickname) {
+      return <NicknameCheck />;
+    }
     return (
       <>
         {user.userData && user.userData.isAuth ? (

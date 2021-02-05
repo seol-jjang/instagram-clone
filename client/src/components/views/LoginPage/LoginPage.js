@@ -7,7 +7,8 @@ import { loginUser } from "../../../_actions/user_action";
 import logo from "../../../assets/instagram_logo.png";
 import Input from "../../../styles/common/Input";
 import Button from "../../../styles/common/Button";
-import { palette } from "../../../styles/Theme";
+import { palette, ErrorText } from "../../../styles/Theme";
+import Kakao from "../../controller/Kakao";
 
 const LoginPage = (props) => {
   const {
@@ -43,6 +44,22 @@ const LoginPage = (props) => {
     });
   };
 
+  const kakaoLoginHandler = (resData) => {
+    const body = {
+      email: resData.profile.kakao_account.email,
+      sns_id: resData.profile.id,
+      sns_type: "kakao"
+    };
+    dispatch(loginUser(body)).then((response) => {
+      if (response.payload.loginSuccess) {
+        localStorage.setItem("ls", response.payload.userId);
+        props.history.push(`/`);
+      } else {
+        alert("카카오 계정으로 로그인하는 데 실패했습니다");
+      }
+    });
+  };
+
   return (
     <>
       <Section>
@@ -58,7 +75,7 @@ const LoginPage = (props) => {
             ref={register({ required: true })}
           />
           {errors.emailInput && errors.emailInput.type === "required" && (
-            <ErrorText>이메일을 입력해주세요</ErrorText>
+            <ErrorTextLogin>이메일을 입력해주세요</ErrorTextLogin>
           )}
           <Input
             type="password"
@@ -67,14 +84,16 @@ const LoginPage = (props) => {
             placeholder="비밀번호"
           />
           {errors.passwordInput && errors.passwordInput.type === "required" && (
-            <ErrorText>비밀번호를 입력해주세요</ErrorText>
+            <ErrorTextLogin>비밀번호를 입력해주세요</ErrorTextLogin>
           )}
           <Button type="submit" blur={!btnDisabled}>
             로그인
           </Button>
         </LoginForm>
         {loginFailMessage && (
-          <ErrorText className="login-error">{loginFailMessage}</ErrorText>
+          <ErrorTextLogin className="login-error">
+            {loginFailMessage}
+          </ErrorTextLogin>
         )}
       </Section>
       <Section smallbox>
@@ -82,6 +101,7 @@ const LoginPage = (props) => {
         <Link to="/accounts" replace>
           <AccountBtn>가입하기</AccountBtn>
         </Link>
+        <Kakao kakaoLoginHandler={kakaoLoginHandler} />
       </Section>
     </>
   );
@@ -100,12 +120,17 @@ const Section = styled.section`
     props.smallbox &&
     css`
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       margin-top: 10px;
       padding: 25px 40px;
       span {
         font-size: 15px;
+        margin-bottom: 20px;
+      }
+      button {
+        margin: 10px 0 0;
       }
     `}
   .login-error {
@@ -142,7 +167,7 @@ const AccountBtn = styled.button`
   font-weight: bold;
 `;
 
-const ErrorText = styled.p`
+const ErrorTextLogin = styled(ErrorText)`
   margin-bottom: 5px;
   color: red;
   font-size: 14px;

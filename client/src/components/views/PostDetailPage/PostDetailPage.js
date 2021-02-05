@@ -19,6 +19,7 @@ import CommentFactory from "./Section/CommentFactory";
 import LikeNumber from "../../utils/LikeNumber";
 import Dialog from "../../utils/Dialog";
 import Axios from "axios";
+import ScrapBtn from "../../utils/ScrapBtn";
 
 function PostDetailPage() {
   const user = useSelector((state) => state.user);
@@ -156,9 +157,7 @@ function PostDetailPage() {
                     </Link>
                   </button>
                 </div>
-                <button>
-                  <VscBookmark />
-                </button>
+                <ScrapBtn postId={post._id} />
               </BtnUtil>
             )}
             <LikeNumber

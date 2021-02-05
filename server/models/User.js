@@ -3,43 +3,53 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 
-const userSchema = mongoose.Schema({
-  name: {
-    type: String,
-    maxlength: 30,
-    trim: true
+const userSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      maxlength: 30,
+      trim: true
+    },
+    email: {
+      type: String,
+      trim: true,
+      unique: true
+    },
+    password: {
+      type: String,
+      minlength: 6
+    },
+    nickname: {
+      type: String,
+      maxlength: 20,
+      trim: true,
+      unique: true
+    },
+    role: {
+      type: Number,
+      default: 1
+    },
+    profileImage: {
+      type: String,
+      default:
+        "https://pineapplegram-image.s3.ap-northeast-2.amazonaws.com/uploads_profileImage/defaultProfile.jpg"
+    },
+    token: {
+      type: String
+    },
+    tokenExp: {
+      type: Number
+    },
+    sns_type: {
+      type: String
+    },
+    sns_id: {
+      type: String,
+      unique: true
+    }
   },
-  email: {
-    type: String,
-    trim: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    minlength: 6
-  },
-  nickname: {
-    type: String,
-    maxlength: 30,
-    trim: true,
-    unique: true
-  },
-  role: {
-    type: Number,
-    default: 1
-  },
-  profileImage: {
-    type: String,
-    default:
-      "https://pineapplegram-image.s3.ap-northeast-2.amazonaws.com/uploads_profileImage/defaultProfile.jpg"
-  },
-  token: {
-    type: String
-  },
-  tokenExp: {
-    type: Number
-  }
-});
+  { timestamps: true }
+);
 
 userSchema.statics.findByToken = function (token, callback) {
   const user = this;

@@ -54,35 +54,65 @@ router.post("/register", (req, res) => {
   });
 });
 
+router.post("/kakaoRegister", (req, res) => {
+  const user = new User(req.body);
+});
+
 router.post("/login", (req, res) => {
-  //요청된 이메일이 데이터베이스에 있는지 확인
-  User.findOne({ email: req.body.email }, (err, user) => {
-    if (!user) {
-      return res.json({
-        loginSuccess: false,
-        message:
-          "입력한 사용자 이름을 사용하는 계정을 찾을 수 없습니다. 사용자 이름을 확인하고 다시 시도하세요."
-      });
-    }
-    user.comparePassword(req.body.password, (err, isMatch) => {
-      //확인했다면 비밀번호가 일치하는 지 확인
-      if (!isMatch) {
-        return res.json({
-          loginSuccess: false,
-          message: "잘못된 비밀번호입니다. 다시 확인하세요."
+  if (req.body.sns_id) {
+    User.findOne({ sns_id: req.body.sns_id }, (err, user) => {
+      if (!user) {
+        const user = new User(req.body);
+        user.save((err, user) => {
+          if (err) return res.json({ loginSuccess: false, err });
+        });
+        user.generateToken((err, user) => {
+          if (err) return res.status(400).send(err);
+          res.cookie("x_auth", user.token).status(200).json({
+            loginSuccess: true,
+            userId: user._id
+          });
+        });
+      } else {
+        user.generateToken((err, user) => {
+          if (err) return res.status(400).send(err);
+          res.cookie("x_auth", user.token).status(200).json({
+            loginSuccess: true,
+            userId: user._id
+          });
         });
       }
-      //일치한다면 토큰 생성
-      user.generateToken((err, user) => {
-        if (err) return res.status(400).send(err);
-        res.cookie("x_auth", user.token).status(200).json({
-          loginSuccess: true,
-          userId: user._id,
-          nickname: user.nickname
+    });
+  } else {
+    //요청된 이메일이 데이터베이스에 있는지 확인
+    User.findOne({ email: req.body.email }, (err, user) => {
+      if (!user) {
+        return res.json({
+          loginSuccess: false,
+          message:
+            "입력한 사용자 이름을 사용하는 계정을 찾을 수 없습니다. 사용자 이름을 확인하고 다시 시도하세요."
+        });
+      }
+      user.comparePassword(req.body.password, (err, isMatch) => {
+        //확인했다면 비밀번호가 일치하는 지 확인
+        if (!isMatch) {
+          return res.json({
+            loginSuccess: false,
+            message: "입력된 정보가 잘못되었습니다. 다시 확인해주세요."
+          });
+        }
+        //일치한다면 토큰 생성
+        user.generateToken((err, user) => {
+          if (err) return res.status(400).send(err);
+          res.cookie("x_auth", user.token).status(200).json({
+            loginSuccess: true,
+            userId: user._id,
+            nickname: user.nickname
+          });
         });
       });
     });
-  });
+  }
 });
 
 router.get("/auth", auth, (req, res) => {
@@ -95,7 +125,8 @@ router.get("/auth", auth, (req, res) => {
     name: req.user.name,
     nickname: req.user.nickname,
     role: req.user.role,
-    profileImage: req.user.profileImage
+    profileImage: req.user.profileImage,
+    sns_type: req.user.sns_type
   });
 });
 
@@ -167,16 +198,25 @@ router.post("/randomUser", auth, (req, res) => {
 });
 
 router.post("/edit", auth, (req, res) => {
-  User.findOneAndUpdate(
-    { _id: req.user._id },
-    { nickname: req.body.nickname, name: req.body.name },
-    (err, user) => {
-      if (err) return res.json({ success: false, err });
-      return res.status(200).send({
-        success: true
+  User.findOne({ nickname: req.body.nickname }, (err, user) => {
+    if (user) {
+      return res.json({
+        success: false,
+        message: "이미 존재하는 사용자 이름입니다."
       });
+    } else {
+      User.findOneAndUpdate(
+        { _id: req.user._id },
+        { nickname: req.body.nickname, name: req.body.name },
+        (err, user) => {
+          if (err) return res.json({ success: false, err });
+          return res.status(200).send({
+            success: true
+          });
+        }
+      );
     }
-  );
+  });
 });
 
 router.post("/editPassword", auth, (req, res) => {

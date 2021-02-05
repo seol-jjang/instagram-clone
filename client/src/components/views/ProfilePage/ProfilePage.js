@@ -154,22 +154,22 @@ function ProfilePage(props) {
               />
             </>
           )}
-          <ProfileNav>
-            <li
-              className={`${tabNumber === 0 ? `active` : ""}`}
-              onClick={() => setTabNumber(0)}
-            >
-              게시물
-            </li>
-            {user.userData && user.userData.isAuth && (
+          {user.userData && user.userData.isAuth && (
+            <ProfileNav>
+              <li
+                className={`${tabNumber === 0 ? `active` : ""}`}
+                onClick={() => setTabNumber(0)}
+              >
+                게시물
+              </li>
               <li
                 className={`${tabNumber === 1 ? `active` : ""}`}
                 onClick={() => setTabNumber(1)}
               >
                 저장됨
               </li>
-            )}
-          </ProfileNav>
+            </ProfileNav>
+          )}
           {tabNumber === 0 ? (
             <UserPost
               profileUser={profileUser._id}
@@ -205,7 +205,6 @@ const ContentsSection = styled.section`
 const ProfileHeader = styled.header`
   display: flex;
   padding-bottom: 30px;
-  border-bottom: 1px solid ${palette.borderColor};
   @media ${viewportSize.tablet} {
     padding: 20px 16px 20px;
     border-bottom: 0;
@@ -268,6 +267,7 @@ const ProfileNav = styled.ul`
   justify-content: center;
   font-size: 13px;
   font-weight: bold;
+  border-top: 1px solid ${palette.borderColor};
   li {
     cursor: pointer;
     margin-top: -1px;

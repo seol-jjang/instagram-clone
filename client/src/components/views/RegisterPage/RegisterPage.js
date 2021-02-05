@@ -8,7 +8,7 @@ import logo from "../../../assets/instagram_logo.png";
 import Input from "../../../styles/common/Input";
 import Button from "../../../styles/common/Button";
 import styled, { css, keyframes } from "styled-components";
-import { palette } from "../../../styles/Theme";
+import { palette, ErrorText } from "../../../styles/Theme";
 
 const RegisterPage = (props) => {
   const {
@@ -114,7 +114,7 @@ const RegisterPage = (props) => {
               errors.nicknameInput.type === "minLength" ||
               errors.nicknameInput.type === "maxLength") && (
               <ErrorText>
-                3~30자의 영문 소문자, 숫자와 밑줄(_)만 사용 가능합니다.
+                3~20자의 영문 소문자, 숫자와 밑줄(_)만 사용 가능합니다.
               </ErrorText>
             )}
           <Input
@@ -225,12 +225,6 @@ const LoginBtn = styled.button`
   color: ${palette.ActivatedColor};
   font-size: 15px;
   font-weight: bold;
-`;
-
-const ErrorText = styled.p`
-  margin-bottom: 5px;
-  color: red;
-  font-size: 14px;
 `;
 
 const Rotation = keyframes`

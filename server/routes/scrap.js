@@ -21,8 +21,21 @@ router.post("/removeScrap", (req, res) => {
   });
 });
 
-router.post("/getScrap", (req, res) => {
+router.post("/loadScrap", (req, res) => {
   Scrap.find({ postId: req.body.postId })
+    .sort({ createdAt: -1 })
+    .populate("postId")
+    .exec((err, scrap) => {
+      if (err) return res.status(400).json({ success: false, err });
+      res.status(200).json({
+        success: true,
+        scrap
+      });
+    });
+});
+
+router.post("/getScrap", (req, res) => {
+  Scrap.find({ userFrom: req.body.userFrom })
     .sort({ createdAt: -1 })
     .populate("postId")
     .exec((err, scrap) => {
