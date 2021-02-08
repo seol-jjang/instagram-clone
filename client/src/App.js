@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import FeedPage from "./components/views/MainPage/FeedPage";
 import ExplorePage from "./components/views/ExplorePage/ExplorePage";
@@ -14,8 +14,14 @@ import PostDetailPage from "./components/views/PostDetailPage/PostDetailPage";
 import { MainContents } from "./styles/Theme";
 import ProfileEditPage from "./components/views/ProfileEditPage/ProfileEditPage";
 import PasswordEdit from "./components/views/ProfileEditPage/Section/PasswordEdit";
+const { Kakao } = window;
 
 function App() {
+  useEffect(() => {
+    if (!Kakao.Auth) {
+      Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
+    }
+  }, []);
   return (
     <>
       <GlobalStyle />

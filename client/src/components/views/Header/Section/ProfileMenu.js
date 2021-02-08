@@ -6,6 +6,7 @@ import Axios from "axios";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { palette, viewportSize } from "../../../../styles/Theme";
+const { Kakao } = window;
 
 function ProfileMenu(props) {
   const { onClose, visible } = props;
@@ -23,6 +24,12 @@ function ProfileMenu(props) {
   }, [localVisible, visible]);
 
   const onClickLogout = () => {
+    if (user.userData.sns_type === "kakao") {
+      Kakao.Auth.logout();
+    } else if (user.userData.sns_type === "naver") {
+      localStorage.removeItem("com.naver.nid.access_token");
+    }
+
     Axios.get("/api/users/logout").then((response) => {
       if (response.data.success) {
         history.push("/login");

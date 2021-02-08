@@ -44,8 +44,7 @@ const userSchema = mongoose.Schema(
       type: String
     },
     sns_id: {
-      type: String,
-      unique: true
+      type: String
     }
   },
   { timestamps: true }

@@ -54,38 +54,34 @@ router.post("/register", (req, res) => {
   });
 });
 
-router.post("/kakaoRegister", (req, res) => {
-  const user = new User(req.body);
-});
-
 router.post("/login", (req, res) => {
   if (req.body.sns_id) {
-    User.findOne({ sns_id: req.body.sns_id }, (err, user) => {
-      if (!user) {
-        const user = new User(req.body);
-        user.save((err, user) => {
-          if (err) return res.json({ loginSuccess: false, err });
-        });
-        user.generateToken((err, user) => {
-          if (err) return res.status(400).send(err);
-          res.cookie("x_auth", user.token).status(200).json({
-            loginSuccess: true,
-            userId: user._id
+    User.findOne(
+      { sns_id: req.body.sns_id, sns_type: req.body.sns_type },
+      (err, user) => {
+        if (!user) {
+          const user = new User(req.body);
+          user.generateToken((err, user) => {
+            if (err) return res.status(400).send(err);
+            res.cookie("x_auth", user.token).status(200).json({
+              loginSuccess: true,
+              userId: user._id
+            });
           });
-        });
-      } else {
-        user.generateToken((err, user) => {
-          if (err) return res.status(400).send(err);
-          res.cookie("x_auth", user.token).status(200).json({
-            loginSuccess: true,
-            userId: user._id
+        } else {
+          user.generateToken((err, user) => {
+            if (err) return res.status(400).send(err);
+            res.cookie("x_auth", user.token).status(200).json({
+              loginSuccess: true,
+              userId: user._id
+            });
           });
-        });
+        }
       }
-    });
+    );
   } else {
     //요청된 이메일이 데이터베이스에 있는지 확인
-    User.findOne({ email: req.body.email }, (err, user) => {
+    User.findOne({ email: req.body.email, sns_type: null }, (err, user) => {
       if (!user) {
         return res.json({
           loginSuccess: false,

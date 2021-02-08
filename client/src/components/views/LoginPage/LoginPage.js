@@ -8,7 +8,8 @@ import logo from "../../../assets/instagram_logo.png";
 import Input from "../../../styles/common/Input";
 import Button from "../../../styles/common/Button";
 import { palette, ErrorText } from "../../../styles/Theme";
-import Kakao from "../../controller/Kakao";
+import KakaoLogin from "../../controller/KakaoLogin";
+import NaverLogin from "../../controller/NaverLogin";
 
 const LoginPage = (props) => {
   const {
@@ -40,22 +41,6 @@ const LoginPage = (props) => {
         props.history.push(`/`);
       } else {
         setLoginFailMessage(response.payload.message);
-      }
-    });
-  };
-
-  const kakaoLoginHandler = (resData) => {
-    const body = {
-      email: resData.profile.kakao_account.email,
-      sns_id: resData.profile.id,
-      sns_type: "kakao"
-    };
-    dispatch(loginUser(body)).then((response) => {
-      if (response.payload.loginSuccess) {
-        localStorage.setItem("ls", response.payload.userId);
-        props.history.push(`/`);
-      } else {
-        alert("카카오 계정으로 로그인하는 데 실패했습니다");
       }
     });
   };
@@ -96,12 +81,15 @@ const LoginPage = (props) => {
           </ErrorTextLogin>
         )}
       </Section>
+      <SocialLoginSection>
+        <KakaoLogin />
+        <NaverLogin />
+      </SocialLoginSection>
       <Section smallbox>
         <Span>계정이 없으신가요?</Span>
         <Link to="/accounts" replace>
           <AccountBtn>가입하기</AccountBtn>
         </Link>
-        <Kakao kakaoLoginHandler={kakaoLoginHandler} />
       </Section>
     </>
   );
@@ -120,21 +108,24 @@ const Section = styled.section`
     props.smallbox &&
     css`
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       margin-top: 10px;
       padding: 25px 40px;
-      span {
-        font-size: 15px;
-        margin-bottom: 20px;
-      }
-      button {
-        margin: 10px 0 0;
-      }
     `}
   .login-error {
     margin-top: 7px;
+  }
+`;
+
+const SocialLoginSection = styled(Section)`
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  button,
+  div {
+    margin-bottom: 5px;
   }
 `;
 

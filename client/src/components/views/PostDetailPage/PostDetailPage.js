@@ -354,6 +354,7 @@ const Description = styled.span`
   flex-basis: auto;
   font-size: 14px;
   white-space: pre-line;
+  line-height: 1.3;
 `;
 
 const BtnUtil = styled.section`
