@@ -28,6 +28,7 @@ function ProfileMenu(props) {
       Kakao.Auth.logout();
     } else if (user.userData.sns_type === "naver") {
       localStorage.removeItem("com.naver.nid.access_token");
+      localStorage.removeItem("naverToken");
     }
 
     Axios.get("/api/users/logout").then((response) => {

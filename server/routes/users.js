@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const request = require("request");
 const { User } = require("../models/User");
 const { Follow } = require("../models/Follow");
 const { Like } = require("../models/Like");
@@ -239,50 +240,71 @@ router.post("/editPassword", auth, (req, res) => {
 });
 
 router.post("/removeUser", auth, (req, res) => {
+  const accessToken = encodeURI(req.body.token);
+  const url = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=${process.env.NAVER_CLIENT_ID}&client_secret=${process.env.NAVER_CLIENT_SECRET}&access_token=${accessToken}&service_provider=NAVER`;
+
+  let options = {
+    url: url,
+    headers: {
+      "X-Naver-Client-Id": process.env.NAVER_CLIENT_ID,
+      "X-Naver-Client-Secret": process.env.NAVER_CLIENT_SECRET
+    }
+  };
+
+  function deleteData(userId) {
+    Follow.deleteMany({
+      $or: [{ userFrom: userId }, { userTo: userId }]
+    })
+      .then(() => {
+        return Scrap.deleteMany({ userFrom: userId });
+      })
+      .then(() => {
+        return Comment.deleteMany({ userFrom: userId });
+      })
+      .then(() => {
+        return Like.deleteMany({ userId: userId });
+      })
+      .then(() => {
+        return Post.deleteMany({ userFrom: userId });
+      })
+      .then(() => {
+        return User.deleteOne({ _id: userId });
+      })
+      .then(() => {
+        res.status(200).json({
+          success: true
+        });
+      })
+      .catch((err) => res.status(400).json({ success: false, err }));
+  }
+
   User.findOne({ _id: req.user._id }, (err, user) => {
-    user.comparePassword(req.body.password, (err, isMatch) => {
-      if (!isMatch) {
-        return res.json({
-          success: false,
-          message: "비밀번호가 일치하지 않습니다."
+    if (req.user.sns_type === "naver" || req.user.sns_type === "kakao") {
+      deleteData(req.user._id);
+      if (req.user.sns_type === "naver") {
+        request.get(options, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            if (body.result === "success") {
+              res.status(200).json({
+                success: true
+              });
+            }
+          } else {
+            res.status(response.statusCode).json({ success: false, error });
+          }
         });
       }
-      Follow.deleteMany({
-        $or: [{ userFrom: req.user._id }, { userTo: req.user._id }]
-      })
-        .then((result) => {
-          Scrap.deleteMany({ userFrom: req.user._id })
-            .then((result) => {
-              Comment.deleteMany({ userFrom: req.user._id })
-                .then((result) => {
-                  Like.deleteMany({ userId: req.user._id })
-                    .then((result) => {
-                      Post.deleteMany({ userFrom: req.user._id })
-                        .then((result) => {
-                          User.deleteOne({ _id: req.user._id })
-                            .then((result) => {
-                              res.status(200).json({
-                                success: true
-                              });
-                            })
-                            .catch((err) =>
-                              res.status(400).json({ success: false, err })
-                            );
-                        })
-                        .catch((err) =>
-                          res.status(400).json({ success: false, err })
-                        );
-                    })
-                    .catch((err) =>
-                      res.status(400).json({ success: false, err })
-                    );
-                })
-                .catch((err) => res.status(400).json({ success: false, err }));
-            })
-            .catch((err) => res.status(400).json({ success: false, err }));
-        })
-        .catch((err) => res.status(400).json({ success: false, err }));
-    });
+    } else {
+      user.comparePassword(req.body.password, (err, isMatch) => {
+        if (!isMatch) {
+          return res.json({
+            success: false,
+            message: "비밀번호가 일치하지 않습니다."
+          });
+        }
+        deleteData(req.user._id);
+      });
+    }
   });
 });
 

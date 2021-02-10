@@ -23,18 +23,31 @@ function RemoveAccount() {
     }
   }, [password]);
 
+  useEffect(() => {
+    if (
+      user.userData &&
+      (user.userData.sns_type === "naver" || user.userData.sns_type === "kakao")
+    ) {
+      setDisable(true);
+    }
+  }, [user.userData]);
+
   const onVisible = (event) => {
     event.preventDefault();
     setComfirm(!confirm);
   };
 
   const onRecomfirm = () => {
+    const token = localStorage.getItem("naverToken");
     const body = {
-      password: password
+      password: password,
+      token
     };
 
     dispatch(removeUser(body)).then((response) => {
       if (response.payload.success) {
+        localStorage.removeItem("com.naver.nid.access_token");
+        localStorage.removeItem("naverToken");
         alert("탈퇴가 완료되었습니다.");
         setTimeout(() => {
           history.push("/login");
@@ -67,18 +80,28 @@ function RemoveAccount() {
               <h2>계정 탈퇴하기</h2>
               <p>안녕히계세요 여러분..</p>
               <EditForm onSubmit={onVisible}>
-                <FormItemWrap>
-                  <LabelWrap>계속하려면 비밀번호를 다시 입력하세요</LabelWrap>
-                  <InputWrap>
-                    <Input
-                      type="password"
-                      id="password"
-                      name="password"
-                      onChange={onChangeHandler}
-                      value={password}
-                    />
-                  </InputWrap>
-                </FormItemWrap>
+                {user.userData.sns_type === "naver" ||
+                user.userData.sns_type === "kakao" ? (
+                  <FormItemWrap>
+                    <LabelWrap>
+                      카카오 또는 네이버 회원은 계정 연동이 해지됩니다
+                    </LabelWrap>
+                  </FormItemWrap>
+                ) : (
+                  <FormItemWrap>
+                    <LabelWrap>계속하려면 비밀번호를 다시 입력하세요</LabelWrap>
+                    <InputWrap>
+                      <Input
+                        type="password"
+                        id="password"
+                        name="password"
+                        onChange={onChangeHandler}
+                        value={password}
+                      />
+                    </InputWrap>
+                  </FormItemWrap>
+                )}
+
                 <p>
                   아래 버튼을 누르면 게시글, 댓글, 좋아요 등 계정 관련 정보가
                   삭제됩니다.
