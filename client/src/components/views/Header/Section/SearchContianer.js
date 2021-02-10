@@ -127,7 +127,7 @@ const SearchForm = styled.form`
     background-color: ${palette.backgroundGray};
     &::placeholder {
       font-size: 14px;
-      color: #aaa;
+      color: #8e8e8e;
     }
   }
   @media ${viewportSize.tablet} {
@@ -148,7 +148,17 @@ const SearchCover = styled.div`
   border-radius: 3px;
   background-color: ${palette.backgroundGray};
   span {
-    color: #aaa;
+    color: #8e8e8e;
+  }
+  span:first-child {
+    position: absolute;
+    top: 6px;
+    left: calc(50% - 25px);
+  }
+  span:last-child {
+    position: absolute;
+    top: 5px;
+    left: calc(50% - 10px);
   }
 `;
 

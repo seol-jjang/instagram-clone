@@ -14,6 +14,7 @@ import PostDetailPage from "./components/views/PostDetailPage/PostDetailPage";
 import { MainContents } from "./styles/Theme";
 import ProfileEditPage from "./components/views/ProfileEditPage/ProfileEditPage";
 import PasswordEdit from "./components/views/ProfileEditPage/Section/PasswordEdit";
+import RemoveAccount from "./components/views/ProfileEditPage/Section/RemoveAccount";
 const { Kakao } = window;
 
 function App() {
@@ -41,6 +42,11 @@ function App() {
                 exact
                 path="/accounts"
                 component={Auth(RegisterPage, false)}
+              />
+              <Route
+                exact
+                path="/accounts/remove"
+                component={Auth(RemoveAccount, true)}
               />
               <Route
                 exact

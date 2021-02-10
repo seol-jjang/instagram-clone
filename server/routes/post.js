@@ -37,20 +37,20 @@ router.get("/getPosts", (req, res) => {
 });
 
 router.get("/getFollowingPosts", auth, (req, res) => {
-  const userFrom = [];
-  Follow.find({ userFrom: req.user._id }, { userFrom: true }).exec(
-    (err, users) => {
-      if (err) return res.status(400).send(err);
-      users.map((user) => userFrom.push(user.userFrom));
-      Post.find({ userFrom: { $in: [...userFrom, req.user._id] } })
-        .populate("userFrom", "nickname profileImage")
-        .sort({ createdAt: -1 })
-        .exec((err, posts) => {
-          if (err) return res.status(400).send(err);
-          res.status(200).json({ success: true, posts });
-        });
-    }
-  );
+  const following = [];
+  Follow.find({ userFrom: req.user._id }).exec((err, users) => {
+    if (err) return res.status(400).send(err);
+    users.map((user) => {
+      following.push(user.userTo);
+    });
+    Post.find({ userFrom: { $in: [...following, req.user._id] } })
+      .populate("userFrom", "nickname profileImage")
+      .sort({ createdAt: -1 })
+      .exec((err, posts) => {
+        if (err) return res.status(400).send(err);
+        res.status(200).json({ success: true, posts });
+      });
+  });
 });
 
 router.post("/getUserPost", (req, res) => {
@@ -95,6 +95,40 @@ router.post("/removePost", (req, res) => {
               if (err) return res.status(400).json({ success: false, err });
               comments.map((comment) => commentId.push(comment._id));
               Comment.deleteMany({ postId: req.body.postId })
+                .then((result) => {
+                  Like.deleteMany({ commentId: { $in: commentId } })
+                    .then((result) => {
+                      res.status(200).json({
+                        success: true
+                      });
+                    })
+                    .catch((err) =>
+                      res.status(400).json({ success: false, err })
+                    );
+                })
+                .catch((err) => res.status(400).json({ success: false, err }));
+            });
+          })
+          .catch((err) => res.status(400).json({ success: false, err }));
+      })
+      .catch((err) => res.status(400).json({ success: false, err }));
+  });
+});
+
+router.get("/removeAllPost", auth, (req, res) => {
+  const commentId = [];
+  const postId = [];
+  Post.find({ userFrom: req.user._id }).exec((err, posts) => {
+    if (err) return res.status(400).json({ success: false, err });
+    posts.map((post) => postId.push(post._id));
+    Like.deleteMany({ postId: { $in: postId } })
+      .then((result) => {
+        Scrap.deleteMany({ postId: { $in: postId } })
+          .then((result) => {
+            Comment.find({ postId: { $in: postId } }).exec((err, comments) => {
+              if (err) return res.status(400).json({ success: false, err });
+              comments.map((comment) => commentId.push(comment._id));
+              Comment.deleteMany({ postId: { $in: postId } })
                 .then((result) => {
                   Like.deleteMany({ commentId: { $in: commentId } })
                     .then((result) => {

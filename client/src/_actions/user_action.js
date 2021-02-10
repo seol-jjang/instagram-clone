@@ -5,7 +5,8 @@ import {
   AUTH_USER,
   EDIT_USER,
   EDIT_PASSWORD,
-  UPLOAD_USER_IMAGE
+  UPLOAD_USER_IMAGE,
+  REMOVE_USER
 } from "./types";
 
 export function loginUser(dataToSubmit) {
@@ -65,6 +66,17 @@ export function auth() {
   );
   return {
     type: AUTH_USER,
+    payload: request
+  };
+}
+
+export async function removeUser(dataToSubmit) {
+  await Axios.get("/api/post/removeAllPost").then((response) => {});
+  const request = Axios.post("/api/users/removeUser", dataToSubmit).then(
+    (response) => response.data
+  );
+  return {
+    type: REMOVE_USER,
     payload: request
   };
 }

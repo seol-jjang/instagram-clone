@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const { User } = require("../models/User");
 const { Follow } = require("../models/Follow");
+const { Like } = require("../models/Like");
+const { Post } = require("../models/Post");
+const { Comment } = require("../models/Comment");
+const { Scrap } = require("../models/Scrap");
 const { auth } = require("../middleware/auth");
 const { upload } = require("./upload");
 
@@ -230,6 +234,54 @@ router.post("/editPassword", auth, (req, res) => {
           success: true
         });
       });
+    });
+  });
+});
+
+router.post("/removeUser", auth, (req, res) => {
+  User.findOne({ _id: req.user._id }, (err, user) => {
+    user.comparePassword(req.body.password, (err, isMatch) => {
+      if (!isMatch) {
+        return res.json({
+          success: false,
+          message: "비밀번호가 일치하지 않습니다."
+        });
+      }
+      Follow.deleteMany({
+        $or: [{ userFrom: req.user._id }, { userTo: req.user._id }]
+      })
+        .then((result) => {
+          Scrap.deleteMany({ userFrom: req.user._id })
+            .then((result) => {
+              Comment.deleteMany({ userFrom: req.user._id })
+                .then((result) => {
+                  Like.deleteMany({ userId: req.user._id })
+                    .then((result) => {
+                      Post.deleteMany({ userFrom: req.user._id })
+                        .then((result) => {
+                          User.deleteOne({ _id: req.user._id })
+                            .then((result) => {
+                              res.status(200).json({
+                                success: true
+                              });
+                            })
+                            .catch((err) =>
+                              res.status(400).json({ success: false, err })
+                            );
+                        })
+                        .catch((err) =>
+                          res.status(400).json({ success: false, err })
+                        );
+                    })
+                    .catch((err) =>
+                      res.status(400).json({ success: false, err })
+                    );
+                })
+                .catch((err) => res.status(400).json({ success: false, err }));
+            })
+            .catch((err) => res.status(400).json({ success: false, err }));
+        })
+        .catch((err) => res.status(400).json({ success: false, err }));
     });
   });
 });

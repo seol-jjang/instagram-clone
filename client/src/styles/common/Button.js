@@ -22,6 +22,20 @@ const opacityStyle = css`
     `}
 `;
 
+const textStyle = css`
+  ${(props) =>
+    props.text &&
+    css`
+      cursor: pointer;
+      margin: 0;
+      padding-left: 0;
+      background-color: transparent;
+      color: ${palette.ActivatedColor};
+      font-size: 14px;
+      font-weight: bold;
+    `}
+`;
+
 const StyleButton = styled.button`
   /* 공통스타일 */
   cursor: pointer;
@@ -35,6 +49,7 @@ const StyleButton = styled.button`
 
   ${opacityStyle}
   ${colorStyle}
+  ${textStyle}
 `;
 
 const Button = React.forwardRef((props, ref) => {

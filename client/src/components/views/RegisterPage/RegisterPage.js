@@ -150,7 +150,7 @@ const RegisterPage = (props) => {
       <Section smallbox>
         <span>계정이 있으신가요?</span>
         <Link to="/login" replace>
-          <LoginBtn>로그인</LoginBtn>
+          <Button text>로그인</Button>
         </Link>
       </Section>
     </>
@@ -175,6 +175,10 @@ const Section = styled.section`
       margin-top: 10px;
       padding: 25px 40px;
       span {
+        font-size: 15px;
+        margin-right: 10px;
+      }
+      button {
         font-size: 15px;
       }
     `}
@@ -218,13 +222,6 @@ const TitleText = styled.p`
   line-height: 1.4;
   font-weight: bold;
   word-break: keep-all;
-`;
-const LoginBtn = styled.button`
-  cursor: pointer;
-  background-color: transparent;
-  color: ${palette.ActivatedColor};
-  font-size: 15px;
-  font-weight: bold;
 `;
 
 const Rotation = keyframes`

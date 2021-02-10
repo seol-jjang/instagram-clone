@@ -17,8 +17,8 @@ function NaverLogin() {
       isPopup: false,
       loginButton: {
         color: "green",
-        type: 3,
-        height: 49
+        type: 1,
+        height: 50
       }
     });
 

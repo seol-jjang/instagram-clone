@@ -20,7 +20,8 @@ const GlobalStyle = createGlobalStyle`
     }
     * {
         box-sizing: border-box;
-        color: ${palette.blackColor}
+        color: ${palette.blackColor};
+        letter-spacing: -0.3px;
     }
 
     a {
@@ -33,15 +34,15 @@ const GlobalStyle = createGlobalStyle`
         outline: none;
         border: none;
     }
-
+    button,
     textarea {
-        font-family:  Helvetica,
+        font-family:
 		   'Apple SD Gothic Neo', 'Apple SD 산돌고딕 Neo', 
 		   '맑은 고딕', 'malgun gothic',
 		   'Microsoft NeoGothic', 
 		   'Droid sans', sans-serif;
         &::placeholder {
-            font-family:  Helvetica,
+            font-family:
 		   'Apple SD Gothic Neo', 'Apple SD 산돌고딕 Neo', 
 		   '맑은 고딕', 'malgun gothic',
 		   'Microsoft NeoGothic', 

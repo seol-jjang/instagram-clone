@@ -6,7 +6,7 @@ import { AiFillCloseCircle, AiOutlineLoading } from "react-icons/ai";
 import { palette, viewportSize } from "../../styles/Theme";
 
 function AddComment(props) {
-  const { addComment, postId, responseTo, addReplyComment } = props;
+  const { refreshComment, postId, responseTo, addReplyComment } = props;
   const user = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [btnDisabled, setBtnDisabled] = useState(true);
@@ -52,7 +52,7 @@ function AddComment(props) {
 
     Axios.post("/api/comment/saveComment", variables).then((response) => {
       if (response.data.success) {
-        addComment(response.data.result);
+        refreshComment(response.data.result);
         setComment("");
         setLoading(false);
         if (responseTo) {

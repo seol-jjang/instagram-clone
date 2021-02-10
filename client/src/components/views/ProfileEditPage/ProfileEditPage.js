@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useForm } from "react-hook-form";
 import Input from "../../../styles/common/Input";
 import {
@@ -8,13 +8,12 @@ import {
   palette,
   ProfileIcon,
   SubText,
-  viewportSize,
-  ErrorText
+  viewportSize
 } from "../../../styles/Theme";
 import Button from "../../../styles/common/Button";
 import { editUser } from "../../../_actions/user_action";
 import { Link } from "react-router-dom";
-import ProfileImageUpload from "../../utils/ProfileImageUpload";
+import ProfileImageUpload from "./ProfileImageUpload";
 
 function ProfileEditPage() {
   const user = useSelector((state) => state.user);
@@ -128,6 +127,12 @@ function ProfileEditPage() {
                     제출
                   </Button>
                 </FormItemWrap>
+                <FormItemWrap>
+                  <LabelWrap></LabelWrap>
+                  <Link to="/accounts/remove">
+                    <Button text>계정 탈퇴하기</Button>
+                  </Link>
+                </FormItemWrap>
               </EditForm>
             </EditContainer>
           </EditWrap>
@@ -213,6 +218,7 @@ const ImageContainer = styled.div`
     margin-right: 30px;
   }
   h3 {
+    margin-bottom: 5px;
     font-size: 20px;
   }
   @media ${viewportSize.tablet} {
@@ -228,6 +234,10 @@ const EditForm = styled.form`
   margin-top: 20px;
   display: flex;
   flex-direction: column;
+
+  button[type="submit"] {
+    padding: 7px 10px;
+  }
 `;
 
 const FormItemWrap = styled.div`
@@ -244,9 +254,6 @@ const FormItemWrap = styled.div`
     padding: 0 10px;
     background-color: white;
     font-size: 16px;
-  }
-  button {
-    padding: 7px 10px;
   }
 
   @media ${viewportSize.tablet} {

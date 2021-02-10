@@ -48,7 +48,6 @@ function KakaoLogin() {
   return (
     <LoginButton onClick={kakaoLoginClick}>
       <Logo>kakao</Logo>
-      카카오 아이디로 로그인
     </LoginButton>
   );
 }
@@ -57,19 +56,24 @@ export default KakaoLogin;
 
 const LoginButton = styled.button`
   cursor: pointer;
-  width: 100%;
-  height: 49px;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #cebb0c;
   border-radius: 5px;
   font-size: 16px;
   background-color: #fee500;
+  margin-right: 10px;
 `;
 const Logo = styled.h1`
+  width: 28px;
+  height: 25px;
   background-image: url(${logo});
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center;
   color: transparent;
   overflow: hidden;
   text-indent: 110%;

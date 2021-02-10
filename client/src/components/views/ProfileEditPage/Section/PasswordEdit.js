@@ -226,6 +226,9 @@ const EditForm = styled.form`
   margin-top: 20px;
   display: flex;
   flex-direction: column;
+  button[type="submit"] {
+    padding: 7px 10px;
+  }
 `;
 
 const FormItemWrap = styled.div`
@@ -243,9 +246,6 @@ const FormItemWrap = styled.div`
     background-color: #fafafa;
     font-size: 16px;
     border-radius: 5px;
-  }
-  button {
-    padding: 7px 10px;
   }
 
   @media ${viewportSize.tablet} {

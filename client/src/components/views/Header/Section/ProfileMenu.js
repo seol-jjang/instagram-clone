@@ -18,7 +18,7 @@ function ProfileMenu(props) {
   useEffect(() => {
     if (localVisible && !visible) {
       setAnimate(true);
-      setTimeout(() => setAnimate(false), 300);
+      setTimeout(() => setAnimate(false), 200);
     }
     setLocalVisible(visible);
   }, [localVisible, visible]);
@@ -74,11 +74,13 @@ export default ProfileMenu;
 
 const slideFade = keyframes`
   from {
-    transform: translateY(0);
+    transform-origin: top center;
+    transform: rotateX(0);
     opacity: 1;
   }
   to {
-    transform: translateY(-30px);
+    transform-origin: top center;
+    transform: rotateX(90deg);
     opacity: 0;
   }
 `;
@@ -95,7 +97,7 @@ const MenuWrapper = styled.div`
   ${(props) =>
     props.disappear &&
     css`
-      animation: ${slideFade} 0.4s ease-out;
+      animation: ${slideFade} 0.2s ease-out;
     `}
 `;
 
@@ -117,7 +119,7 @@ const MenuInner = styled.div`
     a {
       display: flex;
       align-items: center;
-      font-size: 15px;
+      font-size: 14px;
       span {
         margin-left: 10px;
       }

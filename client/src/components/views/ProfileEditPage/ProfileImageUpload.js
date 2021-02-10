@@ -1,13 +1,14 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { palette } from "../../styles/Theme";
-import { uploadUserImage } from "../../_actions/user_action";
+import { palette } from "../../../styles/Theme";
+import { uploadUserImage } from "../../../_actions/user_action";
 
 function ProfileImageUpload(props) {
   const dispatch = useDispatch();
 
   const onFileChange = (event) => {
+    event.preventDefault();
     const {
       target: { files }
     } = event;
@@ -28,7 +29,7 @@ function ProfileImageUpload(props) {
   };
   return (
     <InputWrap htmlFor="profile-file">
-      프로필 사진 바꾸기
+      <span>프로필 사진 바꾸기</span>
       <input
         type="file"
         id="profile-file"
@@ -42,11 +43,15 @@ function ProfileImageUpload(props) {
 export default ProfileImageUpload;
 
 const InputWrap = styled.label`
-  background-color: transparent;
-  color: ${palette.ActivatedColor};
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
+  span {
+    cursor: pointer;
+    margin: 0;
+    padding-left: 0;
+    background-color: transparent;
+    color: ${palette.ActivatedColor};
+    font-size: 14px;
+    font-weight: bold;
+  }
   input[type="file"] {
     display: none;
   }

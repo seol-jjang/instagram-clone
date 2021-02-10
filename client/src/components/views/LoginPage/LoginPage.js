@@ -81,16 +81,22 @@ const LoginPage = (props) => {
           </ErrorTextLogin>
         )}
       </Section>
-      <SocialLoginSection>
-        <KakaoLogin />
-        <NaverLogin />
-      </SocialLoginSection>
       <Section smallbox>
-        <Span>계정이 없으신가요?</Span>
-        <Link to="/accounts" replace>
-          <AccountBtn>가입하기</AccountBtn>
-        </Link>
+        <div>
+          <Span>계정이 없으신가요?</Span>
+          <Link to="/accounts" replace>
+            <Button text>가입하기</Button>
+          </Link>
+        </div>
+        <SocialLoginSection>
+          <Span>or</Span>
+          <div>
+            <KakaoLogin />
+            <NaverLogin />
+          </div>
+        </SocialLoginSection>
       </Section>
+      <SocialLoginSection></SocialLoginSection>
     </>
   );
 };
@@ -108,24 +114,39 @@ const Section = styled.section`
     props.smallbox &&
     css`
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       margin-top: 10px;
       padding: 25px 40px;
+      span {
+        font-size: 15px;
+        margin-right: 10px;
+      }
+      button {
+        font-size: 15px;
+      }
     `}
   .login-error {
     margin-top: 7px;
   }
 `;
 
-const SocialLoginSection = styled(Section)`
-  margin-top: 10px;
+const SocialLoginSection = styled.div`
+  margin-top: 5px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  button,
-  div {
-    margin-bottom: 5px;
+  & > div {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  span {
+    font-size: 13px;
+    color: ${palette.grayText};
   }
 `;
 
@@ -148,14 +169,6 @@ const Logo = styled.h1`
 
 const Span = styled.span`
   font-size: 15px;
-`;
-
-const AccountBtn = styled.button`
-  cursor: pointer;
-  background-color: transparent;
-  color: ${palette.ActivatedColor};
-  font-size: 15px;
-  font-weight: bold;
 `;
 
 const ErrorTextLogin = styled(ErrorText)`

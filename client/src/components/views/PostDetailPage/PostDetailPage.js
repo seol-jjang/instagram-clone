@@ -169,7 +169,7 @@ function PostDetailPage() {
               <AddComment
                 postId={post._id}
                 addReplyComment={onReplyComment}
-                addComment={addComment}
+                refreshComment={addComment}
                 responseTo={responseTo}
                 detailPage
               />
