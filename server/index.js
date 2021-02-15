@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const path = require("path");
 
 const config = require("./config/key");
 const whitelist = ["https://ppgram.herokuapp.com", "http://localhost:3000"];
