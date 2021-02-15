@@ -20,7 +20,7 @@ const { Kakao } = window;
 function App() {
   useEffect(() => {
     if (!Kakao.Auth) {
-      Kakao.init(process.env.KAKAO_API_KEY);
+      Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
     }
   }, []);
   return (

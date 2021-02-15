@@ -13,7 +13,7 @@ function NaverLogin() {
   useEffect(() => {
     const naverLogin = new naver.LoginWithNaverId(
       {
-        clientId: process.env.NAVER_CLIENT_ID,
+        clientId: process.env.REACT_APP_KAKAO_API_KEY,
         callbackUrl: process.env.REACT_APP_NAVER_CALLBACK_URL,
         isPopup: false,
         loginButton: {
