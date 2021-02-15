@@ -19,6 +19,18 @@ const { Kakao } = window;
 
 function App() {
   useEffect(() => {
+    const naverScript = document.createElement("script");
+    const kakaoScript = document.createElement("script");
+    naverScript.src =
+      "https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js";
+    kakaoScript.src = "https://developers.kakao.com/sdk/js/kakao.js";
+
+    naverScript.async = true;
+    kakaoScript.async = true;
+
+    document.body.appendChild(naverScript);
+    document.body.appendChild(kakaoScript);
+
     if (!Kakao.Auth) {
       Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
     }
