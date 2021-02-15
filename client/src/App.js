@@ -15,14 +15,12 @@ import { MainContents } from "./styles/Theme";
 import ProfileEditPage from "./components/views/ProfileEditPage/ProfileEditPage";
 import PasswordEdit from "./components/views/ProfileEditPage/Section/PasswordEdit";
 import RemoveAccount from "./components/views/ProfileEditPage/Section/RemoveAccount";
-const { Kakao } = window;
 
 function App() {
   useEffect(() => {
-    if (!Kakao.Auth) {
-      Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
-    }
+    window.Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
   }, []);
+
   return (
     <>
       <GlobalStyle />

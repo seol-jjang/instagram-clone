@@ -48,7 +48,6 @@ function RemoveAccount() {
           history.push("/login");
         }, 1000);
       } else {
-        console.log(response.payload);
         alert(response.payload.message);
       }
     });

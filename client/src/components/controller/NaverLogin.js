@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { loginUser } from "../../_actions/user_action";
@@ -8,12 +8,11 @@ function NaverLogin() {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
-  const [token, setToken] = useState("");
 
   useEffect(() => {
     const naverLogin = new naver.LoginWithNaverId(
       {
-        clientId: process.env.REACT_APP_KAKAO_API_KEY,
+        clientId: process.env.REACT_APP_NAVER_CLIENT_ID,
         callbackUrl: process.env.REACT_APP_NAVER_CALLBACK_URL,
         isPopup: false,
         loginButton: {
@@ -58,7 +57,7 @@ function NaverLogin() {
         NaverLoginHander(email, id, token);
       }
     });
-  }, [dispatch, history, location.hash, token]);
+  }, [dispatch, history, location.hash]);
 
   return <div id="naverIdLogin" />;
 }

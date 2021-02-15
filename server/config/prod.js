@@ -5,5 +5,7 @@ module.exports = {
   region: process.env.REGION,
   naver_client_id: process.env.NAVER_CLIENT_ID,
   naver_client_secret: process.env.NAVER_CLIENT_SECRET,
-  kakao_api_key: process.env.KAKAO_API_KEY
+  naver_callback: process.env.NAVER_CALLBACK,
+  kakao_api_key: process.env.KAKAO_API_KEY,
+  kakao_callback: process.env.KAKAO_CALLBACK
 };
