@@ -73,11 +73,9 @@ export function auth() {
 export function removeUser(dataToSubmit) {
   const request = Axios.post("/api/users/removeUser", dataToSubmit)
     .then((response) => {
-      console.log(response);
       return Axios.post("/api/post/removeAllPost", dataToSubmit);
     })
     .then((response) => {
-      console.log(response);
       return response.data;
     });
   return {
