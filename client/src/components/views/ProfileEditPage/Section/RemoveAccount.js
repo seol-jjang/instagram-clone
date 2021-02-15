@@ -6,6 +6,7 @@ import Button from "../../../../styles/common/Button";
 import Input from "../../../../styles/common/Input";
 import { Inner, palette, viewportSize } from "../../../../styles/Theme";
 import { removeUser } from "../../../../_actions/user_action";
+const { Kakao } = window;
 
 function RemoveAccount() {
   const [confirm, setComfirm] = useState(false);
@@ -37,13 +38,7 @@ function RemoveAccount() {
     setComfirm(!confirm);
   };
 
-  const onRecomfirm = () => {
-    const token = localStorage.getItem("naverToken");
-    const body = {
-      password: password,
-      token
-    };
-
+  const onRemove = (body) => {
     dispatch(removeUser(body)).then((response) => {
       if (response.payload.success) {
         localStorage.removeItem("com.naver.nid.access_token");
@@ -53,9 +48,39 @@ function RemoveAccount() {
           history.push("/login");
         }, 1000);
       } else {
+        console.log(response.payload);
         alert(response.payload.message);
       }
     });
+  };
+
+  const onRecomfirm = () => {
+    let body;
+    if (user.userData.sns_type === "naver") {
+      const token = localStorage.getItem("naverToken");
+      body = {
+        userId: user.userData._id,
+        password: password,
+        token
+      };
+      onRemove(body);
+    } else {
+      body = { userId: user.userData._id, password: password };
+      if (user.userData.sns_type === "kakao") {
+        Kakao.API.request({
+          url: "/v1/user/unlink",
+          success: function (response) {
+            onRemove(body);
+          },
+          fail: function (error) {
+            console.log(error);
+            alert("계정 해지를 실패했습니다.");
+          }
+        });
+      } else {
+        onRemove(body);
+      }
+    }
   };
 
   const onChangeHandler = (event) => {

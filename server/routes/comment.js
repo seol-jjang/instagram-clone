@@ -51,17 +51,35 @@ router.post("/getCommentsCount", (req, res) => {
 });
 
 router.post("/removeComment", (req, res) => {
-  Comment.findOneAndDelete({ _id: req.body.commentId }).exec((err, comment) => {
-    if (err) return res.status(400).json({ success: false, err });
-    Like.deleteMany({ commentId: req.body.commentId })
-      .then((result) =>
-        res.status(200).json({
-          success: true,
-          comment
-        })
-      )
-      .catch((err) => res.status(400).json({ success: false, err }));
-  });
+  const responseToId = [];
+  Comment.find({ responseTo: req.body.commentId })
+    .then((comments) => {
+      comments.map((comment) => responseToId.push(comment._id));
+      return Comment.deleteMany({
+        $or: [
+          { responseTo: req.body.commentId },
+          { responseTo: { $in: responseToId } }
+        ]
+      });
+    })
+    .then(() => {
+      return Like.deleteMany({
+        $or: [
+          { commentId: req.body.commentId },
+          { commentId: { $in: responseToId } }
+        ]
+      });
+    })
+    .then(() => {
+      return Comment.findOneAndDelete({ _id: req.body.commentId });
+    })
+    .then((comment) => {
+      res.status(200).json({
+        success: true,
+        comment
+      });
+    })
+    .catch((err) => res.status(400).json({ success: false, err }));
 });
 
 module.exports = router;

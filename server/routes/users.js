@@ -240,35 +240,24 @@ router.post("/editPassword", auth, (req, res) => {
 });
 
 router.post("/removeUser", auth, (req, res) => {
-  const accessToken = encodeURI(req.body.token);
-  const url = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=${process.env.NAVER_CLIENT_ID}&client_secret=${process.env.NAVER_CLIENT_SECRET}&access_token=${accessToken}&service_provider=NAVER`;
-
-  let options = {
-    url: url,
-    headers: {
-      "X-Naver-Client-Id": process.env.NAVER_CLIENT_ID,
-      "X-Naver-Client-Secret": process.env.NAVER_CLIENT_SECRET
-    }
-  };
-
-  function deleteData(userId) {
+  function deleteData() {
     Follow.deleteMany({
-      $or: [{ userFrom: userId }, { userTo: userId }]
+      $or: [{ userFrom: req.user._id }, { userTo: req.user._id }]
     })
       .then(() => {
-        return Scrap.deleteMany({ userFrom: userId });
+        return Scrap.deleteMany({ userFrom: req.user._id });
       })
       .then(() => {
-        return Comment.deleteMany({ userFrom: userId });
+        return Comment.deleteMany({ userFrom: req.user._id });
       })
       .then(() => {
-        return Like.deleteMany({ userId: userId });
+        return Like.deleteMany({ userId: req.user._id });
       })
       .then(() => {
-        return Post.deleteMany({ userFrom: userId });
+        return Post.deleteMany({ userFrom: req.user._id });
       })
       .then(() => {
-        return User.deleteOne({ _id: userId });
+        return User.deleteOne({ _id: req.user._id });
       })
       .then(() => {
         res.status(200).json({
@@ -279,21 +268,37 @@ router.post("/removeUser", auth, (req, res) => {
   }
 
   User.findOne({ _id: req.user._id }, (err, user) => {
-    if (req.user.sns_type === "naver" || req.user.sns_type === "kakao") {
-      deleteData(req.user._id);
-      if (req.user.sns_type === "naver") {
-        request.get(options, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            if (body.result === "success") {
-              res.status(200).json({
-                success: true
-              });
-            }
+    if (req.user.sns_type === "naver") {
+      const accessToken = encodeURI(req.body.token);
+      const url = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=${process.env.NAVER_CLIENT_ID}&client_secret=${process.env.NAVER_CLIENT_SECRET}&access_token=${accessToken}&service_provider=NAVER`;
+
+      let options = {
+        url: url,
+        headers: {
+          "X-Naver-Client-Id": process.env.NAVER_CLIENT_ID,
+          "X-Naver-Client-Secret": process.env.NAVER_CLIENT_SECRET
+        }
+      };
+      request.get(options, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          if (body.result === "success") {
+            deleteData();
           } else {
-            res.status(response.statusCode).json({ success: false, error });
+            res.status(response.statusCode).json({
+              success: false,
+              message: "계정 해지를 실패했습니다."
+            });
           }
-        });
-      }
+        } else {
+          res.status(response.statusCode).json({
+            success: false,
+            error,
+            message: "계정 해지를 실패했습니다."
+          });
+        }
+      });
+    } else if (req.user.sns_type === "kakao") {
+      deleteData();
     } else {
       user.comparePassword(req.body.password, (err, isMatch) => {
         if (!isMatch) {
@@ -302,7 +307,7 @@ router.post("/removeUser", auth, (req, res) => {
             message: "비밀번호가 일치하지 않습니다."
           });
         }
-        deleteData(req.user._id);
+        deleteData();
       });
     }
   });

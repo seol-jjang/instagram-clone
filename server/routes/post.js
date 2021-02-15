@@ -85,68 +85,57 @@ router.post("/getPostDetail", (req, res) => {
 
 router.post("/removePost", (req, res) => {
   const commentId = [];
-  Post.findOneAndDelete({ _id: req.body.postId }).exec((err, post) => {
-    if (err) return res.status(400).json({ success: false, err });
-    Like.deleteMany({ postId: req.body.postId })
-      .then((result) => {
-        Scrap.deleteMany({ postId: req.body.postId })
-          .then((result) => {
-            Comment.find({ postId: req.body.postId }).exec((err, comments) => {
-              if (err) return res.status(400).json({ success: false, err });
-              comments.map((comment) => commentId.push(comment._id));
-              Comment.deleteMany({ postId: req.body.postId })
-                .then((result) => {
-                  Like.deleteMany({ commentId: { $in: commentId } })
-                    .then((result) => {
-                      res.status(200).json({
-                        success: true
-                      });
-                    })
-                    .catch((err) =>
-                      res.status(400).json({ success: false, err })
-                    );
-                })
-                .catch((err) => res.status(400).json({ success: false, err }));
-            });
-          })
-          .catch((err) => res.status(400).json({ success: false, err }));
-      })
-      .catch((err) => res.status(400).json({ success: false, err }));
-  });
+
+  Post.findOneAndDelete({ _id: req.body.postId })
+    .then(() => {
+      return Scrap.deleteMany({ postId: req.body.postId });
+    })
+    .then(() => {
+      return Comment.find({ postId: req.body.postId });
+    })
+    .then((comments) => {
+      comments.map((comment) => commentId.push(comment._id));
+      return Comment.deleteMany({ postId: req.body.postId });
+    })
+    .then(() => {
+      return Like.deleteMany({
+        $or: [{ postId: req.body.postId }, { commentId: { $in: commentId } }]
+      });
+    })
+    .then(() => {
+      res.status(200).json({
+        success: true
+      });
+    })
+    .catch((err) => res.status(400).json({ success: false, err }));
 });
 
-router.get("/removeAllPost", auth, (req, res) => {
+router.post("/removeAllPost", (req, res) => {
   const commentId = [];
   const postId = [];
-  Post.find({ userFrom: req.user._id }).exec((err, posts) => {
-    if (err) return res.status(400).json({ success: false, err });
-    posts.map((post) => postId.push(post._id));
-    Like.deleteMany({ postId: { $in: postId } })
-      .then((result) => {
-        Scrap.deleteMany({ postId: { $in: postId } })
-          .then((result) => {
-            Comment.find({ postId: { $in: postId } }).exec((err, comments) => {
-              if (err) return res.status(400).json({ success: false, err });
-              comments.map((comment) => commentId.push(comment._id));
-              Comment.deleteMany({ postId: { $in: postId } })
-                .then((result) => {
-                  Like.deleteMany({ commentId: { $in: commentId } })
-                    .then((result) => {
-                      res.status(200).json({
-                        success: true
-                      });
-                    })
-                    .catch((err) =>
-                      res.status(400).json({ success: false, err })
-                    );
-                })
-                .catch((err) => res.status(400).json({ success: false, err }));
-            });
-          })
-          .catch((err) => res.status(400).json({ success: false, err }));
-      })
-      .catch((err) => res.status(400).json({ success: false, err }));
-  });
+  Post.find({ userFrom: req.body.userId })
+    .then((posts) => {
+      posts.map((post) => postId.push(post._id));
+      return Scrap.deleteMany({ postId: { $in: postId } });
+    })
+    .then(() => {
+      return Comment.find({ postId: { $in: postId } });
+    })
+    .then((comments) => {
+      comments.map((comment) => commentId.push(comment._id));
+      return Comment.deleteMany({ postId: { $in: postId } });
+    })
+    .then(() => {
+      return Like.deleteMany({
+        $or: [{ postId: { $in: postId } }, { commentId: { $in: commentId } }]
+      });
+    })
+    .then(() => {
+      res.status(200).json({
+        success: true
+      });
+    })
+    .catch((err) => res.status(400).json({ success: false, err }));
 });
 
 module.exports = router;

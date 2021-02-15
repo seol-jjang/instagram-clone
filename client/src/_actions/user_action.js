@@ -70,11 +70,16 @@ export function auth() {
   };
 }
 
-export async function removeUser(dataToSubmit) {
-  await Axios.get("/api/post/removeAllPost").then((response) => {});
-  const request = Axios.post("/api/users/removeUser", dataToSubmit).then(
-    (response) => response.data
-  );
+export function removeUser(dataToSubmit) {
+  const request = Axios.post("/api/users/removeUser", dataToSubmit)
+    .then((response) => {
+      console.log(response);
+      return Axios.post("/api/post/removeAllPost", dataToSubmit);
+    })
+    .then((response) => {
+      console.log(response);
+      return response.data;
+    });
   return {
     type: REMOVE_USER,
     payload: request
