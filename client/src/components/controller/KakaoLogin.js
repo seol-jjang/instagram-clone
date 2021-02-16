@@ -17,7 +17,7 @@ function KakaoLogin() {
         Kakao.API.request({
           url: "/v2/user/me",
           success: function (response) {
-            kakaoLoginHandler(response.kakao_account.email, response.id);
+            kakaoLoginHandler(response.id);
           },
           fail: function (error) {
             console.log(error);
@@ -32,7 +32,6 @@ function KakaoLogin() {
 
   const kakaoLoginHandler = (email, id) => {
     const body = {
-      email: email,
       sns_id: id,
       sns_type: "kakao"
     };

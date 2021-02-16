@@ -30,9 +30,8 @@ function NaverLogin() {
     //   setToken(token);
     // };
 
-    const NaverLoginHander = (email, id, token) => {
+    const NaverLoginHander = (id, token) => {
       const body = {
-        email: email,
         sns_id: id,
         sns_type: "naver"
       };
@@ -51,10 +50,9 @@ function NaverLogin() {
     naverLogin.getLoginStatus((status) => {
       if (status) {
         console.log(naverLogin);
-        const email = naverLogin.user.getEmail();
         const id = naverLogin.user.getId();
         const token = naverLogin.accessToken.accessToken;
-        NaverLoginHander(email, id, token);
+        NaverLoginHander(id, token);
       }
     });
   }, [dispatch, history, location.hash]);
